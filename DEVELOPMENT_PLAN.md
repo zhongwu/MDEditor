@@ -60,6 +60,19 @@
 
 ---
 
+#### Phase 1 Acceptance Criteria
+| # | Criterion | Verification Method |
+|---|-----------|---------------------|
+| AC1.1 | Solution builds and runs without errors | `dotnet build` succeeds; app launches |
+| AC1.2 | Main window displays with custom title bar | Visual inspection; title bar draggable |
+| AC1.3 | Two-pane layout with resizable splitter | Drag splitter; both panes resize |
+| AC1.4 | Toolbar visible with placeholder commands | Toolbar renders; commands bound |
+| AC1.5 | Status bar shows line/col, encoding, word count | Type in editor; values update |
+| AC1.6 | DI container resolves all registered services | Unit test service resolution |
+| AC1.7 | Settings service reads/writes JSON config | Integration test with temp config |
+
+---
+
 ### Phase 2: Editor Core (Week 2-3)
 
 #### 2.1 Markdown Text Editor (Left Pane)
@@ -93,6 +106,25 @@
   - Footnotes
   - Definition lists
 - [ ] Custom renderers for WinUI/WebView2
+
+---
+
+#### Phase 2 Acceptance Criteria
+| # | Criterion | Verification Method |
+|---|-----------|---------------------|
+| AC2.1 | Editor accepts text input with monospace font | Type text; font renders correctly |
+| AC2.2 | Syntax highlighting for basic Markdown | Type `# Heading`, `**bold**`; colors apply |
+| AC2.3 | Line numbers gutter visible and accurate | Scroll 50+ lines; numbers match |
+| AC2.4 | Undo/Redo works for 50+ operations | Type, undo 10x, redo 10x; content restored |
+| AC2.5 | Find/Replace finds all occurrences | Search "test" in 10 occurrences; all highlighted |
+| AC2.6 | Go to Line navigates correctly | Ctrl+G → 42; cursor at line 42 |
+| AC2.7 | Preview renders HTML from Markdig | Type markdown; preview shows HTML |
+| AC2.8 | GitHub-style CSS applied in preview | Table, code block, blockquote styled |
+| AC2.9 | Synchronized scrolling works | Scroll editor; preview scrolls proportionally |
+| AC2.10 | Auto-refresh debounced at 300ms | Type rapidly; preview updates once |
+| AC2.11 | Math formulas render via KaTeX | Type `$$E=mc^2$$`; renders in preview |
+| AC2.12 | Mermaid diagrams render | Type mermaid block; diagram appears |
+| AC2.13 | Markdig pipeline passes CommonMark spec | Run CommonMark test suite; >95% pass |
 
 ---
 
@@ -134,6 +166,21 @@
 
 ---
 
+#### Phase 3 Acceptance Criteria
+| # | Criterion | Verification Method |
+|---|-----------|---------------------|
+| AC3.1 | All 6 menu categories present and functional | Click each menu; commands execute |
+| AC3.2 | Format buttons apply markdown to selection | Select text → click Bold → `**text**` inserted |
+| AC3.3 | Keyboard shortcuts match specification | Press Ctrl+B; bold applied |
+| AC3.4 | Heading 1-6 shortcuts work (Ctrl+1..6) | Press Ctrl+3; `### ` inserted |
+| AC3.5 | Format commands work with no selection | Cursor in middle of word; Ctrl+B wraps word |
+| AC3.6 | Context menu appears on right-click | Right-click editor; menu shows format options |
+| AC3.7 | Copy as HTML produces valid HTML | Copy selection; paste in browser; renders |
+| AC3.8 | Toolbar state reflects selection (bold enabled when bold) | Select bold text; Bold button highlighted |
+| AC3.9 | All format commands in table implemented | Test each row in Format Commands table |
+
+---
+
 ### Phase 4: File Operations (Week 4-5)
 
 #### 4.1 File Management
@@ -155,6 +202,24 @@
 - [ ] Drop .md files to open
 - [ ] Drop images to embed (copy to assets folder, insert link)
 - [ ] Drag tabs to reorder (if tabbed interface)
+
+---
+
+#### Phase 4 Acceptance Criteria
+| # | Criterion | Verification Method |
+|---|-----------|---------------------|
+| AC4.1 | New File creates untitled document | Ctrl+N; tab shows "Untitled"; dirty=false |
+| AC4.2 | Open File loads content correctly | Open .md file; content matches file |
+| AC4.3 | Save persists changes to disk | Edit → Save → reopen; changes present |
+| AC4.4 | Save As creates new file at chosen path | Save As → new path; file exists at path |
+| AC4.5 | Dirty state tracked and shown in title | Edit → title shows `*`; Save → `*` removed |
+| AC4.6 | Auto-save draft recovers on crash | Kill app → reopen → draft restored |
+| AC4.7 | Recent Files lists last 10 opened | Open 12 files; menu shows 10 most recent |
+| AC4.8 | UTF-8 files load without encoding errors | Open UTF-8 with emoji; displays correctly |
+| AC4.9 | Export HTML includes embedded CSS | Export → open in browser; styles applied |
+| AC4.10 | Export PDF produces valid PDF | Export → open in PDF reader; content matches |
+| AC4.11 | Drag .md file onto window opens it | Drag file from Explorer; opens in editor |
+| AC4.12 | Drop image copies to assets and inserts link | Drop PNG → `![image](assets/image.png)` inserted |
 
 ---
 
@@ -183,6 +248,26 @@
 #### 5.4 Gist Support (Bonus)
 - [ ] Create/Update secret/public gists
 - [ ] Open gist files
+
+---
+
+#### Phase 5 Acceptance Criteria
+| # | Criterion | Verification Method |
+|---|-----------|---------------------|
+| AC5.1 | OAuth flow completes and stores token | Authenticate → token in Credential Manager |
+| AC5.2 | PAT authentication works | Enter PAT → repositories listed |
+| AC5.3 | Token stored securely (not in plain text) | Check Credential Manager; encrypted |
+| AC5.4 | Multi-account switch works | Add 2 accounts → switch → correct repos shown |
+| AC5.5 | Repository browser lists user/org repos | Click GitHub → tree shows 50+ repos |
+| AC5.6 | File tree navigation works | Expand folders → files listed |
+| AC5.7 | Open from GitHub loads file in editor | Click file → editor shows content |
+| AC5.8 | Save to GitHub creates commit | Edit → Sync → commit appears on GitHub |
+| AC5.9 | Commit message prompt shown | Sync → dialog asks for message |
+| AC5.10 | New branch/PR option works | Sync → choose new branch → PR created |
+| AC5.11 | File history shows commits | History panel → list of commits with dates |
+| AC5.12 | Diff view shows changes vs previous | Click commit → side-by-side diff |
+| AC5.13 | Restore previous version works | Restore → editor content matches that version |
+| AC5.14 | Gist create/update works (bonus) | Create gist → appears on gist.github.com |
 
 ---
 
@@ -216,6 +301,30 @@
 
 ---
 
+#### Phase 6 Acceptance Criteria
+| # | Criterion | Verification Method |
+|---|-----------|---------------------|
+| AC6.1 | Markdown syntax autocomplete triggers on `#`, `*`, `[` | Type `#` → suggestions show headings |
+| AC6.2 | Emoji autocomplete triggers on `:` | Type `:sm` → shows `:smile:` |
+| AC6.3 | File path autocomplete for links/images | Type `](assets/` → lists files in assets |
+| AC6.4 | Multiple cursors with Alt+Click | Alt+Click 3 lines → type → all 3 lines edited |
+| AC6.5 | Minimap shows code overview | Open 200-line file → minimap visible |
+| AC6.6 | Bracket matching highlights pairs | Cursor on `[` → matching `]` highlighted |
+| AC6.7 | Smart quotes convert `"` to `"` and `"` | Type `"` → becomes `"` |
+| AC6.8 | TOC panel shows headings hierarchically | Document with H1/H2/H3 → tree shows structure |
+| AC6.9 | Click TOC entry scrolls to section | Click H2 in TOC → editor scrolls to H2 |
+| AC6.10 | Find in preview highlights matches | Ctrl+F in preview → matches highlighted |
+| AC6.11 | Print preview shows paginated output | File → Print Preview → pages render |
+| AC6.12 | Presentation mode hides UI, fullscreen preview | View → Presentation → only preview visible |
+| AC6.13 | Theme switch updates immediately | Settings → Dark → app theme changes |
+| AC6.14 | Font family/size applies to editor | Settings → Consolas 16 → editor updates |
+| AC6.15 | Custom preview CSS loads | Settings → custom CSS → preview uses it |
+| AC6.16 | Keyboard shortcuts editor remaps keys | Remap Ctrl+S → new shortcut works |
+| AC6.17 | Markdown flavor changes parser behavior | Switch to CommonMark → GFM features disabled |
+| AC6.18 | Auto-save interval configurable | Set 60s → wait → draft saved at 60s |
+
+---
+
 ### Phase 7: Polish & Release (Week 7-8)
 
 #### 7.1 Quality Assurance
@@ -237,6 +346,27 @@
 - [ ] Keyboard shortcuts reference
 - [ ] Contributing guide
 - [ ] Architecture decision records
+
+---
+
+#### Phase 7 Acceptance Criteria
+| # | Criterion | Verification Method |
+|---|-----------|---------------------|
+| AC7.1 | Unit test coverage >80% for core services | `dotnet test --collect:"Code Coverage"` |
+| AC7.2 | UI automation tests cover critical flows | Run integration tests; all pass |
+| AC7.3 | Large file (10MB) opens in <3s | Open 10MB .md; stopwatch <3s |
+| AC7.4 | Memory stable after 1hr editing | Profile; no leak >50MB growth |
+| AC7.5 | Narrator reads editor content | Enable Narrator; navigate editor |
+| AC7.6 | High contrast mode works | System HC theme; all UI visible |
+| AC7.7 | Full keyboard navigation (no mouse) | Tab through all controls; all reachable |
+| AC7.8 | MSIX package installs on clean Windows | Install MSIX; app runs |
+| AC7.9 | Code-signed package passes SmartScreen | Sign → download → no warning |
+| AC7.10 | Auto-update checks GitHub Releases | New version → app notifies |
+| AC7.11 | Microsoft Store submission passes (optional) | Submit → certification passes |
+| AC7.12 | GitHub Release with changelog auto-generated | Tag release → GH Release created |
+| AC7.13 | User guide accessible from Help menu | Help → User Guide → opens |
+| AC7.14 | Keyboard shortcuts reference complete | Help → Shortcuts → all shortcuts listed |
+| AC7.15 | CONTRIBUTING.md guides new contributors | New contributor follows guide; PR accepted |
 
 ---
 
