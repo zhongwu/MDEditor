@@ -1,8 +1,8 @@
-# MKEditor
+# MDEditor
 
 A modern **Markdown desktop editor** built with **WinUI 3** and **Windows App SDK**, featuring a dual-pane interface with live preview, rich formatting toolbar, file management, and GitHub synchronization.
 
-![MKEditor Screenshot](docs/screenshot.png)
+![MDEditor Screenshot](docs/screenshot.png)
 
 ## Features
 
@@ -69,41 +69,41 @@ A modern **Markdown desktop editor** built with **WinUI 3** and **Windows App SD
 
 ```bash
 # Clone the repository
-git clone https://github.com/<your-username>/MKEditor.git
-cd MKEditor
+git clone https://github.com/<your-username>/MDEditor.git
+cd MDEditor
 
 # Restore and build
 dotnet restore
 dotnet build
 
 # Run the application
-dotnet run --project MKEditor/MKEditor.csproj
+dotnet run --project MDEditor/MDEditor.csproj
 ```
 
 ### Open in Visual Studio
 ```bash
 # Open solution
-start MKEditor.sln
+start MDEditor.sln
 ```
 
 ## Project Structure
 
 ```
-MKEditor.sln
-├── MKEditor/                 # WinUI 3 Application
+MDEditor.sln
+├── MDEditor/                 # WinUI 3 Application
 │   ├── Views/                # XAML Views (MainWindow, Dialogs, etc.)
 │   ├── ViewModels/           # MVVM ViewModels
 │   ├── Services/             # Platform services (File, Settings, Theme)
 │   ├── Converters/           # XAML Value Converters
 │   ├── Behaviors/            # XAML Behaviors
 │   └── Resources/            # Styles, Templates, Themes
-├── MKEditor.Core/            # Core Business Logic (Class Library)
+├── MDEditor.Core/            # Core Business Logic (Class Library)
 │   ├── Models/               # Domain Models (Document, GitHub, Settings)
 │   ├── Services/             # Core Services (Markdown, GitHub, File)
 │   ├── Parsers/              # Markdig Pipeline Configuration
 │   └── Interfaces/           # Service Contracts
-├── MKEditor.Tests/           # Unit Tests (xUnit + Moq)
-└── MKEditor.IntegrationTests/ # UI Automation Tests
+├── MDEditor.Tests/           # Unit Tests (xUnit + Moq)
+└── MDEditor.IntegrationTests/ # UI Automation Tests
 ```
 
 ## Keyboard Shortcuts
@@ -124,7 +124,7 @@ MKEditor.sln
 
 ## Configuration
 
-Settings are stored in `%APPDATA%\MKEditor\settings.json`:
+Settings are stored in `%APPDATA%\MDEditor\settings.json`:
 
 ```json
 {

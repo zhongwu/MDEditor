@@ -1,7 +1,7 @@
-# MKEditor Development Plan
+# MDEditor Development Plan
 
 ## Project Overview
-**MKEditor** - A modern Markdown desktop editor built with the latest WinUI platform (WinUI 3 / Windows App SDK), featuring a dual-pane interface with live preview, toolbar for formatting, file operations, and GitHub version synchronization.
+**MDEditor** - A modern Markdown desktop editor built with the latest WinUI platform (WinUI 3 / Windows App SDK), featuring a dual-pane interface with live preview, toolbar for formatting, file operations, and GitHub version synchronization.
 
 ---
 
@@ -31,11 +31,11 @@
 - [ ] Configure Windows App SDK 1.6+ in project
 - [ ] Set up solution structure:
   ```
-  MKEditor.sln
-  ├── MKEditor (WinUI 3 App)
-  ├── MKEditor.Core (Class Library - Business Logic)
-  ├── MKEditor.Tests (Unit Tests)
-  └── MKEditor.IntegrationTests (UI Tests)
+  MDEditor.sln
+  ├── MDEditor (WinUI 3 App)
+  ├── MDEditor.Core (Class Library - Business Logic)
+  ├── MDEditor.Tests (Unit Tests)
+  └── MDEditor.IntegrationTests (UI Tests)
   ```
 - [ ] Configure NuGet packages:
   - CommunityToolkit.Mvvm
@@ -427,28 +427,28 @@ MainWindow
 
 ```bash
 # Create solution structure
-dotnet new sln -n MKEditor
-dotnet new winui3 -n MKEditor -o MKEditor
-dotnet new classlib -n MKEditor.Core -o MKEditor.Core
-dotnet new xunit -n MKEditor.Tests -o MKEditor.Tests
+dotnet new sln -n MDEditor
+dotnet new winui3 -n MDEditor -o MDEditor
+dotnet new classlib -n MDEditor.Core -o MDEditor.Core
+dotnet new xunit -n MDEditor.Tests -o MDEditor.Tests
 
 # Add projects to solution
-dotnet sln add MKEditor/MKEditor.csproj
-dotnet sln add MKEditor.Core/MKEditor.Core.csproj
-dotnet sln add MKEditor.Tests/MKEditor.Tests.csproj
+dotnet sln add MDEditor/MDEditor.csproj
+dotnet sln add MDEditor.Core/MDEditor.Core.csproj
+dotnet sln add MDEditor.Tests/MDEditor.Tests.csproj
 
 # Add core packages
-dotnet add MKEditor.Core package Markdig
-dotnet add MKEditor.Core package Octokit
-dotnet add MKEditor.Core package CommunityToolkit.Mvvm
-dotnet add MKEditor.Core package Microsoft.Extensions.DependencyInjection
-dotnet add MKEditor package Microsoft.WindowsAppSDK
-dotnet add MKEditor package CommunityToolkit.WinUI
-dotnet add MKEditor package Microsoft.Web.WebView2
+dotnet add MDEditor.Core package Markdig
+dotnet add MDEditor.Core package Octokit
+dotnet add MDEditor.Core package CommunityToolkit.Mvvm
+dotnet add MDEditor.Core package Microsoft.Extensions.DependencyInjection
+dotnet add MDEditor package Microsoft.WindowsAppSDK
+dotnet add MDEditor package CommunityToolkit.WinUI
+dotnet add MDEditor package Microsoft.Web.WebView2
 
 # Build and run
 dotnet build
-dotnet run --project MKEditor/MKEditor.csproj
+dotnet run --project MDEditor/MDEditor.csproj
 ```
 
 ---
