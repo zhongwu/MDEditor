@@ -1,6 +1,247 @@
-<Solution>
-  <Project Path="MDEditor.Core/MDEditor.Core.csproj" />
-  <Project Path="MDEditor.IntegrationTests/MDEditor.IntegrationTests.csproj" />
-  <Project Path="MDEditor.Tests/MDEditor.Tests.csproj" />
-  <Project Path="MDEditor/MDEditor.csproj" />
+<?xml version="1.0" encoding="utf-8"?>
+<Solution xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Properties>
+    <SolutionFileFormatVersion>1</SolutionFileFormatVersion>
+    <VisualStudioVersion>17</VisualStudioVersion>
+    <MinimumVisualStudioVersion>10.0.40219.1</MinimumVisualStudioVersion>
+  </Properties>
+  <Projects>
+    <ProjectReference Include="MDEditor.Core\MDEditor.Core.csproj">
+      <Project>{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}</Project>
+      <Name>MDEditor.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="MDEditor\MDEditor.csproj">
+      <Project>{B2C3D4E5-F6A7-8901-BCDE-F23456789012}</Project>
+      <Name>MDEditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="MDEditor.Tests\MDEditor.Tests.csproj">
+      <Project>{C3D4E5F6-A7B8-9012-CDEF-345678901234}</Project>
+      <Name>MDEditor.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="MDEditor.IntegrationTests\MDEditor.IntegrationTests.csproj">
+      <Project>{D4E5F6A7-B8C9-0123-DEFG-456789012345}</Project>
+      <Name>MDEditor.IntegrationTests</Name>
+    </ProjectReference>
+  </Projects>
+  <ConfigurationPlatforms>
+    <ConfigurationPlatform>
+      <Configuration>Debug</Configuration>
+      <Platform>Any CPU</Platform>
+    </ConfigurationPlatform>
+    <ConfigurationPlatform>
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ConfigurationPlatform>
+    <ConfigurationPlatform>
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ConfigurationPlatform>
+    <ConfigurationPlatform>
+      <Configuration>Debug</Configuration>
+      <Platform>x86</Platform>
+    </ConfigurationPlatform>
+    <ConfigurationPlatform>
+      <Configuration>Release</Configuration>
+      <Platform>Any CPU</Platform>
+    </ConfigurationPlatform>
+    <ConfigurationPlatform>
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </ConfigurationPlatform>
+    <ConfigurationPlatform>
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ConfigurationPlatform>
+    <ConfigurationPlatform>
+      <Configuration>Release</Configuration>
+      <Platform>x86</Platform>
+    </ConfigurationPlatform>
+  </ConfigurationPlatforms>
+  <ProjectConfigurationPlatforms>
+    <ProjectConfiguration Platform="Any CPU" Configuration="Debug">
+      <Project>{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}</Project>
+      <Configuration>Debug</Configuration>
+      <Platform>Any CPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="ARM64" Configuration="Debug">
+      <Project>{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}</Project>
+      <Configuration>Debug</Configuration>
+      <Platform>Any CPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="x64" Configuration="Debug">
+      <Project>{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}</Project>
+      <Configuration>Debug</Configuration>
+      <Platform>Any CPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="x86" Configuration="Debug">
+      <Project>{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}</Project>
+      <Configuration>Debug</Configuration>
+      <Platform>Any CPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="Any CPU" Configuration="Release">
+      <Project>{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}</Project>
+      <Configuration>Release</Configuration>
+      <Platform>Any CPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="ARM64" Configuration="Release">
+      <Project>{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}</Project>
+      <Configuration>Release</Configuration>
+      <Platform>Any CPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="x64" Configuration="Release">
+      <Project>{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}</Project>
+      <Configuration>Release</Configuration>
+      <Platform>Any CPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="x86" Configuration="Release">
+      <Project>{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}</Project>
+      <Configuration>Release</Configuration>
+      <Platform>Any CPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="x64" Configuration="Debug">
+      <Project>{B2C3D4E5-F6A7-8901-BCDE-F23456789012}</Project>
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="ARM64" Configuration="Debug">
+      <Project>{B2C3D4E5-F6A7-8901-BCDE-F23456789012}</Project>
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="x86" Configuration="Debug">
+      <Project>{B2C3D4E5-F6A7-8901-BCDE-F23456789012}</Project>
+      <Configuration>Debug</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="x64" Configuration="Release">
+      <Project>{B2C3D4E5-F6A7-8901-BCDE-F23456789012}</Project>
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="ARM64" Configuration="Release">
+      <Project>{B2C3D4E5-F6A7-8901-BCDE-F23456789012}</Project>
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="x86" Configuration="Release">
+      <Project>{B2C3D4E5-F6A7-8901-BCDE-F23456789012}</Project>
+      <Configuration>Release</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="Any CPU" Configuration="Debug">
+      <Project>{C3D4E5F6-A7B8-9012-CDEF-345678901234}</Project>
+      <Configuration>Debug</Configuration>
+      <Platform>Any CPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="ARM64" Configuration="Debug">
+      <Project>{C3D4E5F6-A7B8-9012-CDEF-345678901234}</Project>
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="x64" Configuration="Debug">
+      <Project>{C3D4E5F6-A7B8-9012-CDEF-345678901234}</Project>
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="x86" Configuration="Debug">
+      <Project>{C3D4E5F6-A7B8-9012-CDEF-345678901234}</Project>
+      <Configuration>Debug</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="Any CPU" Configuration="Release">
+      <Project>{C3D4E5F6-A7B8-9012-CDEF-345678901234}</Project>
+      <Configuration>Release</Configuration>
+      <Platform>Any CPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="ARM64" Configuration="Release">
+      <Project>{C3D4E5F6-A7B8-9012-CDEF-345678901234}</Project>
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="x64" Configuration="Release">
+      <Project>{C3D4E5F6-A7B8-9012-CDEF-345678901234}</Project>
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="x86" Configuration="Release">
+      <Project>{C3D4E5F6-A7B8-9012-CDEF-345678901234}</Project>
+      <Configuration>Release</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="Any CPU" Configuration="Debug">
+      <Project>{D4E5F6A7-B8C9-0123-DEFG-456789012345}</Project>
+      <Configuration>Debug</Configuration>
+      <Platform>Any CPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="ARM64" Configuration="Debug">
+      <Project>{D4E5F6A7-B8C9-0123-DEFG-456789012345}</Project>
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="x64" Configuration="Debug">
+      <Project>{D4E5F6A7-B8C9-0123-DEFG-456789012345}</Project>
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="x86" Configuration="Debug">
+      <Project>{D4E5F6A7-B8C9-0123-DEFG-456789012345}</Project>
+      <Configuration>Debug</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="Any CPU" Configuration="Release">
+      <Project>{D4E5F6A7-B8C9-0123-DEFG-456789012345}</Project>
+      <Configuration>Release</Configuration>
+      <Platform>Any CPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="ARM64" Configuration="Release">
+      <Project>{D4E5F6A7-B8C9-0123-DEFG-456789012345}</Project>
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="x64" Configuration="Release">
+      <Project>{D4E5F6A7-B8C9-0123-DEFG-456789012345}</Project>
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Platform="x86" Configuration="Release">
+      <Project>{D4E5F6A7-B8C9-0123-DEFG-456789012345}</Project>
+      <Configuration>Release</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+  </ProjectConfigurationPlatforms>
+  <NestedProjects />
+  <SolutionConfigurationPlatforms>
+    <SolutionConfigurationPlatform>
+      <Configuration>Debug</Configuration>
+      <Platform>Any CPU</Platform>
+    </SolutionConfigurationPlatform>
+    <SolutionConfigurationPlatform>
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </SolutionConfigurationPlatform>
+    <SolutionConfigurationPlatform>
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </SolutionConfigurationPlatform>
+    <SolutionConfigurationPlatform>
+      <Configuration>Debug</Configuration>
+      <Platform>x86</Platform>
+    </SolutionConfigurationPlatform>
+    <SolutionConfigurationPlatform>
+      <Configuration>Release</Configuration>
+      <Platform>Any CPU</Platform>
+    </SolutionConfigurationPlatform>
+    <SolutionConfigurationPlatform>
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </SolutionConfigurationPlatform>
+    <SolutionConfigurationPlatform>
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </SolutionConfigurationPlatform>
+    <SolutionConfigurationPlatform>
+      <Configuration>Release</Configuration>
+      <Platform>x86</Platform>
+    </SolutionConfigurationPlatform>
+  </SolutionConfigurationPlatforms>
 </Solution>
