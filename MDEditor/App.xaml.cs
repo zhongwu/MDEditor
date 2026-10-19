@@ -45,6 +45,7 @@ public partial class App : Application
             .ConfigureServices((context, services) =>
             {
                 services.AddMDEditorCore();
+                services.AddMDEditorViewModels();
             })
             .Build();
 

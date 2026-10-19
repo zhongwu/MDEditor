@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <ProjectGuid>{C3D4E5F6-A7B8-9012-CDEF-345678901234}</ProjectGuid>
+    <Platforms>x86;x64;ARM64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
