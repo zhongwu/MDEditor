@@ -1,0 +1,13 @@
+C:\Users\zwu_9\Documents\projects\MKEditor\MDEditor.Core\bin\Debug\net10.0\MDEditor.Core.deps.json
+C:\Users\zwu_9\Documents\projects\MKEditor\MDEditor.Core\bin\Debug\net10.0\MDEditor.Core.dll
+C:\Users\zwu_9\Documents\projects\MKEditor\MDEditor.Core\bin\Debug\net10.0\MDEditor.Core.pdb
+C:\Users\zwu_9\Documents\projects\MKEditor\MDEditor.Core\obj\Debug\net10.0\MDEditor.Core.csproj.AssemblyReference.cache
+C:\Users\zwu_9\Documents\projects\MKEditor\MDEditor.Core\obj\Debug\net10.0\MDEditor.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\zwu_9\Documents\projects\MKEditor\MDEditor.Core\obj\Debug\net10.0\MDEditor.Core.AssemblyInfoInputs.cache
+C:\Users\zwu_9\Documents\projects\MKEditor\MDEditor.Core\obj\Debug\net10.0\MDEditor.Core.AssemblyInfo.cs
+C:\Users\zwu_9\Documents\projects\MKEditor\MDEditor.Core\obj\Debug\net10.0\MDEditor.Core.csproj.CoreCompileInputs.cache
+C:\Users\zwu_9\Documents\projects\MKEditor\MDEditor.Core\obj\Debug\net10.0\MDEditor.Core.sourcelink.json
+C:\Users\zwu_9\Documents\projects\MKEditor\MDEditor.Core\obj\Debug\net10.0\MDEditor.Core.dll
+C:\Users\zwu_9\Documents\projects\MKEditor\MDEditor.Core\obj\Debug\net10.0\refint\MDEditor.Core.dll
+C:\Users\zwu_9\Documents\projects\MKEditor\MDEditor.Core\obj\Debug\net10.0\MDEditor.Core.pdb
+C:\Users\zwu_9\Documents\projects\MKEditor\MDEditor.Core\obj\Debug\net10.0\ref\MDEditor.Core.dll

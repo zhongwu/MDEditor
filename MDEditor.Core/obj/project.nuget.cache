@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "dgSpecHash": "EWr0Dqng6hM=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\zwu_9\\Documents\\projects\\MKEditor\\MDEditor.Core\\MDEditor.Core.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\zwu_9\\.nuget\\packages\\communitytoolkit.mvvm\\8.4.2\\communitytoolkit.mvvm.8.4.2.nupkg.sha512",
+    "C:\\Users\\zwu_9\\.nuget\\packages\\markdig\\1.4.1\\markdig.1.4.1.nupkg.sha512",
+    "C:\\Users\\zwu_9\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\10.0.13\\microsoft.extensions.dependencyinjection.10.0.13.nupkg.sha512",
+    "C:\\Users\\zwu_9\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.13\\microsoft.extensions.dependencyinjection.abstractions.10.0.13.nupkg.sha512",
+    "C:\\Users\\zwu_9\\.nuget\\packages\\microsoft.extensions.logging\\10.0.13\\microsoft.extensions.logging.10.0.13.nupkg.sha512",
+    "C:\\Users\\zwu_9\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\10.0.13\\microsoft.extensions.logging.abstractions.10.0.13.nupkg.sha512",
+    "C:\\Users\\zwu_9\\.nuget\\packages\\microsoft.extensions.options\\10.0.13\\microsoft.extensions.options.10.0.13.nupkg.sha512",
+    "C:\\Users\\zwu_9\\.nuget\\packages\\microsoft.extensions.primitives\\10.0.13\\microsoft.extensions.primitives.10.0.13.nupkg.sha512",
+    "C:\\Users\\zwu_9\\.nuget\\packages\\octokit\\14.0.0\\octokit.14.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
