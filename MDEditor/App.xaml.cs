@@ -1,4 +1,8 @@
-﻿using Windows.ApplicationModel;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using MDEditor.Core;
+using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -22,7 +26,12 @@ namespace MDEditor;
 public partial class App : Application
 {
     private Window? _window;
-    
+
+    /// <summary>
+    /// Gets the shared service provider for dependency injection.
+    /// </summary>
+    public static IServiceProvider Services { get; private set; } = null!;
+
     /// <summary>
     /// Initializes the singleton application object.  This is the first line of authored code
     /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -30,6 +39,16 @@ public partial class App : Application
     public App()
     {
         InitializeComponent();
+
+        // Build the dependency injection container
+        var host = Host.CreateDefaultBuilder()
+            .ConfigureServices((context, services) =>
+            {
+                services.AddMDEditorCore();
+            })
+            .Build();
+
+        Services = host.Services;
     }
 
     /// <summary>
