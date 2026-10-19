@@ -16,6 +16,7 @@
     <Grid x:Name="RootGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />  <!-- Title Bar -->
+            <RowDefinition Height="Auto" />  <!-- Menu Bar -->
             <RowDefinition Height="Auto" />  <!-- Toolbar -->
             <RowDefinition Height="*" />     <!-- Editor/Preview panes -->
             <RowDefinition Height="Auto" />  <!-- Status Bar -->
@@ -24,130 +25,208 @@
         <!-- Custom Title Bar -->
         <TitleBar x:Name="AppTitleBar" Title="MDEditor" Grid.Row="0" />
 
+        <!-- Menu Bar -->
+        <MenuBar x:Name="MainMenuBar" Grid.Row="1" HorizontalAlignment="Stretch">
+            <MenuBarItem Title="File">
+                <MenuFlyoutItem Text="New" Command="{x:Bind ViewModel.NewFileCommand}" />
+                <MenuFlyoutItem Text="Open..." Command="{x:Bind ViewModel.OpenFileCommand}" />
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem Text="Save" Command="{x:Bind ViewModel.SaveFileCommand}" />
+                <MenuFlyoutItem Text="Save As..." Command="{x:Bind ViewModel.SaveAsFileCommand}" />
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem Text="Export HTML" Command="{x:Bind ViewModel.ExportHtmlCommand}" />
+                <MenuFlyoutItem Text="Export PDF" Command="{x:Bind ViewModel.ExportPdfCommand}" />
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem Text="Exit" Command="{x:Bind ViewModel.ExitCommand}" />
+            </MenuBarItem>
+
+            <MenuBarItem Title="Edit">
+                <MenuFlyoutItem Text="Undo" Command="{x:Bind ViewModel.UndoCommand}" />
+                <MenuFlyoutItem Text="Redo" Command="{x:Bind ViewModel.RedoCommand}" />
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem Text="Cut" Command="{x:Bind ViewModel.CutCommand}" />
+                <MenuFlyoutItem Text="Copy" Command="{x:Bind ViewModel.CopyCommand}" />
+                <MenuFlyoutItem Text="Paste" Command="{x:Bind ViewModel.PasteCommand}" />
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem Text="Find" Command="{x:Bind ViewModel.FindCommand}" />
+                <MenuFlyoutItem Text="Replace" Command="{x:Bind ViewModel.ReplaceCommand}" />
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem Text="Select All" Command="{x:Bind ViewModel.SelectAllCommand}" />
+            </MenuBarItem>
+
+            <MenuBarItem Title="View">
+                <MenuFlyoutItem Text="Toggle Preview" Command="{x:Bind ViewModel.TogglePreviewCommand}" />
+                <MenuFlyoutItem Text="Toggle Line Numbers" Command="{x:Bind ViewModel.ToggleLineNumbersCommand}" />
+                <MenuFlyoutItem Text="Word Wrap" Command="{x:Bind ViewModel.ToggleWordWrapCommand}" />
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem Text="Zoom In" Command="{x:Bind ViewModel.ZoomInCommand}" />
+                <MenuFlyoutItem Text="Zoom Out" Command="{x:Bind ViewModel.ZoomOutCommand}" />
+                <MenuFlyoutItem Text="Reset Zoom" Command="{x:Bind ViewModel.ResetZoomCommand}" />
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem Text="Theme" Command="{x:Bind ViewModel.CycleThemeCommand}" />
+            </MenuBarItem>
+
+            <MenuBarItem Title="Format">
+                <MenuFlyoutItem Text="Heading 1" Command="{x:Bind ViewModel.Heading1Command}" />
+                <MenuFlyoutItem Text="Heading 2" Command="{x:Bind ViewModel.Heading2Command}" />
+                <MenuFlyoutItem Text="Heading 3" Command="{x:Bind ViewModel.Heading3Command}" />
+                <MenuFlyoutItem Text="Heading 4" Command="{x:Bind ViewModel.Heading4Command}" />
+                <MenuFlyoutItem Text="Heading 5" Command="{x:Bind ViewModel.Heading5Command}" />
+                <MenuFlyoutItem Text="Heading 6" Command="{x:Bind ViewModel.Heading6Command}" />
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem Text="Bold" Command="{x:Bind ViewModel.BoldCommand}" />
+                <MenuFlyoutItem Text="Italic" Command="{x:Bind ViewModel.ItalicCommand}" />
+                <MenuFlyoutItem Text="Strikethrough" Command="{x:Bind ViewModel.StrikethroughCommand}" />
+                <MenuFlyoutItem Text="Inline Code" Command="{x:Bind ViewModel.InlineCodeCommand}" />
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem Text="Code Block" Command="{x:Bind ViewModel.CodeBlockCommand}" />
+                <MenuFlyoutItem Text="Blockquote" Command="{x:Bind ViewModel.BlockquoteCommand}" />
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem Text="Unordered List" Command="{x:Bind ViewModel.UnorderedListCommand}" />
+                <MenuFlyoutItem Text="Ordered List" Command="{x:Bind ViewModel.OrderedListCommand}" />
+                <MenuFlyoutItem Text="Task List" Command="{x:Bind ViewModel.TaskListCommand}" />
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem Text="Link" Command="{x:Bind ViewModel.InsertLinkCommand}" />
+                <MenuFlyoutItem Text="Image" Command="{x:Bind ViewModel.InsertImageCommand}" />
+                <MenuFlyoutItem Text="Table" Command="{x:Bind ViewModel.InsertTableCommand}" />
+                <MenuFlyoutItem Text="Horizontal Rule" Command="{x:Bind ViewModel.InsertHorizontalRuleCommand}" />
+            </MenuBarItem>
+
+            <MenuBarItem Title="Tools">
+                <MenuFlyoutItem Text="GitHub Sync" Command="{x:Bind ViewModel.GitHubSyncCommand}" />
+                <MenuFlyoutItem Text="Settings" Command="{x:Bind ViewModel.SettingsCommand}" />
+            </MenuBarItem>
+
+            <MenuBarItem Title="Help">
+                <MenuFlyoutItem Text="Keyboard Shortcuts" Command="{x:Bind ViewModel.KeyboardShortcutsCommand}" />
+                <MenuFlyoutItem Text="Markdown Guide" Command="{x:Bind ViewModel.MarkdownGuideCommand}" />
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem Text="About" Command="{x:Bind ViewModel.AboutCommand}" />
+            </MenuBarItem>
+        </MenuBar>
+
         <!-- Toolbar / Command Bar -->
-        <CommandBar x:Name="MainCommandBar" Grid.Row="1" DefaultLabelPosition="Right" OverflowButtonVisibility="Auto">
-            <!-- File Menu -->
-            <CommandBar.Content>
-                <MenuBar x:Name="MainMenuBar">
-                    <MenuBarItem Title="File">
-                        <MenuFlyoutItem Text="New" Command="{x:Bind ViewModel.NewFileCommand}" />
-                        <MenuFlyoutItem Text="Open..." Command="{x:Bind ViewModel.OpenFileCommand}" />
-                        <MenuFlyoutSeparator />
-                        <MenuFlyoutItem Text="Save" Command="{x:Bind ViewModel.SaveFileCommand}" />
-                        <MenuFlyoutItem Text="Save As..." Command="{x:Bind ViewModel.SaveAsFileCommand}" />
-                        <MenuFlyoutSeparator />
-                        <MenuFlyoutItem Text="Export HTML" Command="{x:Bind ViewModel.ExportHtmlCommand}" />
-                        <MenuFlyoutItem Text="Export PDF" Command="{x:Bind ViewModel.ExportPdfCommand}" />
-                        <MenuFlyoutSeparator />
-                        <MenuFlyoutItem Text="Exit" Command="{x:Bind ViewModel.ExitCommand}" />
-                    </MenuBarItem>
-
-                    <MenuBarItem Title="Edit">
-                        <MenuFlyoutItem Text="Undo" Command="{x:Bind ViewModel.UndoCommand}" />
-                        <MenuFlyoutItem Text="Redo" Command="{x:Bind ViewModel.RedoCommand}" />
-                        <MenuFlyoutSeparator />
-                        <MenuFlyoutItem Text="Cut" Command="{x:Bind ViewModel.CutCommand}" />
-                        <MenuFlyoutItem Text="Copy" Command="{x:Bind ViewModel.CopyCommand}" />
-                        <MenuFlyoutItem Text="Paste" Command="{x:Bind ViewModel.PasteCommand}" />
-                        <MenuFlyoutSeparator />
-                        <MenuFlyoutItem Text="Find" Command="{x:Bind ViewModel.FindCommand}" />
-                        <MenuFlyoutItem Text="Replace" Command="{x:Bind ViewModel.ReplaceCommand}" />
-                        <MenuFlyoutSeparator />
-                        <MenuFlyoutItem Text="Select All" Command="{x:Bind ViewModel.SelectAllCommand}" />
-                    </MenuBarItem>
-
-                    <MenuBarItem Title="View">
-                        <MenuFlyoutItem Text="Toggle Preview" Command="{x:Bind ViewModel.TogglePreviewCommand}" />
-                        <MenuFlyoutItem Text="Toggle Line Numbers" Command="{x:Bind ViewModel.ToggleLineNumbersCommand}" />
-                        <MenuFlyoutItem Text="Word Wrap" Command="{x:Bind ViewModel.ToggleWordWrapCommand}" />
-                        <MenuFlyoutSeparator />
-                        <MenuFlyoutItem Text="Zoom In" Command="{x:Bind ViewModel.ZoomInCommand}" />
-                        <MenuFlyoutItem Text="Zoom Out" Command="{x:Bind ViewModel.ZoomOutCommand}" />
-                        <MenuFlyoutItem Text="Reset Zoom" Command="{x:Bind ViewModel.ResetZoomCommand}" />
-                        <MenuFlyoutSeparator />
-                        <MenuFlyoutItem Text="Theme" Command="{x:Bind ViewModel.CycleThemeCommand}" />
-                    </MenuBarItem>
-
-                    <MenuBarItem Title="Format">
-                        <MenuFlyoutItem Text="Heading 1" Command="{x:Bind ViewModel.Heading1Command}" />
-                        <MenuFlyoutItem Text="Heading 2" Command="{x:Bind ViewModel.Heading2Command}" />
-                        <MenuFlyoutItem Text="Heading 3" Command="{x:Bind ViewModel.Heading3Command}" />
-                        <MenuFlyoutItem Text="Heading 4" Command="{x:Bind ViewModel.Heading4Command}" />
-                        <MenuFlyoutItem Text="Heading 5" Command="{x:Bind ViewModel.Heading5Command}" />
-                        <MenuFlyoutItem Text="Heading 6" Command="{x:Bind ViewModel.Heading6Command}" />
-                        <MenuFlyoutSeparator />
-                        <MenuFlyoutItem Text="Bold" Command="{x:Bind ViewModel.BoldCommand}" />
-                        <MenuFlyoutItem Text="Italic" Command="{x:Bind ViewModel.ItalicCommand}" />
-                        <MenuFlyoutItem Text="Strikethrough" Command="{x:Bind ViewModel.StrikethroughCommand}" />
-                        <MenuFlyoutItem Text="Inline Code" Command="{x:Bind ViewModel.InlineCodeCommand}" />
-                        <MenuFlyoutSeparator />
-                        <MenuFlyoutItem Text="Code Block" Command="{x:Bind ViewModel.CodeBlockCommand}" />
-                        <MenuFlyoutItem Text="Blockquote" Command="{x:Bind ViewModel.BlockquoteCommand}" />
-                        <MenuFlyoutSeparator />
-                        <MenuFlyoutItem Text="Unordered List" Command="{x:Bind ViewModel.UnorderedListCommand}" />
-                        <MenuFlyoutItem Text="Ordered List" Command="{x:Bind ViewModel.OrderedListCommand}" />
-                        <MenuFlyoutItem Text="Task List" Command="{x:Bind ViewModel.TaskListCommand}" />
-                        <MenuFlyoutSeparator />
-                        <MenuFlyoutItem Text="Link" Command="{x:Bind ViewModel.InsertLinkCommand}" />
-                        <MenuFlyoutItem Text="Image" Command="{x:Bind ViewModel.InsertImageCommand}" />
-                        <MenuFlyoutItem Text="Table" Command="{x:Bind ViewModel.InsertTableCommand}" />
-                        <MenuFlyoutItem Text="Horizontal Rule" Command="{x:Bind ViewModel.InsertHorizontalRuleCommand}" />
-                    </MenuBarItem>
-
-                    <MenuBarItem Title="Tools">
-                        <MenuFlyoutItem Text="GitHub Sync" Command="{x:Bind ViewModel.GitHubSyncCommand}" />
-                        <MenuFlyoutItem Text="Settings" Command="{x:Bind ViewModel.SettingsCommand}" />
-                    </MenuBarItem>
-
-                    <MenuBarItem Title="Help">
-                        <MenuFlyoutItem Text="Keyboard Shortcuts" Command="{x:Bind ViewModel.KeyboardShortcutsCommand}" />
-                        <MenuFlyoutItem Text="Markdown Guide" Command="{x:Bind ViewModel.MarkdownGuideCommand}" />
-                        <MenuFlyoutSeparator />
-                        <MenuFlyoutItem Text="About" Command="{x:Bind ViewModel.AboutCommand}" />
-                    </MenuBarItem>
-                </MenuBar>
-            </CommandBar.Content>
-
+        <CommandBar x:Name="MainCommandBar" Grid.Row="2" DefaultLabelPosition="Right" OverflowButtonVisibility="Auto" HorizontalAlignment="Stretch" Padding="0">
             <!-- Quick-access toolbar buttons -->
-            <AppBarButton x:Name="BtnNew" Label="New" Command="{x:Bind ViewModel.NewFileCommand}" ToolTipService.ToolTip="New (Ctrl+N)" />
-            <AppBarButton x:Name="BtnOpen" Label="Open" Command="{x:Bind ViewModel.OpenFileCommand}" ToolTipService.ToolTip="Open (Ctrl+O)" />
-            <AppBarButton x:Name="BtnSave" Label="Save" Command="{x:Bind ViewModel.SaveFileCommand}" ToolTipService.ToolTip="Save (Ctrl+S)" />
+            <AppBarButton x:Name="BtnNew" Label="New" Command="{x:Bind ViewModel.NewFileCommand}" ToolTipService.ToolTip="New (Ctrl+N)">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8A5;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="BtnOpen" Label="Open" Command="{x:Bind ViewModel.OpenFileCommand}" ToolTipService.ToolTip="Open (Ctrl+O)">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8E5;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="BtnSave" Label="Save" Command="{x:Bind ViewModel.SaveFileCommand}" ToolTipService.ToolTip="Save (Ctrl+S)">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74E;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
             <AppBarSeparator />
 
-            <AppBarButton x:Name="BtnUndo" Label="Undo" Command="{x:Bind ViewModel.UndoCommand}" ToolTipService.ToolTip="Undo (Ctrl+Z)" />
-            <AppBarButton x:Name="BtnRedo" Label="Redo" Command="{x:Bind ViewModel.RedoCommand}" ToolTipService.ToolTip="Redo (Ctrl+Y)" />
+            <AppBarButton x:Name="BtnUndo" Label="Undo" Command="{x:Bind ViewModel.UndoCommand}" ToolTipService.ToolTip="Undo (Ctrl+Z)">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE7A7;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="BtnRedo" Label="Redo" Command="{x:Bind ViewModel.RedoCommand}" ToolTipService.ToolTip="Redo (Ctrl+Y)">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE7A6;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
             <AppBarSeparator />
 
-            <AppBarButton x:Name="BtnBold" Label="Bold" Command="{x:Bind ViewModel.BoldCommand}" ToolTipService.ToolTip="Bold (Ctrl+B)" />
-            <AppBarButton x:Name="BtnItalic" Label="Italic" Command="{x:Bind ViewModel.ItalicCommand}" ToolTipService.ToolTip="Italic (Ctrl+I)" />
-            <AppBarButton x:Name="BtnStrikethrough" Label="Strikethrough" Command="{x:Bind ViewModel.StrikethroughCommand}" ToolTipService.ToolTip="Strikethrough (Ctrl+Shift+X)" />
-            <AppBarButton x:Name="BtnInlineCode" Label="Inline Code" Command="{x:Bind ViewModel.InlineCodeCommand}" ToolTipService.ToolTip="Inline Code (Ctrl+`)" />
+            <AppBarButton x:Name="BtnBold" Label="Bold" Command="{x:Bind ViewModel.BoldCommand}" ToolTipService.ToolTip="Bold (Ctrl+B)">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8DD;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="BtnItalic" Label="Italic" Command="{x:Bind ViewModel.ItalicCommand}" ToolTipService.ToolTip="Italic (Ctrl+I)">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8DB;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="BtnStrikethrough" Label="Strikethrough" Command="{x:Bind ViewModel.StrikethroughCommand}" ToolTipService.ToolTip="Strikethrough (Ctrl+Shift+X)">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEDE0;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="BtnInlineCode" Label="Inline Code" Command="{x:Bind ViewModel.InlineCodeCommand}" ToolTipService.ToolTip="Inline Code (Ctrl+`)">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE943;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
             <AppBarSeparator />
 
-            <AppBarButton x:Name="BtnCodeBlock" Label="Code Block" Command="{x:Bind ViewModel.CodeBlockCommand}" ToolTipService.ToolTip="Code Block (Ctrl+Shift+C)" />
-            <AppBarButton x:Name="BtnBlockquote" Label="Quote" Command="{x:Bind ViewModel.BlockquoteCommand}" ToolTipService.ToolTip="Blockquote (Ctrl+Q)" />
+            <AppBarButton x:Name="BtnCodeBlock" Label="Code Block" Command="{x:Bind ViewModel.CodeBlockCommand}" ToolTipService.ToolTip="Code Block (Ctrl+Shift+C)">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE943;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="BtnBlockquote" Label="Quote" Command="{x:Bind ViewModel.BlockquoteCommand}" ToolTipService.ToolTip="Blockquote (Ctrl+Q)">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE908;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
             <AppBarSeparator />
 
-            <AppBarButton x:Name="BtnHeading1" Label="H1" Command="{x:Bind ViewModel.Heading1Command}" ToolTipService.ToolTip="Heading 1 (Ctrl+1)" />
-            <AppBarButton x:Name="BtnHeading2" Label="H2" Command="{x:Bind ViewModel.Heading2Command}" ToolTipService.ToolTip="Heading 2 (Ctrl+2)" />
+            <AppBarButton x:Name="BtnHeading1" Label="H1" Command="{x:Bind ViewModel.Heading1Command}" ToolTipService.ToolTip="Heading 1 (Ctrl+1)">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8E2;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="BtnHeading2" Label="H2" Command="{x:Bind ViewModel.Heading2Command}" ToolTipService.ToolTip="Heading 2 (Ctrl+2)">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8E2;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
             <AppBarButton x:Name="BtnHeading3" Label="H3" Command="{x:Bind ViewModel.Heading3Command}" ToolTipService.ToolTip="Heading 3 (Ctrl+3)" />
             <AppBarSeparator />
 
-            <AppBarButton x:Name="BtnUnorderedList" Label="List" Command="{x:Bind ViewModel.UnorderedListCommand}" ToolTipService.ToolTip="Unordered List (Ctrl+Shift+L)" />
-            <AppBarButton x:Name="BtnOrderedList" Label="Numbered" Command="{x:Bind ViewModel.OrderedListCommand}" ToolTipService.ToolTip="Ordered List (Ctrl+Shift+O)" />
-            <AppBarButton x:Name="BtnTaskList" Label="Tasks" Command="{x:Bind ViewModel.TaskListCommand}" ToolTipService.ToolTip="Task List (Ctrl+Shift+T)" />
+            <AppBarButton x:Name="BtnUnorderedList" Label="List" Command="{x:Bind ViewModel.UnorderedListCommand}" ToolTipService.ToolTip="Unordered List (Ctrl+Shift+L)">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8FD;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="BtnOrderedList" Label="Numbered" Command="{x:Bind ViewModel.OrderedListCommand}" ToolTipService.ToolTip="Ordered List (Ctrl+Shift+O)">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8FD;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="BtnTaskList" Label="Tasks" Command="{x:Bind ViewModel.TaskListCommand}" ToolTipService.ToolTip="Task List (Ctrl+Shift+T)">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE73E;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
             <AppBarSeparator />
 
-            <AppBarButton x:Name="BtnLink" Label="Link" Command="{x:Bind ViewModel.InsertLinkCommand}" ToolTipService.ToolTip="Insert Link (Ctrl+K)" />
-            <AppBarButton x:Name="BtnImage" Label="Image" Command="{x:Bind ViewModel.InsertImageCommand}" ToolTipService.ToolTip="Insert Image (Ctrl+Shift+I)" />
-            <AppBarButton x:Name="BtnTable" Label="Table" Command="{x:Bind ViewModel.InsertTableCommand}" ToolTipService.ToolTip="Insert Table (Ctrl+Shift+T)" />
+            <AppBarButton x:Name="BtnLink" Label="Link" Command="{x:Bind ViewModel.InsertLinkCommand}" ToolTipService.ToolTip="Insert Link (Ctrl+K)">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE71B;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="BtnImage" Label="Image" Command="{x:Bind ViewModel.InsertImageCommand}" ToolTipService.ToolTip="Insert Image (Ctrl+Shift+I)">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B9;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="BtnTable" Label="Table" Command="{x:Bind ViewModel.InsertTableCommand}" ToolTipService.ToolTip="Insert Table (Ctrl+Shift+T)">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8F1;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
             <AppBarSeparator />
 
-            <AppBarButton x:Name="BtnTogglePreview" Label="Preview" Command="{x:Bind ViewModel.TogglePreviewCommand}" ToolTipService.ToolTip="Toggle Preview (Ctrl+Shift+P)" />
+            <AppBarButton x:Name="BtnTogglePreview" Label="Preview" Command="{x:Bind ViewModel.TogglePreviewCommand}" ToolTipService.ToolTip="Toggle Preview (Ctrl+Shift+P)">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8A1;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
         </CommandBar>
 
         <!-- Main Content: Dual-pane Editor/Preview -->
-        <Grid x:Name="MainContentGrid" Grid.Row="2">
+        <Grid x:Name="MainContentGrid" Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition x:Name="EditorColumn" Width="*" MinWidth="300" />
                 <ColumnDefinition Width="Auto" />  <!-- Splitter -->
@@ -198,7 +277,11 @@
                 <Border Grid.Row="0" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="0,0,0,1" Padding="8,4">
                     <StackPanel Orientation="Horizontal" Spacing="4">
                         <TextBlock Text="PREVIEW" Style="{ThemeResource CaptionTextBlockStyle}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center" />
-                        <AppBarButton x:Name="BtnRefreshPreview" Label="Refresh" Command="{x:Bind ViewModel.RefreshPreviewCommand}" ToolTipService.ToolTip="Refresh Preview" Width="40" Height="40" Margin="8,0,0,0" />
+                        <AppBarButton x:Name="BtnRefreshPreview" Label="Refresh" Command="{x:Bind ViewModel.RefreshPreviewCommand}" ToolTipService.ToolTip="Refresh Preview" Width="40" Height="40" Margin="8,0,0,0">
+                            <AppBarButton.Icon>
+                                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE72C;" />
+                            </AppBarButton.Icon>
+                        </AppBarButton>
                     </StackPanel>
                 </Border>
 
@@ -210,7 +293,7 @@
         </Grid>
 
         <!-- Status Bar -->
-        <Grid x:Name="StatusBar" Grid.Row="3" Height="28" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="0,1,0,0">
+        <Grid x:Name="StatusBar" Grid.Row="4" Height="28" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="0,1,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />

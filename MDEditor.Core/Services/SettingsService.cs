@@ -32,7 +32,7 @@ public class SettingsService : ISettingsService
             {
                 var json = storedValue as string ?? storedValue?.ToString() ?? string.Empty;
                 var deserialized = JsonSerializer.Deserialize<T>(json) ?? defaultValue;
-                _cache[key] = deserialized;
+                _cache[key] = deserialized!;
                 return deserialized;
             }
             catch
@@ -41,7 +41,7 @@ public class SettingsService : ISettingsService
             }
         }
 
-        _cache[key] = defaultValue;
+        _cache[key] = defaultValue!;
         return defaultValue;
     }
 
@@ -52,7 +52,7 @@ public class SettingsService : ISettingsService
     {
         var json = JsonSerializer.Serialize(value);
         _localSettings.Values[key] = json;
-        _cache[key] = value;
+        _cache[key] = value!;
     }
 
     /// <summary>
