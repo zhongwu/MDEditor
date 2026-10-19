@@ -249,16 +249,35 @@
                 </Border>
 
                 <Border Grid.Row="1" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" Margin="8" CornerRadius="4">
-                    <RichEditBox x:Name="MarkdownEditor"
-                                 FontFamily="Cascadia Code, Consolas, monospace"
-                                 FontSize="14"
-                                 AcceptsReturn="True"
-                                 TextWrapping="Wrap"
-                                 ScrollViewer.HorizontalScrollMode="Auto"
-                                 ScrollViewer.VerticalScrollMode="Auto"
-                                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                 TextChanged="MarkdownEditor_TextChanged" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Line Numbers -->
+                        <TextBlock x:Name="LineNumbers"
+                                   Grid.Column="0"
+                                   FontFamily="Cascadia Code, Consolas, monospace"
+                                   FontSize="14"
+                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                   TextAlignment="Right"
+                                   Padding="0,0,8,0"
+                                   VerticalAlignment="Top" />
+
+                        <!-- Editor -->
+                        <RichEditBox x:Name="MarkdownEditor"
+                                     Grid.Column="1"
+                                     FontFamily="Cascadia Code, Consolas, monospace"
+                                     FontSize="14"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     ScrollViewer.HorizontalScrollMode="Auto"
+                                     ScrollViewer.VerticalScrollMode="Auto"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                     TextChanged="MarkdownEditor_TextChanged" />
+                    </Grid>
                 </Border>
             </Grid>
 

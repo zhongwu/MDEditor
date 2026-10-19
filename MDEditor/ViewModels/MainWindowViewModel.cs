@@ -16,6 +16,11 @@ public sealed partial class MainWindowViewModel : ObservableObject
     private readonly INavigationService _navigationService;
     private readonly ILoggingService _loggingService;
 
+    /// <summary>
+    /// Callback to insert markdown around selected text in the editor.
+    /// </summary>
+    public Action<string, string>? InsertMarkdownCallback { get; set; }
+
     public MainWindowViewModel(ISettingsService settingsService, INavigationService navigationService, ILoggingService loggingService)
     {
         _settingsService = settingsService;
@@ -51,7 +56,7 @@ public sealed partial class MainWindowViewModel : ObservableObject
     private void SaveAsFile()
     {
         _loggingService.LogInformation("Save As requested");
-        // TODO: Implement save as logic
+        // TODO: Implement save file logic
     }
 
     [RelayCommand]
@@ -187,133 +192,133 @@ public sealed partial class MainWindowViewModel : ObservableObject
     private void Heading1()
     {
         _loggingService.LogInformation("Heading 1 requested");
-        // TODO: Implement heading 1
+        InsertMarkdownCallback?.Invoke("# ", "\n");
     }
 
     [RelayCommand]
     private void Heading2()
     {
         _loggingService.LogInformation("Heading 2 requested");
-        // TODO: Implement heading 2
+        InsertMarkdownCallback?.Invoke("## ", "\n");
     }
 
     [RelayCommand]
     private void Heading3()
     {
         _loggingService.LogInformation("Heading 3 requested");
-        // TODO: Implement heading 3
+        InsertMarkdownCallback?.Invoke("### ", "\n");
     }
 
     [RelayCommand]
     private void Heading4()
     {
         _loggingService.LogInformation("Heading 4 requested");
-        // TODO: Implement heading 4
+        InsertMarkdownCallback?.Invoke("#### ", "\n");
     }
 
     [RelayCommand]
     private void Heading5()
     {
         _loggingService.LogInformation("Heading 5 requested");
-        // TODO: Implement heading 5
+        InsertMarkdownCallback?.Invoke("##### ", "\n");
     }
 
     [RelayCommand]
     private void Heading6()
     {
         _loggingService.LogInformation("Heading 6 requested");
-        // TODO: Implement heading 6
+        InsertMarkdownCallback?.Invoke("###### ", "\n");
     }
 
     [RelayCommand]
     private void Bold()
     {
         _loggingService.LogInformation("Bold requested");
-        // TODO: Implement bold
+        InsertMarkdownCallback?.Invoke("**", "**");
     }
 
     [RelayCommand]
     private void Italic()
     {
         _loggingService.LogInformation("Italic requested");
-        // TODO: Implement italic
+        InsertMarkdownCallback?.Invoke("*", "*");
     }
 
     [RelayCommand]
     private void Strikethrough()
     {
         _loggingService.LogInformation("Strikethrough requested");
-        // TODO: Implement strikethrough
+        InsertMarkdownCallback?.Invoke("~~", "~~");
     }
 
     [RelayCommand]
     private void InlineCode()
     {
         _loggingService.LogInformation("Inline code requested");
-        // TODO: Implement inline code
+        InsertMarkdownCallback?.Invoke("`", "`");
     }
 
     [RelayCommand]
     private void CodeBlock()
     {
         _loggingService.LogInformation("Code block requested");
-        // TODO: Implement code block
+        InsertMarkdownCallback?.Invoke("```\n", "\n```");
     }
 
     [RelayCommand]
     private void Blockquote()
     {
         _loggingService.LogInformation("Blockquote requested");
-        // TODO: Implement blockquote
+        InsertMarkdownCallback?.Invoke("> ", "\n");
     }
 
     [RelayCommand]
     private void UnorderedList()
     {
         _loggingService.LogInformation("Unordered list requested");
-        // TODO: Implement unordered list
+        InsertMarkdownCallback?.Invoke("- ", "\n");
     }
 
     [RelayCommand]
     private void OrderedList()
     {
         _loggingService.LogInformation("Ordered list requested");
-        // TODO: Implement ordered list
+        InsertMarkdownCallback?.Invoke("1. ", "\n");
     }
 
     [RelayCommand]
     private void TaskList()
     {
         _loggingService.LogInformation("Task list requested");
-        // TODO: Implement task list
+        InsertMarkdownCallback?.Invoke("- [ ] ", "\n");
     }
 
     [RelayCommand]
     private void InsertLink()
     {
         _loggingService.LogInformation("Insert link requested");
-        // TODO: Implement insert link
+        InsertMarkdownCallback?.Invoke("[", "](url)");
     }
 
     [RelayCommand]
     private void InsertImage()
     {
         _loggingService.LogInformation("Insert image requested");
-        // TODO: Implement insert image
+        InsertMarkdownCallback?.Invoke("![", "](url)");
     }
 
     [RelayCommand]
     private void InsertTable()
     {
         _loggingService.LogInformation("Insert table requested");
-        // TODO: Implement insert table
+        InsertMarkdownCallback?.Invoke("| Header 1 | Header 2 |\n|----------|----------|\n| Cell 1 | Cell 2 |\n", "\n");
     }
 
     [RelayCommand]
     private void InsertHorizontalRule()
     {
         _loggingService.LogInformation("Insert horizontal rule requested");
-        // TODO: Implement horizontal rule
+        InsertMarkdownCallback?.Invoke("\n---\n", "\n");
     }
 
     // Tools commands

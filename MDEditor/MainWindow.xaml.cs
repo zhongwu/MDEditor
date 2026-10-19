@@ -36,6 +36,9 @@ public sealed partial class MainWindow : Window
         ViewModel = App.Services.GetRequiredService<MainWindowViewModel>();
         _markdownParser = App.Services.GetRequiredService<IMarkdownParser>();
 
+        // Wire up markdown insertion callback
+        ViewModel.InsertMarkdownCallback = InsertMarkdown;
+
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(AppTitleBar);
 
@@ -128,18 +131,45 @@ public sealed partial class MainWindow : Window
     private void MarkdownEditor_TextChanged(object sender, RoutedEventArgs e)
     {
         UpdatePreview();
+        UpdateLineNumbers();
     }
 
-    private async void UpdatePreview()
+    private void UpdateLineNumbers()
+    {
+        MarkdownEditor.Document.GetText(TextGetOptions.None, out var text);
+        var lineCount = text.Split('\n').Length;
+        var lineNumbers = string.Join("\n", Enumerable.Range(1, lineCount));
+        LineNumbers.Text = lineNumbers;
+    }
+
+    private void UpdatePreview()
     {
         if (MarkdownPreview.CoreWebView2 == null)
         {
-            await MarkdownPreview.EnsureCoreWebView2Async();
+            return;
         }
 
-        MarkdownEditor.Document.GetText(TextGetOptions.FormatRtf, out string markdown);
+        MarkdownEditor.Document.GetText(TextGetOptions.None, out string markdown);
         var html = _markdownParser.ToHtmlDocument(markdown);
         MarkdownPreview.NavigateToString(html);
+    }
+
+    private void InsertMarkdown(string before, string after)
+    {
+        var doc = MarkdownEditor.Document;
+        var selStart = doc.Selection.StartPosition;
+        var selEnd = doc.Selection.EndPosition;
+
+        doc.Selection.StartPosition = selStart;
+        doc.Selection.EndPosition = selEnd;
+        var selectedText = doc.Selection.Text;
+
+        doc.Selection.StartPosition = selStart;
+        doc.Selection.EndPosition = selEnd;
+        doc.Selection.Text = before + selectedText + after;
+
+        doc.Selection.StartPosition = selStart + before.Length + selectedText.Length + after.Length;
+        doc.Selection.EndPosition = selStart + before.Length + selectedText.Length + after.Length;
     }
 
     // Splitter drag handling
