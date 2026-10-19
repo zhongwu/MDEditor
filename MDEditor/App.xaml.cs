@@ -1,47 +1,30 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MDEditor.Core;
-using Windows.ApplicationModel;
-using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using Microsoft.UI.Xaml.Shapes;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using MDEditor.ViewModels;
 
 namespace MDEditor;
 
 /// <summary>
-/// Provides application-specific behavior to supplement the default Application class.
+/// Interaction logic for App.xaml
 /// </summary>
 public partial class App : Application
 {
-    private Window? _window;
+    private static IHost? _host;
 
     /// <summary>
     /// Gets the shared service provider for dependency injection.
     /// </summary>
     public static IServiceProvider Services { get; private set; } = null!;
 
-    /// <summary>
-    /// Initializes the singleton application object.  This is the first line of authored code
-    /// executed, and as such is the logical equivalent of main() or WinMain().
-    /// </summary>
-    public App()
+    protected override void OnStartup(StartupEventArgs e)
     {
-        InitializeComponent();
+        base.OnStartup(e);
 
         // Build the dependency injection container
-        var host = Host.CreateDefaultBuilder()
+        _host = Host.CreateDefaultBuilder()
             .ConfigureServices((context, services) =>
             {
                 services.AddMDEditorCore();
@@ -49,16 +32,12 @@ public partial class App : Application
             })
             .Build();
 
-        Services = host.Services;
+        Services = _host.Services;
     }
 
-    /// <summary>
-    /// Invoked when the application is launched.
-    /// </summary>
-    /// <param name="args">Details about the launch request and process.</param>
-    protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
+    protected override void OnExit(ExitEventArgs e)
     {
-        _window = new MainWindow();
-        _window.Activate();
+        _host?.Dispose();
+        base.OnExit(e);
     }
 }

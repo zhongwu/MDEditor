@@ -1,19 +1,62 @@
+using System;
+using System.IO;
 using System.Text.Json;
 using MDEditor.Core.Interfaces;
 
 namespace MDEditor.Core.Services;
 
 /// <summary>
-/// Service for reading and writing application settings persisted to disk using Windows.Storage.ApplicationData.
+/// Service for reading and writing application settings persisted to a JSON file.
 /// </summary>
 public class SettingsService : ISettingsService
 {
-    private readonly Windows.Storage.ApplicationDataContainer _localSettings;
-    private readonly Dictionary<string, object> _cache = new();
+    private readonly string _settingsFilePath;
+    private readonly Dictionary<string, object> _settings = new();
 
     public SettingsService()
     {
-        _localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+        var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        var appFolder = Path.Combine(appDataPath, "MDEditor");
+        Directory.CreateDirectory(appFolder);
+        _settingsFilePath = Path.Combine(appFolder, "settings.json");
+
+        LoadSettings();
+    }
+
+    private void LoadSettings()
+    {
+        try
+        {
+            if (File.Exists(_settingsFilePath))
+            {
+                var json = File.ReadAllText(_settingsFilePath);
+                var dict = JsonSerializer.Deserialize<Dictionary<string, object>>(json);
+                if (dict != null)
+                {
+                    foreach (var kvp in dict)
+                    {
+                        _settings[kvp.Key] = kvp.Value;
+                    }
+                }
+            }
+        }
+        catch
+        {
+            // Ignore loading errors, start with empty settings
+        }
+    }
+
+    private void SaveSettings()
+    {
+        try
+        {
+            var json = JsonSerializer.Serialize(_settings, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(_settingsFilePath, json);
+        }
+        catch
+        {
+            // Ignore saving errors
+        }
     }
 
     /// <summary>
@@ -21,19 +64,16 @@ public class SettingsService : ISettingsService
     /// </summary>
     public T Get<T>(string key, T defaultValue)
     {
-        if (_cache.TryGetValue(key, out var cachedValue))
-        {
-            return (T)cachedValue;
-        }
-
-        if (_localSettings.Values.TryGetValue(key, out var storedValue))
+        if (_settings.TryGetValue(key, out var storedValue))
         {
             try
             {
-                var json = storedValue as string ?? storedValue?.ToString() ?? string.Empty;
-                var deserialized = JsonSerializer.Deserialize<T>(json) ?? defaultValue;
-                _cache[key] = deserialized!;
-                return deserialized;
+                if (storedValue is JsonElement element)
+                {
+                    var deserialized = element.Deserialize<T>();
+                    return deserialized ?? defaultValue;
+                }
+                return (T)storedValue;
             }
             catch
             {
@@ -41,7 +81,6 @@ public class SettingsService : ISettingsService
             }
         }
 
-        _cache[key] = defaultValue!;
         return defaultValue;
     }
 
@@ -50,9 +89,8 @@ public class SettingsService : ISettingsService
     /// </summary>
     public void Set<T>(string key, T value)
     {
-        var json = JsonSerializer.Serialize(value);
-        _localSettings.Values[key] = json;
-        _cache[key] = value!;
+        _settings[key] = value!;
+        SaveSettings();
     }
 
     /// <summary>
@@ -60,8 +98,8 @@ public class SettingsService : ISettingsService
     /// </summary>
     public void Remove(string key)
     {
-        _localSettings.Values.Remove(key);
-        _cache.Remove(key);
+        _settings.Remove(key);
+        SaveSettings();
     }
 
     /// <summary>
@@ -69,6 +107,6 @@ public class SettingsService : ISettingsService
     /// </summary>
     public void Save()
     {
-        // ApplicationData saves automatically, but this method exists for future batch operations.
+        SaveSettings();
     }
 }

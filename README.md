@@ -1,8 +1,6 @@
 # MDEditor
 
-A modern **Markdown desktop editor** built with **WinUI 3** and **Windows App SDK**, featuring a dual-pane interface with live preview, rich formatting toolbar, file management, and GitHub synchronization.
-
-![MDEditor Screenshot](docs/screenshot.png)
+A modern **Markdown desktop editor** built with **WPF** and **.NET 8/9**, featuring a dual-pane interface with live preview, rich formatting toolbar, file management, and GitHub synchronization.
 
 ## Features
 
@@ -48,14 +46,14 @@ A modern **Markdown desktop editor** built with **WinUI 3** and **Windows App SD
 
 | Layer | Technology |
 |-------|------------|
-| **UI Framework** | WinUI 3 (Windows App SDK 1.6+) |
+| **UI Framework** | WPF (.NET 8/9) |
 | **Language** | C# (.NET 8/9) |
 | **Architecture** | MVVM (CommunityToolkit.Mvvm) |
 | **Markdown** | Markdig (GFM + extensions) |
 | **Preview** | WebView2 (HTML/CSS rendering) |
 | **GitHub API** | Octokit.NET |
 | **DI/Logging** | Microsoft.Extensions.* |
-| **Packaging** | MSIX |
+| **Packaging** | MSIX / ClickOnce |
 
 ## Getting Started
 
@@ -63,7 +61,6 @@ A modern **Markdown desktop editor** built with **WinUI 3** and **Windows App SD
 - **Windows 10 1809+** (Build 17763) or **Windows 11**
 - **Visual Studio 2022 17.8+** with "Desktop development with C#" workload
 - **.NET 8/9 SDK**
-- **Windows App SDK 1.6+** (installed via VS or NuGet)
 
 ### Build & Run
 
@@ -83,19 +80,18 @@ dotnet run --project MDEditor/MDEditor.csproj
 ### Open in Visual Studio
 ```bash
 # Open solution
-start MDEditor.sln
+start MDEditor.slnx
 ```
 
 ## Project Structure
 
 ```
-MDEditor.sln
-├── MDEditor/                 # WinUI 3 Application
+MDEditor.slnx
+├── MDEditor/                 # WPF Application
 │   ├── Views/                # XAML Views (MainWindow, Dialogs, etc.)
 │   ├── ViewModels/           # MVVM ViewModels
 │   ├── Services/             # Platform services (File, Settings, Theme)
 │   ├── Converters/           # XAML Value Converters
-│   ├── Behaviors/            # XAML Behaviors
 │   └── Resources/            # Styles, Templates, Themes
 ├── MDEditor.Core/            # Core Business Logic (Class Library)
 │   ├── Models/               # Domain Models (Document, GitHub, Settings)
@@ -150,9 +146,8 @@ dotnet test
 
 ### Creating MSIX Package
 ```bash
-# Requires code signing certificate for distribution
-dotnet publish -c Release -r win10-x64 --self-contained true
-# Then use MSIX Packaging Tool or VS "Publish" → "Create App Packages"
+dotnet publish -c Release -r win-x64 --self-contained true
+# Then use VS "Publish" → "Create App Packages"
 ```
 
 ## Contributing
@@ -172,10 +167,10 @@ Licensed under the **Apache License 2.0** - see [LICENSE](LICENSE) for details.
 ## Acknowledgments
 
 - [Markdig](https://github.com/xoofx/markdig) - Fast, powerful Markdown processor
-- [Windows App SDK](https://learn.microsoft.com/windows/apps/windows-app-sdk/) - Modern Windows app platform
+- [WPF](https://learn.microsoft.com/dotnet/desktop/wpf/) - Windows Presentation Foundation
 - [WebView2](https://learn.microsoft.com/microsoft-edge/webview2/) - Evergreen web rendering
 - [Octokit.NET](https://github.com/octokit/octokit.net) - GitHub API client
-- [CommunityToolkit](https://github.com/CommunityToolkit/) - MVVM, WinUI helpers
+- [CommunityToolkit](https://github.com/CommunityToolkit/) - MVVM, WPF helpers
 - [github-markdown-css](https://github.com/sindresorhus/github-markdown-css) - GitHub-style preview CSS
 
 ---

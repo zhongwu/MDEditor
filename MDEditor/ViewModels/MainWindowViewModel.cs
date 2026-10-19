@@ -77,7 +77,7 @@ public sealed partial class MainWindowViewModel : ObservableObject
     private void Exit()
     {
         _loggingService.LogInformation("Exit requested");
-        App.Current.Exit();
+        App.Current.Shutdown();
     }
 
     // Edit commands

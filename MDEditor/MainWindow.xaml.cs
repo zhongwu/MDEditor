@@ -1,32 +1,21 @@
+﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Input;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.UI.Input;
-using Microsoft.UI.Text;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Input;
 using Microsoft.Web.WebView2.Core;
 using MDEditor.Core.Interfaces;
 using MDEditor.ViewModels;
-using Windows.Foundation;
-using Windows.System;
-using Windows.UI.Core;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace MDEditor;
 
 /// <summary>
-/// The application window with dual-pane markdown editor and live preview.
+/// Interaction logic for MainWindow.xaml
 /// </summary>
-public sealed partial class MainWindow : Window
+public partial class MainWindow : Window
 {
     public MainWindowViewModel ViewModel { get; }
     private readonly IMarkdownParser _markdownParser;
-
-    private bool _isDraggingSplitter;
-    private double _initialEditorWidth;
-    private double _initialMouseX;
 
     public MainWindow()
     {
@@ -39,19 +28,13 @@ public sealed partial class MainWindow : Window
         // Wire up markdown insertion callback
         ViewModel.InsertMarkdownCallback = InsertMarkdown;
 
-        ExtendsContentIntoTitleBar = true;
-        SetTitleBar(AppTitleBar);
-
-        AppWindow.SetIcon("Assets/AppIcon.ico");
+        DataContext = ViewModel;
 
         // Initialize zoom combo
         StatusZoomCombo.SelectedIndex = 2; // 100%
 
         // Initialize preview with blank content
         InitializePreview();
-
-        // Setup splitter drag handling
-        SetupSplitter();
     }
 
     private async void InitializePreview()
@@ -103,32 +86,13 @@ public sealed partial class MainWindow : Window
                 <div class="placeholder">
                     <h3>Live Preview</h3>
                     <p>Start typing in the editor to see the preview update in real-time.</p>
-                    <p><kbd>Ctrl+Shift+P</kbd> to toggle preview</p>
                 </div>
             </body>
             </html>
             """;
     }
 
-    private void SetupSplitter()
-    {
-        SplitterColumn.PointerPressed += SplitterColumn_PointerPressed;
-        SplitterColumn.PointerMoved += SplitterColumn_PointerMoved;
-        SplitterColumn.PointerReleased += SplitterColumn_PointerReleased;
-        SplitterColumn.PointerExited += SplitterColumn_PointerReleased;
-        SplitterColumn.PointerEntered += SplitterColumn_PointerEntered;
-    }
-
-    private void SplitterColumn_PointerEntered(object sender, PointerRoutedEventArgs e)
-    {
-        var coreWindow = CoreWindow.GetForCurrentThread();
-        if (coreWindow != null)
-        {
-            coreWindow.PointerCursor = new CoreCursor(CoreCursorType.SizeWestEast, 0);
-        }
-    }
-
-    private void MarkdownEditor_TextChanged(object sender, RoutedEventArgs e)
+    private void MarkdownEditor_TextChanged(object sender, TextChangedEventArgs e)
     {
         UpdatePreview();
         UpdateLineNumbers();
@@ -136,72 +100,43 @@ public sealed partial class MainWindow : Window
 
     private void UpdateLineNumbers()
     {
-        MarkdownEditor.Document.GetText(TextGetOptions.None, out var text);
+        var text = GetEditorText();
         var lineCount = text.Split('\n').Length;
         var lineNumbers = string.Join("\n", Enumerable.Range(1, lineCount));
         LineNumbers.Text = lineNumbers;
     }
 
-    private void UpdatePreview()
+    private async void UpdatePreview()
     {
         if (MarkdownPreview.CoreWebView2 == null)
         {
-            return;
+            await MarkdownPreview.EnsureCoreWebView2Async();
         }
 
-        MarkdownEditor.Document.GetText(TextGetOptions.None, out string markdown);
+        var markdown = GetEditorText();
         var html = _markdownParser.ToHtmlDocument(markdown);
         MarkdownPreview.NavigateToString(html);
     }
 
+    private string GetEditorText()
+    {
+        var range = new TextRange(MarkdownEditor.Document.ContentStart, MarkdownEditor.Document.ContentEnd);
+        return range.Text;
+    }
+
     private void InsertMarkdown(string before, string after)
     {
-        var doc = MarkdownEditor.Document;
-        var selStart = doc.Selection.StartPosition;
-        var selEnd = doc.Selection.EndPosition;
+        var range = MarkdownEditor.Selection;
+        var selectedText = range.Text;
 
-        doc.Selection.StartPosition = selStart;
-        doc.Selection.EndPosition = selEnd;
-        var selectedText = doc.Selection.Text;
+        range.Text = before + selectedText + after;
 
-        doc.Selection.StartPosition = selStart;
-        doc.Selection.EndPosition = selEnd;
-        doc.Selection.Text = before + selectedText + after;
-
-        doc.Selection.StartPosition = selStart + before.Length + selectedText.Length + after.Length;
-        doc.Selection.EndPosition = selStart + before.Length + selectedText.Length + after.Length;
+        // Move cursor after inserted text
+        var newOffset = range.Start.GetOffsetToPosition(range.End) + before.Length + selectedText.Length + after.Length;
+        MarkdownEditor.CaretPosition = range.Start.GetPositionAtOffset(before.Length + selectedText.Length);
     }
 
-    // Splitter drag handling
-    private void SplitterColumn_PointerPressed(object sender, PointerRoutedEventArgs e)
-    {
-        _isDraggingSplitter = true;
-        _initialEditorWidth = EditorColumn.ActualWidth;
-        _initialMouseX = e.GetCurrentPoint(SplitterColumn).Position.X;
-        SplitterColumn.CapturePointer(e.Pointer);
-    }
-
-    private void SplitterColumn_PointerMoved(object sender, PointerRoutedEventArgs e)
-    {
-        if (!_isDraggingSplitter) return;
-
-        var currentX = e.GetCurrentPoint(SplitterColumn).Position.X;
-        var delta = currentX - _initialMouseX;
-        var newWidth = _initialEditorWidth + delta;
-
-        newWidth = Math.Clamp(newWidth, 300, MainContentGrid.ActualWidth - 300 - SplitterColumn.ActualWidth);
-        EditorColumn.Width = new GridLength(newWidth);
-    }
-
-    private void SplitterColumn_PointerReleased(object sender, PointerRoutedEventArgs e)
-    {
-        if (!_isDraggingSplitter) return;
-
-        _isDraggingSplitter = false;
-        SplitterColumn.ReleasePointerCapture(e.Pointer);
-    }
-
-    private void MarkdownPreview_NavigationStarting(WebView2 sender, CoreWebView2NavigationStartingEventArgs args)
+    private void MarkdownPreview_NavigationStarting(object? sender, CoreWebView2NavigationStartingEventArgs e)
     {
     }
 

@@ -1,13 +1,6 @@
 <Solution>
   <Project Path="MDEditor.Core/MDEditor.Core.csproj" />
-  <Project Path="MDEditor.IntegrationTests/MDEditor.IntegrationTests.csproj">
-    <Platform Solution="Debug|*" Project="x64" />
-  </Project>
-  <Project Path="MDEditor.Tests/MDEditor.Tests.csproj">
-    <Platform Solution="Debug|*" Project="x64" />
-  </Project>
-  <Project Path="MDEditor/MDEditor.csproj">
-    <Platform Solution="Debug|*" Project="x64" />
-    <Deploy Solution="Debug|*" />
-  </Project>
+  <Project Path="MDEditor.IntegrationTests/MDEditor.IntegrationTests.csproj" />
+  <Project Path="MDEditor.Tests/MDEditor.Tests.csproj" />
+  <Project Path="MDEditor/MDEditor.csproj" />
 </Solution>
