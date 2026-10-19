@@ -15,6 +15,7 @@
     <EnableWinAppRunSupport>false</EnableWinAppRunSupport>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <ProjectGuid>{B2C3D4E5-F6A7-8901-BCDE-F23456789012}</ProjectGuid>
   </PropertyGroup>
 
   <ItemGroup>
