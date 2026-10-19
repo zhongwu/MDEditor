@@ -26,6 +26,7 @@ public static class CoreServiceCollectionExtensions
         services.AddSingleton<ISettingsService, SettingsService>();
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<ILoggingService, LoggingService>();
+        services.AddSingleton<IMarkdownParser, MarkdownParser>();
 
         return services;
     }

@@ -1,9 +1,11 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Input;
+using Microsoft.UI.Text;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.Web.WebView2.Core;
+using MDEditor.Core.Interfaces;
 using MDEditor.ViewModels;
 using Windows.Foundation;
 using Windows.System;
@@ -20,6 +22,7 @@ namespace MDEditor;
 public sealed partial class MainWindow : Window
 {
     public MainWindowViewModel ViewModel { get; }
+    private readonly IMarkdownParser _markdownParser;
 
     private bool _isDraggingSplitter;
     private double _initialEditorWidth;
@@ -31,6 +34,7 @@ public sealed partial class MainWindow : Window
 
         // Initialize ViewModel from DI container
         ViewModel = App.Services.GetRequiredService<MainWindowViewModel>();
+        _markdownParser = App.Services.GetRequiredService<IMarkdownParser>();
 
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(AppTitleBar);
@@ -57,7 +61,6 @@ public sealed partial class MainWindow : Window
         }
         catch (Exception ex)
         {
-            // WebView2 initialization failed - log and continue
             System.Diagnostics.Debug.WriteLine($"WebView2 initialization failed: {ex.Message}");
         }
     }
@@ -106,7 +109,6 @@ public sealed partial class MainWindow : Window
 
     private void SetupSplitter()
     {
-        // Pointer events for custom splitter
         SplitterColumn.PointerPressed += SplitterColumn_PointerPressed;
         SplitterColumn.PointerMoved += SplitterColumn_PointerMoved;
         SplitterColumn.PointerReleased += SplitterColumn_PointerReleased;
@@ -116,7 +118,6 @@ public sealed partial class MainWindow : Window
 
     private void SplitterColumn_PointerEntered(object sender, PointerRoutedEventArgs e)
     {
-        // Set cursor for splitter - use CoreWindow
         var coreWindow = CoreWindow.GetForCurrentThread();
         if (coreWindow != null)
         {
@@ -124,7 +125,6 @@ public sealed partial class MainWindow : Window
         }
     }
 
-    // Event handlers for editor
     private void MarkdownEditor_TextChanged(object sender, RoutedEventArgs e)
     {
         UpdatePreview();
@@ -137,34 +137,9 @@ public sealed partial class MainWindow : Window
             await MarkdownPreview.EnsureCoreWebView2Async();
         }
 
-        MarkdownEditor.Document.GetText(Microsoft.UI.Text.TextGetOptions.FormatRtf, out string markdown);
-        var html = ConvertMarkdownToHtml(markdown);
+        MarkdownEditor.Document.GetText(TextGetOptions.FormatRtf, out string markdown);
+        var html = _markdownParser.ToHtmlDocument(markdown);
         MarkdownPreview.NavigateToString(html);
-    }
-
-    private string ConvertMarkdownToHtml(string markdown)
-    {
-        if (string.IsNullOrWhiteSpace(markdown))
-        {
-            return GetEmptyPreviewHtml();
-        }
-
-        var escaped = System.Net.WebUtility.HtmlEncode(markdown).Replace("\n", "<br/>");
-        return $$"""
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <meta charset="utf-8">
-                <style>
-                    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; line-height: 1.6; padding: 20px; max-width: 900px; margin: 0 auto; color: #24292f; }
-                    pre { background: #f6f8fa; border-radius: 6px; padding: 16px; overflow: auto; }
-                    code { background: #f6f8fa; border-radius: 4px; padding: 2px 4px; font-family: monospace; }
-                    blockquote { border-left: 4px solid #d0d7de; color: #656d76; padding-left: 16px; margin: 0; }
-                </style>
-            </head>
-            <body>{{escaped}}</body>
-            </html>
-            """;
     }
 
     // Splitter drag handling
@@ -184,7 +159,6 @@ public sealed partial class MainWindow : Window
         var delta = currentX - _initialMouseX;
         var newWidth = _initialEditorWidth + delta;
 
-        // Clamp to min/max
         newWidth = Math.Clamp(newWidth, 300, MainContentGrid.ActualWidth - 300 - SplitterColumn.ActualWidth);
         EditorColumn.Width = new GridLength(newWidth);
     }
@@ -197,18 +171,14 @@ public sealed partial class MainWindow : Window
         SplitterColumn.ReleasePointerCapture(e.Pointer);
     }
 
-    // WebView2 handlers
     private void MarkdownPreview_NavigationStarting(WebView2 sender, CoreWebView2NavigationStartingEventArgs args)
     {
-        // Handle navigation if needed
     }
 
-    // Status bar handlers
     private async void StatusZoomCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (StatusZoomCombo.SelectedItem is ComboBoxItem item && item.Tag is string tag && double.TryParse(tag, out double zoom))
         {
-            // Apply zoom to WebView2 (zoom factor set via JavaScript)
             if (MarkdownPreview.CoreWebView2 != null)
             {
                 await MarkdownPreview.CoreWebView2.ExecuteScriptAsync($"document.body.style.zoom = '{zoom}';");
