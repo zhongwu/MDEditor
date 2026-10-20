@@ -20,6 +20,14 @@ public partial class MainWindow : Window
     private double _initialEditorWidth;
     private double _initialMouseX;
 
+    // Single-instance dialog tracking
+    private FindReplaceDialog? _findDialog;
+    private FindReplaceDialog? _replaceDialog;
+    private GoToLineDialog? _goToLineDialog;
+
+    // Line numbers state
+    private bool _lineNumbersVisible = false;
+
     public MainWindow()
     {
         InitializeComponent();
@@ -37,7 +45,10 @@ public partial class MainWindow : Window
         ViewModel.FindCallback = ShowFindDialog;
         ViewModel.ReplaceCallback = ShowReplaceDialog;
         ViewModel.GoToLineCallback = ShowGoToLineDialog;
-        ViewModel.ToggleWordWrapCallback = () => { /* Word wrap toggle - WPF RichTextBox doesn't support TextWrapping directly */ };
+        ViewModel.ToggleWordWrapCallback = ToggleWordWrap;
+
+        // Line numbers toggle
+        ViewModel.ToggleLineNumbersCallback = ToggleLineNumbers;
 
         DataContext = ViewModel;
 
@@ -141,6 +152,7 @@ public partial class MainWindow : Window
     private void MarkdownEditor_TextChanged(object sender, TextChangedEventArgs e)
     {
         UpdatePreview();
+        UpdateLineNumbers();
     }
 
     private async void UpdatePreview()
@@ -176,22 +188,93 @@ public partial class MainWindow : Window
         }
     }
 
+    private void ToggleWordWrap()
+    {
+        // WPF RichTextBox doesn't support TextWrapping directly
+        // Toggle horizontal scrollbar visibility instead
+        if (MarkdownEditor.HorizontalScrollBarVisibility == ScrollBarVisibility.Auto)
+        {
+            MarkdownEditor.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
+        }
+        else
+        {
+            MarkdownEditor.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+        }
+    }
+
+    private void ToggleLineNumbers()
+    {
+        _lineNumbersVisible = !_lineNumbersVisible;
+        LineNumbers.Visibility = _lineNumbersVisible ? Visibility.Visible : Visibility.Collapsed;
+        if (_lineNumbersVisible)
+        {
+            UpdateLineNumbers();
+        }
+    }
+
+    private void UpdateLineNumbers()
+    {
+        if (!_lineNumbersVisible) return;
+
+        var text = GetEditorText();
+        var lines = text.Split('\n');
+        var sb = new System.Text.StringBuilder();
+        for (int i = 1; i <= lines.Length; i++)
+        {
+            sb.AppendLine(i.ToString());
+        }
+        LineNumbers.Text = sb.ToString().TrimEnd('\r', '\n');
+    }
+
     private void ShowFindDialog()
     {
-        // TODO: Implement Find dialog
-        System.Diagnostics.Debug.WriteLine("Find dialog requested");
+        if (_findDialog != null && _findDialog.IsVisible)
+        {
+            _findDialog.Activate();
+            _findDialog.Focus();
+            return;
+        }
+
+        _findDialog = new FindReplaceDialog(MarkdownEditor, false);
+        _findDialog.Owner = this;
+        _findDialog.WindowStartupLocation = WindowStartupLocation.Manual;
+        _findDialog.Left = this.Left + this.Width - 420;
+        _findDialog.Top = this.Top + 80;
+        _findDialog.Closed += (s, e) => _findDialog = null;
+        _findDialog.Show();
     }
 
     private void ShowReplaceDialog()
     {
-        // TODO: Implement Replace dialog
-        System.Diagnostics.Debug.WriteLine("Replace dialog requested");
+        if (_replaceDialog != null && _replaceDialog.IsVisible)
+        {
+            _replaceDialog.Activate();
+            _replaceDialog.Focus();
+            return;
+        }
+
+        _replaceDialog = new FindReplaceDialog(MarkdownEditor, true);
+        _replaceDialog.Owner = this;
+        _replaceDialog.WindowStartupLocation = WindowStartupLocation.Manual;
+        _replaceDialog.Left = this.Left + this.Width - 420;
+        _replaceDialog.Top = this.Top + 80;
+        _replaceDialog.Closed += (s, e) => _replaceDialog = null;
+        _replaceDialog.Show();
     }
 
     private void ShowGoToLineDialog()
     {
-        // TODO: Implement Go to Line dialog
-        System.Diagnostics.Debug.WriteLine("Go to Line dialog requested");
+        if (_goToLineDialog != null && _goToLineDialog.IsVisible)
+        {
+            _goToLineDialog.Activate();
+            _goToLineDialog.Focus();
+            return;
+        }
+
+        _goToLineDialog = new GoToLineDialog(MarkdownEditor);
+        _goToLineDialog.Owner = this;
+        _goToLineDialog.Closed += (s, e) => _goToLineDialog = null;
+        _goToLineDialog.Show();
     }
 
     private void MarkdownPreview_NavigationStarting(object? sender, CoreWebView2NavigationStartingEventArgs e)

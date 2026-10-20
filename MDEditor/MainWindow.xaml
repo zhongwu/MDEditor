@@ -42,6 +42,7 @@
                 <Separator />
                 <MenuItem Header="Find" Command="{Binding FindCommand}" />
                 <MenuItem Header="Replace" Command="{Binding ReplaceCommand}" />
+                <MenuItem Header="Go to Line..." Command="{Binding GoToLineCommand}" />
                 <Separator />
                 <MenuItem Header="Select All" Command="{Binding SelectAllCommand}" />
             </MenuItem>
@@ -230,13 +231,28 @@
                 </Border>
 
                 <Border Grid.Row="1" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="1" Margin="8" CornerRadius="4">
-                    <RichTextBox x:Name="MarkdownEditor"
-                                 FontFamily="Cascadia Code, Consolas, monospace"
-                                 FontSize="14"
-                                 AcceptsReturn="True"
-                                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                 TextChanged="MarkdownEditor_TextChanged" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock x:Name="LineNumbers"
+                                   Grid.Column="0"
+                                   FontFamily="Cascadia Code, Consolas, monospace"
+                                   FontSize="14"
+                                   Foreground="Gray"
+                                   Padding="8,0,8,0"
+                                   TextAlignment="Right"
+                                   Visibility="Collapsed" />
+                        <RichTextBox x:Name="MarkdownEditor"
+                                     Grid.Column="1"
+                                     FontFamily="Cascadia Code, Consolas, monospace"
+                                     FontSize="14"
+                                     AcceptsReturn="True"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                     TextChanged="MarkdownEditor_TextChanged" />
+                    </Grid>
                 </Border>
             </Grid>
 

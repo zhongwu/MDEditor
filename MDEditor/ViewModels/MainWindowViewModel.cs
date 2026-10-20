@@ -71,6 +71,11 @@ public sealed partial class MainWindowViewModel : ObservableObject
     /// </summary>
     public Action? ToggleWordWrapCallback { get; set; }
 
+    /// <summary>
+    /// Callback for line numbers toggle.
+    /// </summary>
+    public Action? ToggleLineNumbersCallback { get; set; }
+
     public MainWindowViewModel(ISettingsService settingsService, INavigationService navigationService, ILoggingService loggingService)
     {
         _settingsService = settingsService;
@@ -181,6 +186,13 @@ public sealed partial class MainWindowViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private void GoToLine()
+    {
+        _loggingService.LogInformation("Go to line requested");
+        GoToLineCallback?.Invoke();
+    }
+
+    [RelayCommand]
     private void SelectAll()
     {
         _loggingService.LogInformation("Select All requested");
@@ -206,7 +218,7 @@ public sealed partial class MainWindowViewModel : ObservableObject
     private void ToggleLineNumbers()
     {
         _loggingService.LogInformation("Toggle line numbers requested");
-        // TODO: Implement line numbers toggle
+        ToggleLineNumbersCallback?.Invoke();
     }
 
     [RelayCommand]
