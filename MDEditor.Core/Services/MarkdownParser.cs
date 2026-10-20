@@ -22,6 +22,15 @@ public class MarkdownParser : IMarkdownParser
             .UseDiagrams()
             .UseFootnotes()
             .UseDefinitionLists()
+            .UseAutoIdentifiers()
+            .UseGenericAttributes()
+            .UseAbbreviations()
+            .UseCitations()
+            .UseCustomContainers()
+            .UseFigures()
+            .UseMediaLinks()
+            .UseSmartyPants()
+            .UseTaskLists()
             .Build();
     }
 
@@ -75,6 +84,18 @@ public class MarkdownParser : IMarkdownParser
             "        a:hover { text-decoration: underline; }\n" +
             "        .task-list-item { list-style-type: none; }\n" +
             "        .task-list-item input { margin-right: 0.5em; }\n" +
+            "        figure { margin: 1em 0; text-align: center; }\n" +
+            "        figcaption { font-size: 0.9em; color: #6a737d; margin-top: 0.5em; }\n" +
+            "        .footnotes { margin-top: 2em; border-top: 1px solid #eaecef; padding-top: 1em; font-size: 0.9em; }\n" +
+            "        .footnote-ref { font-size: 0.8em; vertical-align: super; }\n" +
+            "        abbr { border-bottom: 1px dotted #6a737d; cursor: help; }\n" +
+            "        .citation { color: #0366d6; }\n" +
+            "        .alert { padding: 1em; margin: 1em 0; border-radius: 6px; border-left: 4px solid; }\n" +
+            "        .alert-info { background: #e7f3ff; border-color: #0366d6; }\n" +
+            "        .alert-warning { background: #fff8e1; border-color: #f9a825; }\n" +
+            "        .alert-danger { background: #ffebee; border-color: #d32f2f; }\n" +
+            "        details { margin: 1em 0; }\n" +
+            "        summary { cursor: pointer; font-weight: 600; }\n" +
             "    </style>\n" +
             "</head>\n" +
             "<body>\n" +

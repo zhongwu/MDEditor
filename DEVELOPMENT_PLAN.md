@@ -81,21 +81,30 @@
 - [x] `WebView2` for full HTML rendering
   - Load Markdig-rendered HTML with GitHub-style CSS
   - Auto-refresh on text change (debounced 300ms)
-- [x] Synchronized scrolling (editor → preview)
+- [x] Click-to-sync preview (click in editor → preview scrolls to corresponding position)
 - [x] Handle internal links, images, math (KaTeX), mermaid
 - [x] Emoji support via Markdig UseEmojiAndSmiley
 
-#### 2.3 Markdown Processing Pipeline
+#### 2.3 Markdown Processing Pipeline ✅ COMPLETED
 - [x] Configure Markdig pipeline:
   - CommonMark core
-  - GitHub Flavored Markdown extensions
+  - GitHub Flavored Markdown extensions (UseAdvancedExtensions)
   - Pipe tables, task lists, strikethrough
-- [ ] Emoji support
-- [ ] Math formulas ($$...$$)
-- [ ] Mermaid diagrams
-- [ ] Footnotes
-- [ ] Definition lists
-- [ ] Custom renderers for WPF/WebView2
+  - Emoji support (UseEmojiAndSmiley)
+  - Math formulas ($$...$$) (UseMathematics + KaTeX)
+  - Mermaid diagrams (UseDiagrams + Mermaid.js)
+  - Footnotes (UseFootnotes)
+  - Definition lists (UseDefinitionLists)
+  - Grid tables (UseGridTables)
+  - Auto identifiers (UseAutoIdentifiers)
+  - Generic attributes (UseGenericAttributes)
+  - Abbreviations (UseAbbreviations)
+  - Citations (UseCitations)
+  - Custom containers (UseCustomContainers)
+  - Figures (UseFigures)
+  - Media links (UseMediaLinks)
+  - SmartyPants (UseSmartyPants)
+- [x] Custom CSS for WPF/WebView2 (GitHub-style + figures, footnotes, citations, alerts)
 
 ---
 

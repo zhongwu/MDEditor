@@ -145,12 +145,12 @@
             <Separator />
             <Button Command="{Binding CodeBlockCommand}" ToolTip="Code Block (Ctrl+Shift+C)">
                 <Button.Content>
-                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE943;" />
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE943;" VerticalAlignment="Bottom" />
                 </Button.Content>
             </Button>
             <Button Command="{Binding BlockquoteCommand}" ToolTip="Blockquote (Ctrl+Q)">
                 <Button.Content>
-                    <TextBlock Text="&quot;" FontSize="16" FontWeight="Bold" />
+                    <TextBlock Text="&gt;" />
                 </Button.Content>
             </Button>
             <Separator />

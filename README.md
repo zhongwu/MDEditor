@@ -7,7 +7,7 @@ A modern **Markdown desktop editor** built with **WPF** and **.NET 10**, featuri
 | Phase | Status | Notes |
 |-------|--------|-------|
 | **1. Foundation & Project Setup** | ✅ Complete | WPF app, DI, MVVM, settings, logging |
-| **2. Editor Core** | ✅ Mostly Done | Syntax highlight, line numbers, find/replace, go-to-line, word wrap |
+| **2. Editor Core** | ✅ Complete | Syntax highlight, line numbers, find/replace, go-to-line, word wrap, live preview with KaTeX/Mermaid |
 | **3. Toolbar & Formatting** | ✅ Complete | All format commands, menus, toolbar |
 | **4. File Operations** | 🔄 In Progress | New/Open/Save/Export not yet implemented |
 | **5. GitHub Integration** | ⏳ Not Started | Auth, repo browser, sync |
@@ -19,7 +19,9 @@ A modern **Markdown desktop editor** built with **WPF** and **.NET 10**, featuri
 ### Dual-Pane Editing
 - **Left pane**: Markdown editor with syntax highlighting (regex-based, 300ms debounced), line numbers, find/replace, go-to-line
 - **Right pane**: Live preview with GitHub-flavored Markdown rendering (via WebView2)
-- **Synchronized scrolling**: Editor scroll position syncs to preview
+- **KaTeX math**: Inline (`$...$`) and block (`$$...$$`) math rendering
+- **Mermaid diagrams**: Flowcharts, sequence, pie, gantt, class diagrams
+- **Click-to-sync preview**: Click in editor → preview scrolls to corresponding position
 - **Real-time updates** (300ms debounced)
 
 ### Rich Formatting Toolbar
@@ -47,8 +49,8 @@ A modern **Markdown desktop editor** built with **WPF** and **.NET 10**, featuri
 | **UI Framework** | WPF (.NET 10) |
 | **Language** | C# (.NET 10) |
 | **Architecture** | MVVM (CommunityToolkit.Mvvm) |
-| **Markdown** | Markdig (GFM + extensions) |
-| **Preview** | WebView2 (HTML/CSS rendering) |
+| **Markdown** | Markdig (GFM + extensions, math, diagrams, footnotes) |
+| **Preview** | WebView2 (HTML/CSS, KaTeX, Mermaid) |
 | **GitHub API** | Octokit.NET |
 | **DI/Logging** | Microsoft.Extensions.* |
 | **Settings** | JSON in `%APPDATA%\MDEditor\settings.json` |

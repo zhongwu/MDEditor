@@ -30,7 +30,6 @@ public partial class MainWindow : Window
     private bool _lineNumbersVisible = false;
     private System.Windows.Threading.DispatcherTimer? _highlightTimer;
     private System.Windows.Threading.DispatcherTimer? _previewTimer;
-    private bool _isSyncingScroll = false;
     private string _lastRenderedMarkdown = string.Empty;
 
     public MainWindow()
@@ -93,41 +92,38 @@ public partial class MainWindow : Window
         // Handle Tab/Shift+Tab for indentation
         MarkdownEditor.PreviewKeyDown += MarkdownEditor_PreviewKeyDown;
 
-        // Setup synchronized scrolling (deferred until visual tree is ready)
-        Loaded += (s, e) =>
+        // Handle editor mouse click to scroll preview to corresponding position
+        MarkdownEditor.PreviewMouseLeftButtonUp += (s, e) =>
         {
-            var scrollViewer = FindVisualChild<ScrollViewer>(MarkdownEditor);
-            if (scrollViewer != null)
-            {
-                scrollViewer.ScrollChanged += (sender, args) => MarkdownEditor_ScrollChanged(sender, args);
-            }
+            // Delay to ensure caret position is updated after click
+            Dispatcher.BeginInvoke(new Action(() => SyncPreviewToCaret()), System.Windows.Threading.DispatcherPriority.Input);
         };
     }
 
-    private void MarkdownEditor_ScrollChanged(object sender, ScrollChangedEventArgs e)
+    private void SyncPreviewToCaret()
     {
-        if (_isSyncingScroll) return;
-        _isSyncingScroll = true;
+        if (MarkdownPreview.CoreWebView2 == null) return;
 
         try
         {
-            // Get the ScrollViewer inside RichTextBox
-            var scrollViewer = FindVisualChild<ScrollViewer>(MarkdownEditor);
-            if (scrollViewer != null && scrollViewer.ScrollableHeight > 0)
-            {
-                var scrollPercent = scrollViewer.VerticalOffset / scrollViewer.ScrollableHeight;
-                // Scroll the WebView2 to the same percentage
-                if (MarkdownPreview.CoreWebView2 != null)
-                {
-                    var script = $"window.scrollTo(0, document.body.scrollHeight * {scrollPercent.ToString(System.Globalization.CultureInfo.InvariantCulture)});";
-                    MarkdownPreview.CoreWebView2.ExecuteScriptAsync(script);
-                }
-            }
+            // Calculate the percentage of the document where the caret is
+            // using character count via TextRange for reliability
+            var caretRange = new TextRange(MarkdownEditor.Document.ContentStart, MarkdownEditor.CaretPosition);
+            var fullRange = new TextRange(MarkdownEditor.Document.ContentStart, MarkdownEditor.Document.ContentEnd);
+            var caretText = caretRange.Text;
+            var fullText = fullRange.Text;
+
+            if (fullText.Length <= 0) return;
+
+            var caretPercent = (double)caretText.Length / fullText.Length;
+
+            // Scroll the preview to the corresponding position
+            var script = $"window.scrollTo(0, document.body.scrollHeight * {caretPercent.ToString(System.Globalization.CultureInfo.InvariantCulture)});";
+            MarkdownPreview.CoreWebView2.ExecuteScriptAsync(script);
         }
-        catch { }
-        finally
+        catch (Exception ex)
         {
-            _isSyncingScroll = false;
+            System.Diagnostics.Debug.WriteLine($"SyncPreviewToCaret error: {ex.Message}");
         }
     }
 
@@ -293,6 +289,10 @@ public partial class MainWindow : Window
 
     private void MarkdownEditor_TextChanged(object sender, TextChangedEventArgs e)
     {
+        // Save scroll position before content change
+        var scrollViewer = FindVisualChild<ScrollViewer>(MarkdownEditor);
+        double savedOffset = scrollViewer?.VerticalOffset ?? 0;
+
         // Debounce preview refresh (300ms)
         _previewTimer?.Stop();
         _previewTimer?.Start();
@@ -302,6 +302,16 @@ public partial class MainWindow : Window
         // Debounce syntax highlighting
         _highlightTimer?.Stop();
         _highlightTimer?.Start();
+
+        // Restore scroll position after layout update (prevents auto-scroll to caret)
+        Dispatcher.BeginInvoke(new Action(() =>
+        {
+            var sv = FindVisualChild<ScrollViewer>(MarkdownEditor);
+            if (sv != null)
+            {
+                sv.ScrollToVerticalOffset(savedOffset);
+            }
+        }), System.Windows.Threading.DispatcherPriority.Render);
     }
 
     private async void UpdatePreview()
