@@ -1,40 +1,40 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Web.WebView2.Core;
+using Microsoft.Web.WebView2.Wpf;
 using MDEditor.Core.Interfaces;
 using MDEditor.ViewModels;
+using System;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace MDEditor;
 
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
 public partial class MainWindow : Window
 {
     public MainWindowViewModel ViewModel { get; }
     private readonly IMarkdownParser _markdownParser;
 
+    private bool _isDraggingSplitter;
+    private double _initialEditorWidth;
+    private double _initialMouseX;
+
     public MainWindow()
     {
         InitializeComponent();
 
-        // Initialize ViewModel from DI container
         ViewModel = App.Services.GetRequiredService<MainWindowViewModel>();
         _markdownParser = App.Services.GetRequiredService<IMarkdownParser>();
 
-        // Wire up markdown insertion callback
         ViewModel.InsertMarkdownCallback = InsertMarkdown;
 
         DataContext = ViewModel;
 
-        // Initialize zoom combo
-        StatusZoomCombo.SelectedIndex = 2; // 100%
+        StatusZoomCombo.SelectedIndex = 2;
 
-        // Initialize preview with blank content
         InitializePreview();
+        SetupSplitter();
     }
 
     private async void InitializePreview()
@@ -86,24 +86,51 @@ public partial class MainWindow : Window
                 <div class="placeholder">
                     <h3>Live Preview</h3>
                     <p>Start typing in the editor to see the preview update in real-time.</p>
+                    <p><kbd>Ctrl+Shift+P</kbd> to toggle preview</p>
                 </div>
             </body>
             </html>
             """;
     }
 
+    private void SetupSplitter()
+    {
+        SplitterColumn.PreviewMouseLeftButtonDown += SplitterColumn_MouseLeftButtonDown;
+        SplitterColumn.PreviewMouseMove += SplitterColumn_MouseMove;
+        SplitterColumn.PreviewMouseLeftButtonUp += SplitterColumn_MouseLeftButtonUp;
+    }
+
+    private void SplitterColumn_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        _isDraggingSplitter = true;
+        _initialEditorWidth = EditorColumn.ActualWidth;
+        _initialMouseX = e.GetPosition(SplitterColumn).X;
+        SplitterColumn.CaptureMouse();
+    }
+
+    private void SplitterColumn_MouseMove(object sender, MouseEventArgs e)
+    {
+        if (!_isDraggingSplitter) return;
+
+        var currentX = e.GetPosition(SplitterColumn).X;
+        var delta = currentX - _initialMouseX;
+        var newWidth = _initialEditorWidth + delta;
+
+        newWidth = Math.Clamp(newWidth, 300, MainContentGrid.ActualWidth - 300 - SplitterColumn.ActualWidth);
+        EditorColumn.Width = new GridLength(newWidth);
+    }
+
+    private void SplitterColumn_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        if (!_isDraggingSplitter) return;
+
+        _isDraggingSplitter = false;
+        SplitterColumn.ReleaseMouseCapture();
+    }
+
     private void MarkdownEditor_TextChanged(object sender, TextChangedEventArgs e)
     {
         UpdatePreview();
-        UpdateLineNumbers();
-    }
-
-    private void UpdateLineNumbers()
-    {
-        var text = GetEditorText();
-        var lineCount = text.Split('\n').Length;
-        var lineNumbers = string.Join("\n", Enumerable.Range(1, lineCount));
-        LineNumbers.Text = lineNumbers;
     }
 
     private async void UpdatePreview()
@@ -120,20 +147,23 @@ public partial class MainWindow : Window
 
     private string GetEditorText()
     {
-        var range = new TextRange(MarkdownEditor.Document.ContentStart, MarkdownEditor.Document.ContentEnd);
+        var range = new System.Windows.Documents.TextRange(MarkdownEditor.Document.ContentStart, MarkdownEditor.Document.ContentEnd);
         return range.Text;
     }
 
     private void InsertMarkdown(string before, string after)
     {
-        var range = MarkdownEditor.Selection;
-        var selectedText = range.Text;
-
-        range.Text = before + selectedText + after;
-
-        // Move cursor after inserted text
-        var newOffset = range.Start.GetOffsetToPosition(range.End) + before.Length + selectedText.Length + after.Length;
-        MarkdownEditor.CaretPosition = range.Start.GetPositionAtOffset(before.Length + selectedText.Length);
+        try
+        {
+            var selection = MarkdownEditor.Selection;
+            var selectedText = selection.Text;
+            selection.Text = before + selectedText + after;
+            System.Diagnostics.Debug.WriteLine($"InsertMarkdown: inserted '{before}{selectedText}{after}'");
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"InsertMarkdown error: {ex.Message}");
+        }
     }
 
     private void MarkdownPreview_NavigationStarting(object? sender, CoreWebView2NavigationStartingEventArgs e)

@@ -4,7 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
-        Title="MDEditor" Height="600" Width="1000">
+        Title="MDEditor" Height="600" Width="1000"
+        mc:Ignorable="d">
     <Grid x:Name="RootGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -95,79 +96,119 @@
         <ToolBar x:Name="MainCommandBar" Grid.Row="2">
             <Button Command="{Binding NewFileCommand}" ToolTip="New (Ctrl+N)">
                 <Button.Content>
-                    <TextBlock Text="New" />
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8A5;" />
                 </Button.Content>
             </Button>
             <Button Command="{Binding OpenFileCommand}" ToolTip="Open (Ctrl+O)">
                 <Button.Content>
-                    <TextBlock Text="Open" />
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8E5;" />
                 </Button.Content>
             </Button>
             <Button Command="{Binding SaveFileCommand}" ToolTip="Save (Ctrl+S)">
                 <Button.Content>
-                    <TextBlock Text="Save" />
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE74E;" />
                 </Button.Content>
             </Button>
             <Separator />
             <Button Command="{Binding UndoCommand}" ToolTip="Undo (Ctrl+Z)">
                 <Button.Content>
-                    <TextBlock Text="Undo" />
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE7A7;" />
                 </Button.Content>
             </Button>
             <Button Command="{Binding RedoCommand}" ToolTip="Redo (Ctrl+Y)">
                 <Button.Content>
-                    <TextBlock Text="Redo" />
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE7A6;" />
                 </Button.Content>
             </Button>
             <Separator />
             <Button Command="{Binding BoldCommand}" ToolTip="Bold (Ctrl+B)">
                 <Button.Content>
-                    <TextBlock Text="B" FontWeight="Bold" />
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8DD;" />
                 </Button.Content>
             </Button>
             <Button Command="{Binding ItalicCommand}" ToolTip="Italic (Ctrl+I)">
                 <Button.Content>
-                    <TextBlock Text="I" FontStyle="Italic" />
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8DB;" />
                 </Button.Content>
             </Button>
             <Button Command="{Binding StrikethroughCommand}" ToolTip="Strikethrough (Ctrl+Shift+X)">
                 <Button.Content>
-                    <TextBlock Text="S" TextDecorations="Strikethrough" />
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xEDE0;" />
                 </Button.Content>
             </Button>
             <Button Command="{Binding InlineCodeCommand}" ToolTip="Inline Code (Ctrl+`)">
                 <Button.Content>
-                    <TextBlock Text="&lt;&gt;" FontFamily="Cascadia Code, Consolas, monospace" />
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE943;" />
                 </Button.Content>
             </Button>
             <Separator />
             <Button Command="{Binding CodeBlockCommand}" ToolTip="Code Block (Ctrl+Shift+C)">
                 <Button.Content>
-                    <TextBlock FontFamily="Cascadia Code, Consolas, monospace" Text="&gt;&gt;" />
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE943;" />
                 </Button.Content>
             </Button>
             <Button Command="{Binding BlockquoteCommand}" ToolTip="Blockquote (Ctrl+Q)">
                 <Button.Content>
-                    <TextBlock FontFamily="Cascadia Code, Consolas, monospace" Text="&gt;" />
+                    <TextBlock Text="&quot;" FontSize="16" FontWeight="Bold" />
                 </Button.Content>
             </Button>
             <Separator />
-            <Button Command="{Binding Heading1Command}" ToolTip="Heading 1 (Ctrl+1)" />
-            <Button Command="{Binding Heading2Command}" ToolTip="Heading 2 (Ctrl+2)" />
-            <Button Command="{Binding Heading3Command}" ToolTip="Heading 3 (Ctrl+3)" />
+            <Button Command="{Binding Heading1Command}" ToolTip="Heading 1 (Ctrl+1)">
+                <Button.Content>
+                    <TextBlock Text="H1" />
+                </Button.Content>
+            </Button>
+            <Button Command="{Binding Heading2Command}" ToolTip="Heading 2 (Ctrl+2)">
+                <Button.Content>
+                    <TextBlock Text="H2" />
+                </Button.Content>
+            </Button>
+            <Button Command="{Binding Heading3Command}" ToolTip="Heading 3 (Ctrl+3)">
+                <Button.Content>
+                    <TextBlock Text="H3" />
+                </Button.Content>
+            </Button>
             <Separator />
-            <Button Command="{Binding UnorderedListCommand}" ToolTip="Unordered List (Ctrl+Shift+L)" />
-            <Button Command="{Binding OrderedListCommand}" ToolTip="Ordered List (Ctrl+Shift+O)" />
-            <Button Command="{Binding TaskListCommand}" ToolTip="Task List (Ctrl+Shift+T)" />
+            <Button Command="{Binding UnorderedListCommand}" ToolTip="Unordered List (Ctrl+Shift+L)">
+                <Button.Content>
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8FD;" />
+                </Button.Content>
+            </Button>
+            <Button Command="{Binding OrderedListCommand}" ToolTip="Ordered List (Ctrl+Shift+O)">
+                <Button.Content>
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8FD;" />
+                </Button.Content>
+            </Button>
+            <Button Command="{Binding TaskListCommand}" ToolTip="Task List (Ctrl+Shift+T)">
+                <Button.Content>
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE73E;" />
+                </Button.Content>
+            </Button>
             <Separator />
-            <Button Command="{Binding InsertLinkCommand}" ToolTip="Insert Link (Ctrl+K)" />
-            <Button Command="{Binding InsertImageCommand}" ToolTip="Insert Image (Ctrl+Shift+I)" />
-            <Button Command="{Binding InsertTableCommand}" ToolTip="Insert Table (Ctrl+Shift+T)" />
+            <Button Command="{Binding InsertLinkCommand}" ToolTip="Insert Link (Ctrl+K)">
+                <Button.Content>
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE71B;" />
+                </Button.Content>
+            </Button>
+            <Button Command="{Binding InsertImageCommand}" ToolTip="Insert Image (Ctrl+Shift+I)">
+                <Button.Content>
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8B9;" />
+                </Button.Content>
+            </Button>
+            <Button Command="{Binding InsertTableCommand}" ToolTip="Insert Table (Ctrl+Shift+T)">
+                <Button.Content>
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8F1;" />
+                </Button.Content>
+            </Button>
             <Separator />
-            <Button Command="{Binding TogglePreviewCommand}" ToolTip="Toggle Preview (Ctrl+Shift+P)" />
+            <Button Command="{Binding TogglePreviewCommand}" ToolTip="Toggle Preview (Ctrl+Shift+P)">
+                <Button.Content>
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8A1;" />
+                </Button.Content>
+            </Button>
         </ToolBar>
 
-        <Grid x:Name="MainContentGrid" Grid.Row="2">
+        <Grid x:Name="MainContentGrid" Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition x:Name="EditorColumn" Width="*" MinWidth="300" />
                 <ColumnDefinition Width="Auto" />
@@ -189,13 +230,10 @@
                 </Border>
 
                 <Border Grid.Row="1" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="1" Margin="8" CornerRadius="4">
-                    <RichEditBox x:Name="MarkdownEditor"
+                    <RichTextBox x:Name="MarkdownEditor"
                                  FontFamily="Cascadia Code, Consolas, monospace"
                                  FontSize="14"
                                  AcceptsReturn="True"
-                                 TextWrapping="Wrap"
-                                 ScrollViewer.HorizontalScrollMode="Auto"
-                                 ScrollViewer.VerticalScrollMode="Auto"
                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
                                  TextChanged="MarkdownEditor_TextChanged" />
@@ -211,21 +249,17 @@
                 </Grid.RowDefinitions>
 
                 <Border Grid.Row="0" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0,0,0,1" Padding="8,4">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="PREVIEW" FontSize="12" Foreground="Gray" VerticalAlignment="Center" />
-                        <Button x:Name="BtnRefreshPreview" Content="Refresh" Command="{Binding RefreshPreviewCommand}" ToolTipService.ToolTip="Refresh Preview" Width="80" Height="40" Margin="8,0,0,0" />
-                    </StackPanel>
+                    <TextBlock Text="PREVIEW" FontSize="12" Foreground="Gray" VerticalAlignment="Center" />
                 </Border>
 
                 <Border Grid.Row="1" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="1" Margin="8" CornerRadius="4">
                     <wpf:WebView2 x:Name="MarkdownPreview"
-                                  DefaultBackgroundColor="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"
                                   NavigationStarting="MarkdownPreview_NavigationStarting" />
                 </Border>
             </Grid>
         </Grid>
 
-        <StatusBar Grid.Row="3" Height="28" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0,1,0,0">
+        <StatusBar Grid.Row="4" Height="28" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0,1,0,0">
             <StatusBarItem>
                 <TextBlock x:Name="StatusCursorPosition" Text="Ln 1, Col 1" VerticalAlignment="Center" Margin="12,0" />
             </StatusBarItem>
