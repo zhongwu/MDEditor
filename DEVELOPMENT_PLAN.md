@@ -148,11 +148,12 @@
 
 ### Phase 4: File Operations (Week 4-5) 🔄 IN PROGRESS
 
-#### 4.1 File Management
-- [ ] New File (Ctrl+N) - untitled, track dirty state
-- [ ] Open File (Ctrl+O) - OpenFileDialog, support .md, .markdown, .txt
-- [ ] Save (Ctrl+S) - Save to existing path
-- [ ] Save As (Ctrl+Shift+S) - SaveFileDialog
+#### 4.1 File Management ✅ COMPLETED
+- [x] New File (Ctrl+N) - untitled, track dirty state
+- [x] Open File (Ctrl+O) - OpenFileDialog, support .md, .markdown, .txt
+- [x] Save (Ctrl+S) - Save to existing path
+- [x] Save As (Ctrl+Shift+S) - SaveFileDialog
+- [x] Export to HTML
 - [ ] Auto-save draft (periodic, recover on crash)
 - [ ] Recent Files menu (MRU list, max 10)
 - [ ] File encoding detection (UTF-8 default, fallback)

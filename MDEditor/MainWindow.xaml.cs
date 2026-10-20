@@ -32,6 +32,10 @@ public partial class MainWindow : Window
     private System.Windows.Threading.DispatcherTimer? _previewTimer;
     private string _lastRenderedMarkdown = string.Empty;
 
+    // File management state
+    private string? _currentFilePath = null;
+    private bool _isDirty = false;
+
     public MainWindow()
     {
         InitializeComponent();
@@ -50,6 +54,11 @@ public partial class MainWindow : Window
         ViewModel.ReplaceCallback = ShowReplaceDialog;
         ViewModel.GoToLineCallback = ShowGoToLineDialog;
         ViewModel.ToggleWordWrapCallback = ToggleWordWrap;
+        ViewModel.NewFileCallback = NewFile;
+        ViewModel.OpenFileCallback = OpenFile;
+        ViewModel.SaveFileCallback = SaveFile;
+        ViewModel.SaveAsFileCallback = SaveAsFile;
+        ViewModel.ExportHtmlCallback = ExportHtml;
 
         // Line numbers toggle
         ViewModel.ToggleLineNumbersCallback = ToggleLineNumbers;
@@ -289,6 +298,9 @@ public partial class MainWindow : Window
 
     private void MarkdownEditor_TextChanged(object sender, TextChangedEventArgs e)
     {
+        // Mark as dirty
+        MarkDirty();
+
         // Save scroll position before content change
         var scrollViewer = FindVisualChild<ScrollViewer>(MarkdownEditor);
         double savedOffset = scrollViewer?.VerticalOffset ?? 0;
@@ -358,6 +370,158 @@ public partial class MainWindow : Window
         var html = _markdownParser.ToHtmlDocument(markdown);
         Clipboard.SetText(html);
     }
+
+    private void UpdateTitleBar()
+    {
+        var fileName = string.IsNullOrEmpty(_currentFilePath)
+            ? "Untitled.md"
+            : System.IO.Path.GetFileName(_currentFilePath);
+        var dirty = _isDirty ? " ●" : "";
+        Title = $"MDEditor - {fileName}{dirty}";
+        EditorFileName.Text = fileName;
+        EditorDirtyIndicator.Visibility = _isDirty ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    private void SetEditorText(string text)
+    {
+        var range = new TextRange(MarkdownEditor.Document.ContentStart, MarkdownEditor.Document.ContentEnd);
+        range.Text = text;
+        _isDirty = false;
+        UpdateTitleBar();
+    }
+
+    private void MarkDirty()
+    {
+        if (!_isDirty)
+        {
+            _isDirty = true;
+            UpdateTitleBar();
+        }
+    }
+
+    private void NewFile()
+    {
+        if (_isDirty)
+        {
+            var result = MessageBox.Show("You have unsaved changes. Discard them?", "New File", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result != MessageBoxResult.Yes)
+                return;
+        }
+
+        _currentFilePath = null;
+        SetEditorText("");
+    }
+
+    private void OpenFile()
+    {
+        if (_isDirty)
+        {
+            var result = MessageBox.Show("You have unsaved changes. Discard them?", "Open File", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result != MessageBoxResult.Yes)
+                return;
+        }
+
+        var dialog = new Microsoft.Win32.OpenFileDialog
+        {
+            Title = "Open Markdown File",
+            Filter = "Markdown Files (*.md;*.markdown)|*.md;*.markdown|Text Files (*.txt)|*.txt|All Files (*.*)|*.*",
+            DefaultExt = ".md"
+        };
+
+        if (dialog.ShowDialog() == true)
+        {
+            try
+            {
+                var content = System.IO.File.ReadAllText(dialog.FileName);
+                _currentFilePath = dialog.FileName;
+                SetEditorText(content);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error opening file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+    }
+
+    private void SaveFile()
+    {
+        if (string.IsNullOrEmpty(_currentFilePath))
+        {
+            SaveAsFile();
+            return;
+        }
+
+        try
+        {
+            var text = GetEditorText();
+            System.IO.File.WriteAllText(_currentFilePath, text);
+            _isDirty = false;
+            UpdateTitleBar();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error saving file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    private void SaveAsFile()
+    {
+        var dialog = new Microsoft.Win32.SaveFileDialog
+        {
+            Title = "Save Markdown File As",
+            Filter = "Markdown Files (*.md)|*.md|Text Files (*.txt)|*.txt|All Files (*.*)|*.*",
+            DefaultExt = ".md",
+            FileName = string.IsNullOrEmpty(_currentFilePath)
+                ? "Untitled.md"
+                : System.IO.Path.GetFileName(_currentFilePath)
+        };
+
+        if (dialog.ShowDialog() == true)
+        {
+            try
+            {
+                var text = GetEditorText();
+                System.IO.File.WriteAllText(dialog.FileName, text);
+                _currentFilePath = dialog.FileName;
+                _isDirty = false;
+                UpdateTitleBar();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error saving file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+    }
+
+    private void ExportHtml()
+    {
+        var dialog = new Microsoft.Win32.SaveFileDialog
+        {
+            Title = "Export as HTML",
+            Filter = "HTML Files (*.html)|*.html|All Files (*.*)|*.*",
+            DefaultExt = ".html",
+            FileName = string.IsNullOrEmpty(_currentFilePath)
+                ? "Untitled.html"
+                : System.IO.Path.ChangeExtension(System.IO.Path.GetFileName(_currentFilePath), ".html")
+        };
+
+        if (dialog.ShowDialog() == true)
+        {
+            try
+            {
+                var markdown = GetEditorText();
+                var html = _markdownParser.ToHtmlDocument(markdown);
+                System.IO.File.WriteAllText(dialog.FileName, html);
+                MessageBox.Show($"Exported to {dialog.FileName}", "Export Complete", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error exporting: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+    }
+
+
 
     private void InsertMarkdown(string before, string after)
     {

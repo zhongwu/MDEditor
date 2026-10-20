@@ -76,6 +76,31 @@ public sealed partial class MainWindowViewModel : ObservableObject
     /// </summary>
     public Action? ToggleLineNumbersCallback { get; set; }
 
+    /// <summary>
+    /// Callback for new file.
+    /// </summary>
+    public Action? NewFileCallback { get; set; }
+
+    /// <summary>
+    /// Callback for open file.
+    /// </summary>
+    public Action? OpenFileCallback { get; set; }
+
+    /// <summary>
+    /// Callback for save file.
+    /// </summary>
+    public Action? SaveFileCallback { get; set; }
+
+    /// <summary>
+    /// Callback for save as file.
+    /// </summary>
+    public Action? SaveAsFileCallback { get; set; }
+
+    /// <summary>
+    /// Callback for export HTML.
+    /// </summary>
+    public Action? ExportHtmlCallback { get; set; }
+
     public MainWindowViewModel(ISettingsService settingsService, INavigationService navigationService, ILoggingService loggingService)
     {
         _settingsService = settingsService;
@@ -90,35 +115,35 @@ public sealed partial class MainWindowViewModel : ObservableObject
     private void NewFile()
     {
         _loggingService.LogInformation("New file requested");
-        // TODO: Implement new file logic
+        NewFileCallback?.Invoke();
     }
 
     [RelayCommand]
     private void OpenFile()
     {
         _loggingService.LogInformation("Open file requested");
-        // TODO: Implement open file logic
+        OpenFileCallback?.Invoke();
     }
 
     [RelayCommand]
     private void SaveFile()
     {
         _loggingService.LogInformation("Save file requested");
-        // TODO: Implement save file logic
+        SaveFileCallback?.Invoke();
     }
 
     [RelayCommand]
     private void SaveAsFile()
     {
         _loggingService.LogInformation("Save As requested");
-        // TODO: Implement save file logic
+        SaveAsFileCallback?.Invoke();
     }
 
     [RelayCommand]
     private void ExportHtml()
     {
         _loggingService.LogInformation("Export HTML requested");
-        // TODO: Implement export HTML
+        ExportHtmlCallback?.Invoke();
     }
 
     [RelayCommand]
