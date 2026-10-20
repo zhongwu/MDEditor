@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Documents;
 
 namespace MDEditor;
 
@@ -56,6 +57,12 @@ public partial class MainWindow : Window
 
         InitializePreview();
         SetupSplitter();
+
+        // Set paragraph style for consistent line height
+        var style = new Style(typeof(Paragraph));
+        style.Setters.Add(new Setter(Paragraph.MarginProperty, new Thickness(0)));
+        style.Setters.Add(new Setter(Paragraph.LineHeightProperty, 18.0));
+        MarkdownEditor.Resources.Add(typeof(Paragraph), style);
     }
 
     private async void InitializePreview()
@@ -216,14 +223,25 @@ public partial class MainWindow : Window
     {
         if (!_lineNumbersVisible) return;
 
-        var text = GetEditorText();
-        var lines = text.Split('\n');
-        var sb = new System.Text.StringBuilder();
-        for (int i = 1; i <= lines.Length; i++)
+        var paragraphs = new System.Collections.Generic.List<Paragraph>();
+        foreach (Block block in MarkdownEditor.Document.Blocks)
         {
-            sb.AppendLine(i.ToString());
+            if (block is Paragraph p)
+                paragraphs.Add(p);
         }
-        LineNumbers.Text = sb.ToString().TrimEnd('\r', '\n');
+
+        int lineCount = paragraphs.Count;
+        if (lineCount == 0)
+            lineCount = 1;
+
+        var sb = new System.Text.StringBuilder();
+        for (int i = 1; i <= lineCount; i++)
+        {
+            if (i > 1)
+                sb.Append('\n');
+            sb.Append(i.ToString());
+        }
+        LineNumbers.Text = sb.ToString();
     }
 
     private void ShowFindDialog()
