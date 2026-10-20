@@ -18,6 +18,10 @@ public class MarkdownParser : IMarkdownParser
             .UseEmojiAndSmiley()
             .UseGridTables()
             .UsePipeTables()
+            .UseMathematics()
+            .UseDiagrams()
+            .UseFootnotes()
+            .UseDefinitionLists()
             .Build();
     }
 
@@ -47,6 +51,10 @@ public class MarkdownParser : IMarkdownParser
             "<head>\n" +
             "    <meta charset=\"utf-8\">\n" +
             "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
+            "    <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css\">\n" +
+            "    <script src=\"https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js\"></script>\n" +
+            "    <script src=\"https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js\"></script>\n" +
+            "    <script src=\"https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js\"></script>\n" +
             "    <style>\n" +
             "        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; line-height: 1.6; padding: 20px; max-width: 900px; margin: 0 auto; color: #24292f; background-color: #ffffff; }\n" +
             "        h1, h2, h3, h4, h5, h6 { margin-top: 24px; margin-bottom: 16px; font-weight: 600; line-height: 1.25; }\n" +
@@ -71,6 +79,28 @@ public class MarkdownParser : IMarkdownParser
             "</head>\n" +
             "<body>\n" +
             bodyHtml +
+            "<script>\n" +
+            "    // Initialize KaTeX math rendering\n" +
+            "    document.addEventListener('DOMContentLoaded', function() {\n" +
+            "        if (typeof renderMathInElement !== 'undefined') {\n" +
+            "            renderMathInElement(document.body, {\n" +
+            "                delimiters: [\n" +
+            "                    {left: '$$', right: '$$', display: true},\n" +
+            "                    {left: '$', right: '$', display: false},\n" +
+            "                    {left: '\\\\(', right: '\\\\)', display: false},\n" +
+            "                    {left: '\\\\[', right: '\\\\]', display: true}\n" +
+            "                ]\n" +
+            "            });\n" +
+            "        }\n" +
+            "    });\n" +
+            "    // Initialize Mermaid diagrams\n" +
+            "    if (typeof mermaid !== 'undefined') {\n" +
+            "        mermaid.initialize({ startOnLoad: false, theme: 'default' });\n" +
+            "        document.addEventListener('DOMContentLoaded', function() {\n" +
+            "            mermaid.run();\n" +
+            "        });\n" +
+            "    }\n" +
+            "</script>\n" +
             "</body>\n" +
             "</html>";
     }

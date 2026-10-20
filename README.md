@@ -19,6 +19,7 @@ A modern **Markdown desktop editor** built with **WPF** and **.NET 10**, featuri
 ### Dual-Pane Editing
 - **Left pane**: Markdown editor with syntax highlighting (regex-based, 300ms debounced), line numbers, find/replace, go-to-line
 - **Right pane**: Live preview with GitHub-flavored Markdown rendering (via WebView2)
+- **Synchronized scrolling**: Editor scroll position syncs to preview
 - **Real-time updates** (300ms debounced)
 
 ### Rich Formatting Toolbar

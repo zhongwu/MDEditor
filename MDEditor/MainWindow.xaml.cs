@@ -29,6 +29,9 @@ public partial class MainWindow : Window
     // Line numbers state
     private bool _lineNumbersVisible = false;
     private System.Windows.Threading.DispatcherTimer? _highlightTimer;
+    private System.Windows.Threading.DispatcherTimer? _previewTimer;
+    private bool _isSyncingScroll = false;
+    private string _lastRenderedMarkdown = string.Empty;
 
     public MainWindow()
     {
@@ -76,8 +79,70 @@ public partial class MainWindow : Window
             ApplySyntaxHighlighting();
         };
 
+        // Setup preview refresh timer (debounced 300ms)
+        _previewTimer = new System.Windows.Threading.DispatcherTimer
+        {
+            Interval = TimeSpan.FromMilliseconds(300)
+        };
+        _previewTimer.Tick += (s, e) =>
+        {
+            _previewTimer.Stop();
+            UpdatePreview();
+        };
+
         // Handle Tab/Shift+Tab for indentation
         MarkdownEditor.PreviewKeyDown += MarkdownEditor_PreviewKeyDown;
+
+        // Setup synchronized scrolling (deferred until visual tree is ready)
+        Loaded += (s, e) =>
+        {
+            var scrollViewer = FindVisualChild<ScrollViewer>(MarkdownEditor);
+            if (scrollViewer != null)
+            {
+                scrollViewer.ScrollChanged += (sender, args) => MarkdownEditor_ScrollChanged(sender, args);
+            }
+        };
+    }
+
+    private void MarkdownEditor_ScrollChanged(object sender, ScrollChangedEventArgs e)
+    {
+        if (_isSyncingScroll) return;
+        _isSyncingScroll = true;
+
+        try
+        {
+            // Get the ScrollViewer inside RichTextBox
+            var scrollViewer = FindVisualChild<ScrollViewer>(MarkdownEditor);
+            if (scrollViewer != null && scrollViewer.ScrollableHeight > 0)
+            {
+                var scrollPercent = scrollViewer.VerticalOffset / scrollViewer.ScrollableHeight;
+                // Scroll the WebView2 to the same percentage
+                if (MarkdownPreview.CoreWebView2 != null)
+                {
+                    var script = $"window.scrollTo(0, document.body.scrollHeight * {scrollPercent.ToString(System.Globalization.CultureInfo.InvariantCulture)});";
+                    MarkdownPreview.CoreWebView2.ExecuteScriptAsync(script);
+                }
+            }
+        }
+        catch { }
+        finally
+        {
+            _isSyncingScroll = false;
+        }
+    }
+
+    private static T? FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+    {
+        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+        {
+            var child = VisualTreeHelper.GetChild(parent, i);
+            if (child is T typedChild)
+                return typedChild;
+            var result = FindVisualChild<T>(child);
+            if (result != null)
+                return result;
+        }
+        return null;
     }
 
     private void MarkdownEditor_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -228,7 +293,10 @@ public partial class MainWindow : Window
 
     private void MarkdownEditor_TextChanged(object sender, TextChangedEventArgs e)
     {
-        UpdatePreview();
+        // Debounce preview refresh (300ms)
+        _previewTimer?.Stop();
+        _previewTimer?.Start();
+
         UpdateLineNumbers();
 
         // Debounce syntax highlighting
@@ -241,9 +309,23 @@ public partial class MainWindow : Window
         if (MarkdownPreview.CoreWebView2 == null)
         {
             await MarkdownPreview.EnsureCoreWebView2Async();
+            // Initial full page load
+            var initMarkdown = GetEditorText();
+            var initHtml = _markdownParser.ToHtmlDocument(initMarkdown);
+            MarkdownPreview.NavigateToString(initHtml);
+            _lastRenderedMarkdown = initMarkdown;
+            return;
         }
 
         var markdown = GetEditorText();
+
+        // Skip if content hasn't changed
+        if (markdown == _lastRenderedMarkdown)
+            return;
+
+        _lastRenderedMarkdown = markdown;
+
+        // Full page reload for proper Mermaid/KaTeX rendering
         var html = _markdownParser.ToHtmlDocument(markdown);
         MarkdownPreview.NavigateToString(html);
     }

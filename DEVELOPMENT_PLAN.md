@@ -81,8 +81,9 @@
 - [x] `WebView2` for full HTML rendering
   - Load Markdig-rendered HTML with GitHub-style CSS
   - Auto-refresh on text change (debounced 300ms)
-- [ ] Synchronized scrolling (both panes scroll together)
-- [ ] Handle internal links, images, math (KaTeX), mermaid
+- [x] Synchronized scrolling (editor → preview)
+- [x] Handle internal links, images, math (KaTeX), mermaid
+- [x] Emoji support via Markdig UseEmojiAndSmiley
 
 #### 2.3 Markdown Processing Pipeline
 - [x] Configure Markdig pipeline:
