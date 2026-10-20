@@ -21,6 +21,56 @@ public sealed partial class MainWindowViewModel : ObservableObject
     /// </summary>
     public Action<string, string>? InsertMarkdownCallback { get; set; }
 
+    /// <summary>
+    /// Callback for undo operation.
+    /// </summary>
+    public Action? UndoCallback { get; set; }
+
+    /// <summary>
+    /// Callback for redo operation.
+    /// </summary>
+    public Action? RedoCallback { get; set; }
+
+    /// <summary>
+    /// Callback for cut operation.
+    /// </summary>
+    public Action? CutCallback { get; set; }
+
+    /// <summary>
+    /// Callback for copy operation.
+    /// </summary>
+    public Action? CopyCallback { get; set; }
+
+    /// <summary>
+    /// Callback for paste operation.
+    /// </summary>
+    public Action? PasteCallback { get; set; }
+
+    /// <summary>
+    /// Callback for select all operation.
+    /// </summary>
+    public Action? SelectAllCallback { get; set; }
+
+    /// <summary>
+    /// Callback for find operation.
+    /// </summary>
+    public Action? FindCallback { get; set; }
+
+    /// <summary>
+    /// Callback for replace operation.
+    /// </summary>
+    public Action? ReplaceCallback { get; set; }
+
+    /// <summary>
+    /// Callback for go to line operation.
+    /// </summary>
+    public Action? GoToLineCallback { get; set; }
+
+    /// <summary>
+    /// Callback for word wrap toggle.
+    /// </summary>
+    public Action? ToggleWordWrapCallback { get; set; }
+
     public MainWindowViewModel(ISettingsService settingsService, INavigationService navigationService, ILoggingService loggingService)
     {
         _settingsService = settingsService;
@@ -85,56 +135,63 @@ public sealed partial class MainWindowViewModel : ObservableObject
     private void Undo()
     {
         _loggingService.LogInformation("Undo requested");
-        // TODO: Implement undo
+        UndoCallback?.Invoke();
     }
 
     [RelayCommand]
     private void Redo()
     {
         _loggingService.LogInformation("Redo requested");
-        // TODO: Implement redo
+        RedoCallback?.Invoke();
     }
 
     [RelayCommand]
     private void Cut()
     {
         _loggingService.LogInformation("Cut requested");
-        // TODO: Implement cut
+        CutCallback?.Invoke();
     }
 
     [RelayCommand]
     private void Copy()
     {
         _loggingService.LogInformation("Copy requested");
-        // TODO: Implement copy
+        CopyCallback?.Invoke();
     }
 
     [RelayCommand]
     private void Paste()
     {
         _loggingService.LogInformation("Paste requested");
-        // TODO: Implement paste
+        PasteCallback?.Invoke();
     }
 
     [RelayCommand]
     private void Find()
     {
         _loggingService.LogInformation("Find requested");
-        // TODO: Implement find
+        FindCallback?.Invoke();
     }
 
     [RelayCommand]
     private void Replace()
     {
         _loggingService.LogInformation("Replace requested");
-        // TODO: Implement replace
+        ReplaceCallback?.Invoke();
     }
 
     [RelayCommand]
     private void SelectAll()
     {
         _loggingService.LogInformation("Select All requested");
-        // TODO: Implement select all
+        SelectAllCallback?.Invoke();
+    }
+
+    [RelayCommand]
+    private void ToggleWordWrap()
+    {
+        _loggingService.LogInformation("Toggle word wrap requested");
+        ToggleWordWrapCallback?.Invoke();
     }
 
     // View commands
@@ -150,13 +207,6 @@ public sealed partial class MainWindowViewModel : ObservableObject
     {
         _loggingService.LogInformation("Toggle line numbers requested");
         // TODO: Implement line numbers toggle
-    }
-
-    [RelayCommand]
-    private void ToggleWordWrap()
-    {
-        _loggingService.LogInformation("Toggle word wrap requested");
-        // TODO: Implement word wrap toggle
     }
 
     [RelayCommand]

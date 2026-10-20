@@ -28,6 +28,16 @@ public partial class MainWindow : Window
         _markdownParser = App.Services.GetRequiredService<IMarkdownParser>();
 
         ViewModel.InsertMarkdownCallback = InsertMarkdown;
+        ViewModel.UndoCallback = () => MarkdownEditor.Undo();
+        ViewModel.RedoCallback = () => MarkdownEditor.Redo();
+        ViewModel.CutCallback = () => MarkdownEditor.Cut();
+        ViewModel.CopyCallback = () => MarkdownEditor.Copy();
+        ViewModel.PasteCallback = () => MarkdownEditor.Paste();
+        ViewModel.SelectAllCallback = () => MarkdownEditor.SelectAll();
+        ViewModel.FindCallback = ShowFindDialog;
+        ViewModel.ReplaceCallback = ShowReplaceDialog;
+        ViewModel.GoToLineCallback = ShowGoToLineDialog;
+        ViewModel.ToggleWordWrapCallback = () => { /* Word wrap toggle - WPF RichTextBox doesn't support TextWrapping directly */ };
 
         DataContext = ViewModel;
 
@@ -164,6 +174,24 @@ public partial class MainWindow : Window
         {
             System.Diagnostics.Debug.WriteLine($"InsertMarkdown error: {ex.Message}");
         }
+    }
+
+    private void ShowFindDialog()
+    {
+        // TODO: Implement Find dialog
+        System.Diagnostics.Debug.WriteLine("Find dialog requested");
+    }
+
+    private void ShowReplaceDialog()
+    {
+        // TODO: Implement Replace dialog
+        System.Diagnostics.Debug.WriteLine("Replace dialog requested");
+    }
+
+    private void ShowGoToLineDialog()
+    {
+        // TODO: Implement Go to Line dialog
+        System.Diagnostics.Debug.WriteLine("Go to Line dialog requested");
     }
 
     private void MarkdownPreview_NavigationStarting(object? sender, CoreWebView2NavigationStartingEventArgs e)
