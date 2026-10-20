@@ -119,6 +119,7 @@ MDEditor.slnx
 | `Ctrl+Q` | Blockquote |
 | `Ctrl+K` | Insert Link |
 | `Ctrl+Shift+L/O/T` | Lists (Unordered/Ordered/Task) |
+| `Ctrl+Shift+M` | Math Block |
 | `Ctrl+Shift+P` | Toggle Preview |
 | `Ctrl+Shift+N` | Toggle Line Numbers |
 | `Ctrl+Shift+W` | Toggle Word Wrap |

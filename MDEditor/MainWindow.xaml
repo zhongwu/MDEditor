@@ -81,6 +81,7 @@
                 <MenuItem Header="Image" Command="{Binding InsertImageCommand}" />
                 <MenuItem Header="Table" Command="{Binding InsertTableCommand}" />
                 <MenuItem Header="Horizontal Rule" Command="{Binding InsertHorizontalRuleCommand}" />
+                <MenuItem Header="Math Block" Command="{Binding MathBlockCommand}" />
             </MenuItem>
             <MenuItem Header="Tools">
                 <MenuItem Header="GitHub Sync" Command="{Binding GitHubSyncCommand}" />
@@ -254,7 +255,44 @@
                                      Padding="4,0,4,0"
                                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                      ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                     TextChanged="MarkdownEditor_TextChanged" />
+                                     TextChanged="MarkdownEditor_TextChanged">
+                            <RichTextBox.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Undo" Command="{Binding UndoCommand}" />
+                                    <MenuItem Header="Redo" Command="{Binding RedoCommand}" />
+                                    <Separator />
+                                    <MenuItem Header="Cut" Command="{Binding CutCommand}" />
+                                    <MenuItem Header="Copy" Command="{Binding CopyCommand}" />
+                                    <MenuItem Header="Paste" Command="{Binding PasteCommand}" />
+                                    <Separator />
+                                    <MenuItem Header="Bold" Command="{Binding BoldCommand}" />
+                                    <MenuItem Header="Italic" Command="{Binding ItalicCommand}" />
+                                    <MenuItem Header="Strikethrough" Command="{Binding StrikethroughCommand}" />
+                                    <MenuItem Header="Inline Code" Command="{Binding InlineCodeCommand}" />
+                                    <Separator />
+                                    <MenuItem Header="Heading 1" Command="{Binding Heading1Command}" />
+                                    <MenuItem Header="Heading 2" Command="{Binding Heading2Command}" />
+                                    <MenuItem Header="Heading 3" Command="{Binding Heading3Command}" />
+                                    <Separator />
+                                    <MenuItem Header="Code Block" Command="{Binding CodeBlockCommand}" />
+                                    <MenuItem Header="Blockquote" Command="{Binding BlockquoteCommand}" />
+                                    <Separator />
+                                    <MenuItem Header="Unordered List" Command="{Binding UnorderedListCommand}" />
+                                    <MenuItem Header="Ordered List" Command="{Binding OrderedListCommand}" />
+                                    <MenuItem Header="Task List" Command="{Binding TaskListCommand}" />
+                                    <Separator />
+                                    <MenuItem Header="Insert Link" Command="{Binding InsertLinkCommand}" />
+                                    <MenuItem Header="Insert Image" Command="{Binding InsertImageCommand}" />
+                                    <MenuItem Header="Insert Table" Command="{Binding InsertTableCommand}" />
+                                    <MenuItem Header="Insert Horizontal Rule" Command="{Binding InsertHorizontalRuleCommand}" />
+                                    <Separator />
+                                    <MenuItem Header="Select All" Command="{Binding SelectAllCommand}" />
+                                    <Separator />
+                                    <MenuItem Header="Copy as Markdown" Click="CopyAsMarkdown_Click" />
+                                    <MenuItem Header="Copy as HTML" Click="CopyAsHtml_Click" />
+                                </ContextMenu>
+                            </RichTextBox.ContextMenu>
+                        </RichTextBox>
                     </Grid>
                 </Border>
             </Grid>

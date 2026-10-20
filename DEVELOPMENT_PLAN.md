@@ -140,9 +140,9 @@
 | Horizontal Rule | `---` | Ctrl+Shift+H |
 | Math Block | `$$...$$` | Ctrl+Shift+M |
 
-#### 3.3 Context Menu
-- [ ] Right-click menu with format options
-- [ ] "Copy as HTML" / "Copy as Markdown"
+#### 3.3 Context Menu ✅ COMPLETED
+- [x] Right-click menu with format options (Undo, Redo, Cut, Copy, Paste, Bold, Italic, etc.)
+- [x] "Copy as Markdown" / "Copy as HTML"
 
 ---
 

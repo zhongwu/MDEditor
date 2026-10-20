@@ -383,6 +383,13 @@ public sealed partial class MainWindowViewModel : ObservableObject
         InsertMarkdownCallback?.Invoke("\n---\n", "\n");
     }
 
+    [RelayCommand]
+    private void MathBlock()
+    {
+        _loggingService.LogInformation("Math block requested");
+        InsertMarkdownCallback?.Invoke("$$\n", "\n$$");
+    }
+
     // Tools commands
     [RelayCommand]
     private void GitHubSync()

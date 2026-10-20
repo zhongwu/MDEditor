@@ -346,6 +346,19 @@ public partial class MainWindow : Window
         return range.Text;
     }
 
+    private void CopyAsMarkdown_Click(object sender, RoutedEventArgs e)
+    {
+        var text = GetEditorText();
+        Clipboard.SetText(text);
+    }
+
+    private void CopyAsHtml_Click(object sender, RoutedEventArgs e)
+    {
+        var markdown = GetEditorText();
+        var html = _markdownParser.ToHtmlDocument(markdown);
+        Clipboard.SetText(html);
+    }
+
     private void InsertMarkdown(string before, string after)
     {
         try
