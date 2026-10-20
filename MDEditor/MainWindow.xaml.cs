@@ -28,6 +28,7 @@ public partial class MainWindow : Window
 
     // Line numbers state
     private bool _lineNumbersVisible = false;
+    private System.Windows.Threading.DispatcherTimer? _highlightTimer;
 
     public MainWindow()
     {
@@ -63,6 +64,17 @@ public partial class MainWindow : Window
         style.Setters.Add(new Setter(Paragraph.MarginProperty, new Thickness(0)));
         style.Setters.Add(new Setter(Paragraph.LineHeightProperty, 18.0));
         MarkdownEditor.Resources.Add(typeof(Paragraph), style);
+
+        // Setup syntax highlighting timer (debounced)
+        _highlightTimer = new System.Windows.Threading.DispatcherTimer
+        {
+            Interval = TimeSpan.FromMilliseconds(300)
+        };
+        _highlightTimer.Tick += (s, e) =>
+        {
+            _highlightTimer.Stop();
+            ApplySyntaxHighlighting();
+        };
     }
 
     private async void InitializePreview()
@@ -160,6 +172,10 @@ public partial class MainWindow : Window
     {
         UpdatePreview();
         UpdateLineNumbers();
+
+        // Debounce syntax highlighting
+        _highlightTimer?.Stop();
+        _highlightTimer?.Start();
     }
 
     private async void UpdatePreview()
@@ -242,6 +258,95 @@ public partial class MainWindow : Window
             sb.Append(i.ToString());
         }
         LineNumbers.Text = sb.ToString();
+    }
+
+    private void ApplySyntaxHighlighting()
+    {
+        // Save caret position
+        var caretPos = MarkdownEditor.CaretPosition;
+
+        // Clear existing foreground formatting only
+        var fullRange = new TextRange(MarkdownEditor.Document.ContentStart, MarkdownEditor.Document.ContentEnd);
+        fullRange.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Black);
+
+        var text = GetEditorText();
+        if (string.IsNullOrEmpty(text))
+            return;
+
+        // Define highlighting patterns with colors
+        var highlights = new (string pattern, Color color)[]
+        {
+            // Headings
+            (@"^#{1,6}\s+.*$", Color.FromRgb(0x00, 0x66, 0xCC)),
+            // Code blocks (fenced)
+            (@"^```[\s\S]*?^```", Color.FromRgb(0x22, 0x88, 0x22)),
+            // Inline code
+            (@"`[^`]+`", Color.FromRgb(0x22, 0x88, 0x22)),
+            // Bold
+            (@"\*\*[^*]+\*\*", Color.FromRgb(0x88, 0x00, 0x88)),
+            // Italic
+            (@"\*[^*]+\*", Color.FromRgb(0x88, 0x00, 0x88)),
+            // Links
+            (@"\[[^\]]+\]\([^)]+\)", Color.FromRgb(0x00, 0x66, 0xCC)),
+            // Images
+            (@"!\[[^\]]*\]\([^)]+\)", Color.FromRgb(0x00, 0x66, 0xCC)),
+            // Blockquotes
+            (@"^>\s+.*$", Color.FromRgb(0x66, 0x66, 0x66)),
+            // Unordered lists
+            (@"^[\s]*[-*+]\s+", Color.FromRgb(0xCC, 0x66, 0x00)),
+            // Ordered lists
+            (@"^[\s]*\d+\.\s+", Color.FromRgb(0xCC, 0x66, 0x00)),
+            // Horizontal rules
+            (@"^[-*_]{3,}\s*$", Color.FromRgb(0x66, 0x66, 0x66)),
+            // Strikethrough
+            (@"~~[^~]+~~", Color.FromRgb(0x88, 0x00, 0x88)),
+        };
+
+        foreach (var (pattern, color) in highlights)
+        {
+            var brush = new SolidColorBrush(color);
+            var regex = new System.Text.RegularExpressions.Regex(pattern,
+                System.Text.RegularExpressions.RegexOptions.Multiline);
+
+            foreach (System.Text.RegularExpressions.Match match in regex.Matches(text))
+            {
+                if (!match.Success)
+                    continue;
+
+                // Convert character index to TextPointer
+                var startPointer = GetTextPointerAtOffset(match.Index);
+                var endPointer = GetTextPointerAtOffset(match.Index + match.Length);
+
+                if (startPointer != null && endPointer != null)
+                {
+                    var range = new TextRange(startPointer, endPointer);
+                    range.ApplyPropertyValue(TextElement.ForegroundProperty, brush);
+                }
+            }
+        }
+
+        // Restore caret position
+        MarkdownEditor.CaretPosition = caretPos;
+    }
+
+    private TextPointer? GetTextPointerAtOffset(int offset)
+    {
+        if (offset <= 0)
+            return MarkdownEditor.Document.ContentStart;
+
+        var current = MarkdownEditor.Document.ContentStart;
+        int count = 0;
+
+        while (count < offset && current != null)
+        {
+            var next = current.GetNextInsertionPosition(LogicalDirection.Forward);
+            if (next == null || next == current)
+                break;
+            current = next;
+            count++;
+        }
+
+        return current;
     }
 
     private void ShowFindDialog()
