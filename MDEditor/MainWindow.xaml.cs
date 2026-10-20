@@ -75,6 +75,64 @@ public partial class MainWindow : Window
             _highlightTimer.Stop();
             ApplySyntaxHighlighting();
         };
+
+        // Handle Tab/Shift+Tab for indentation
+        MarkdownEditor.PreviewKeyDown += MarkdownEditor_PreviewKeyDown;
+    }
+
+    private void MarkdownEditor_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key != Key.Tab)
+            return;
+
+        e.Handled = true;
+        const string indent = "    ";
+
+        bool isShift = (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift;
+
+        if (isShift)
+        {
+            if (MarkdownEditor.Selection.IsEmpty)
+            {
+                var caret = MarkdownEditor.CaretPosition;
+                var lineStart = caret.GetLineStartPosition(0);
+                if (lineStart != null)
+                {
+                    var lineEnd = caret.GetLineStartPosition(1) ?? MarkdownEditor.Document.ContentEnd;
+                    var lineRange = new TextRange(lineStart, lineEnd);
+                    var lineText = lineRange.Text;
+                    if (lineText.StartsWith(indent))
+                    {
+                        lineRange.Text = lineText.Substring(indent.Length);
+                    }
+                }
+            }
+            else
+            {
+                var selectedText = MarkdownEditor.Selection.Text;
+                var lines = selectedText.Split('\n');
+                var unindented = string.Join("\n", Array.ConvertAll(lines, l =>
+                    l.StartsWith(indent) ? l.Substring(indent.Length) : l));
+                MarkdownEditor.Selection.Text = unindented;
+            }
+        }
+        else
+        {
+            if (MarkdownEditor.Selection.IsEmpty)
+            {
+                MarkdownEditor.Selection.Text = indent;
+                var newPos = MarkdownEditor.CaretPosition.GetPositionAtOffset(indent.Length, LogicalDirection.Forward);
+                if (newPos != null)
+                    MarkdownEditor.CaretPosition = newPos;
+            }
+            else
+            {
+                var selectedText = MarkdownEditor.Selection.Text;
+                var lines = selectedText.Split('\n');
+                var indented = string.Join("\n", Array.ConvertAll(lines, l => indent + l));
+                MarkdownEditor.Selection.Text = indented;
+            }
+        }
     }
 
     private async void InitializePreview()

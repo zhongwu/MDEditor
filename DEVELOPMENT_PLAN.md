@@ -75,7 +75,7 @@
   - [x] Find/Replace (Ctrl+F, Ctrl+H) - single-instance dialogs
   - [x] Go to Line (Ctrl+G) - paragraph-aware + offset fallback
   - [x] Word wrap toggle
-  - [ ] Tab/Shift+Tab for indentation
+  - [x] Tab/Shift+Tab for indentation
 
 #### 2.2 Live Preview (Right Pane)
 - [x] `WebView2` for full HTML rendering
