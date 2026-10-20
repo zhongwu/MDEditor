@@ -65,10 +65,10 @@ public partial class MainWindow : Window
         style.Setters.Add(new Setter(Paragraph.LineHeightProperty, 18.0));
         MarkdownEditor.Resources.Add(typeof(Paragraph), style);
 
-        // Setup syntax highlighting timer (debounced)
+        // Setup syntax highlighting timer (debounced - longer to preserve undo)
         _highlightTimer = new System.Windows.Threading.DispatcherTimer
         {
-            Interval = TimeSpan.FromMilliseconds(300)
+            Interval = TimeSpan.FromMilliseconds(2000)
         };
         _highlightTimer.Tick += (s, e) =>
         {
@@ -262,8 +262,11 @@ public partial class MainWindow : Window
 
     private void ApplySyntaxHighlighting()
     {
-        // Save caret position
+        // Save caret position and selection
         var caretPos = MarkdownEditor.CaretPosition;
+        var selectionStart = MarkdownEditor.Selection.Start;
+        var selectionEnd = MarkdownEditor.Selection.End;
+        var hasSelection = !MarkdownEditor.Selection.IsEmpty;
 
         // Clear existing foreground formatting only
         var fullRange = new TextRange(MarkdownEditor.Document.ContentStart, MarkdownEditor.Document.ContentEnd);
@@ -292,10 +295,10 @@ public partial class MainWindow : Window
             (@"!\[[^\]]*\]\([^)]+\)", Color.FromRgb(0x00, 0x66, 0xCC)),
             // Blockquotes
             (@"^>\s+.*$", Color.FromRgb(0x66, 0x66, 0x66)),
-            // Unordered lists
-            (@"^[\s]*[-*+]\s+", Color.FromRgb(0xCC, 0x66, 0x00)),
-            // Ordered lists
-            (@"^[\s]*\d+\.\s+", Color.FromRgb(0xCC, 0x66, 0x00)),
+            // Unordered lists (entire line)
+            (@"^[\s]*[-*+]\s+.*$", Color.FromRgb(0xCC, 0x66, 0x00)),
+            // Ordered lists (entire line)
+            (@"^[\s]*\d+\.\s+.*$", Color.FromRgb(0xCC, 0x66, 0x00)),
             // Horizontal rules
             (@"^[-*_]{3,}\s*$", Color.FromRgb(0x66, 0x66, 0x66)),
             // Strikethrough
@@ -325,8 +328,12 @@ public partial class MainWindow : Window
             }
         }
 
-        // Restore caret position
+        // Restore caret position and selection
         MarkdownEditor.CaretPosition = caretPos;
+        if (hasSelection && selectionStart != null && selectionEnd != null)
+        {
+            MarkdownEditor.Selection.Select(selectionStart, selectionEnd);
+        }
     }
 
     private TextPointer? GetTextPointerAtOffset(int offset)

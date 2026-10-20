@@ -1,72 +1,69 @@
 # MDEditor
 
-A modern **Markdown desktop editor** built with **WPF** and **.NET 8/9**, featuring a dual-pane interface with live preview, rich formatting toolbar, file management, and GitHub synchronization.
+A modern **Markdown desktop editor** built with **WPF** and **.NET 10**, featuring a dual-pane interface with live preview, rich formatting toolbar, file management, and GitHub synchronization.
 
-## Features
+## Current Status (v0.2.0-dev)
+
+| Phase | Status | Notes |
+|-------|--------|-------|
+| **1. Foundation & Project Setup** | ✅ Complete | WPF app, DI, MVVM, settings, logging |
+| **2. Editor Core** | ✅ Mostly Done | Syntax highlight, line numbers, find/replace, go-to-line, word wrap |
+| **3. Toolbar & Formatting** | ✅ Complete | All format commands, menus, toolbar |
+| **4. File Operations** | 🔄 In Progress | New/Open/Save/Export not yet implemented |
+| **5. GitHub Integration** | ⏳ Not Started | Auth, repo browser, sync |
+| **6. Advanced Features** | ⏳ Not Started | Autocomplete, themes, settings |
+| **7. Polish & Release** | ⏳ Not Started | Tests, packaging, docs |
+
+## Implemented Features
 
 ### Dual-Pane Editing
-- **Left pane**: Full-featured Markdown editor with syntax highlighting, line numbers, and code folding
+- **Left pane**: Markdown editor with syntax highlighting (regex-based, 300ms debounced), line numbers, find/replace, go-to-line
 - **Right pane**: Live preview with GitHub-flavored Markdown rendering (via WebView2)
-- **Synchronized scrolling** between editor and preview
 - **Real-time updates** (300ms debounced)
 
 ### Rich Formatting Toolbar
 | Category | Actions |
 |----------|---------|
 | **Headings** | H1–H6 (Ctrl+1–6) |
-| **Text Style** | Bold (Ctrl+B), Italic (Ctrl+I), Strikethrough, Inline Code |
-| **Blocks** | Code Block, Blockquote, Horizontal Rule |
-| **Lists** | Unordered, Ordered, Task Lists |
-| **Links & Media** | Link (Ctrl+K), Image, Table |
-| **Math** | Inline & Block math (KaTeX) |
+| **Text Style** | Bold (Ctrl+B), Italic (Ctrl+I), Strikethrough (Ctrl+Shift+X), Inline Code (Ctrl+`) |
+| **Blocks** | Code Block (Ctrl+Shift+C), Blockquote (Ctrl+Q), Horizontal Rule |
+| **Lists** | Unordered (Ctrl+Shift+L), Ordered (Ctrl+Shift+O), Task Lists (Ctrl+Shift+T) |
+| **Links & Media** | Link (Ctrl+K), Image (Ctrl+Shift+I), Table (Ctrl+Shift+T) |
+| **Math** | Inline & Block math (Ctrl+Shift+M) |
 
-### File Operations
-- New, Open, Save, Save As (Ctrl+N / Ctrl+O / Ctrl+S / Ctrl+Shift+S)
-- **Recent files** menu (MRU)
-- **Auto-save** draft recovery
-- **Export** to HTML, PDF
-- Drag & drop files to open, images to embed
-
-### GitHub Integration
-- OAuth / Personal Access Token authentication
-- Browse repositories and files
-- Open files directly from GitHub
-- Save/commit changes back to GitHub
-- View file commit history and diff
-- Create/update Gists
-
-### Customization
-- Light / Dark / System theme
-- Configurable editor font and size
-- Custom preview CSS
-- Keyboard shortcuts editor
-- Markdown flavor settings (GFM, CommonMark)
+### Editor Features
+- **Syntax highlighting**: Headings, code blocks, inline code, bold, italic, strikethrough, links, images, blockquotes, lists, horizontal rules
+- **Line numbers**: Paragraph-based, aligned with editor content
+- **Find/Replace** (Ctrl+F / Ctrl+H): Single-instance dialogs, proper text highlighting, status inline with buttons
+- **Go to Line** (Ctrl+G): Paragraph-aware navigation with offset fallback
+- **Word wrap toggle** (Ctrl+Shift+W)
+- **Undo/Redo/Cut/Copy/Paste/Select All**: Standard editing commands
 
 ## Tech Stack
 
 | Layer | Technology |
 |-------|------------|
-| **UI Framework** | WPF (.NET 8/9) |
-| **Language** | C# (.NET 8/9) |
+| **UI Framework** | WPF (.NET 10) |
+| **Language** | C# (.NET 10) |
 | **Architecture** | MVVM (CommunityToolkit.Mvvm) |
 | **Markdown** | Markdig (GFM + extensions) |
 | **Preview** | WebView2 (HTML/CSS rendering) |
 | **GitHub API** | Octokit.NET |
 | **DI/Logging** | Microsoft.Extensions.* |
-| **Packaging** | MSIX / ClickOnce |
+| **Settings** | JSON in `%APPDATA%\MDEditor\settings.json` |
 
 ## Getting Started
 
 ### Prerequisites
 - **Windows 10 1809+** (Build 17763) or **Windows 11**
 - **Visual Studio 2022 17.8+** with "Desktop development with C#" workload
-- **.NET 8/9 SDK**
+- **.NET 10 SDK**
 
 ### Build & Run
 
 ```bash
 # Clone the repository
-git clone https://github.com/<your-username>/MDEditor.git
+git clone https://github.com/zhongwu/MDEditor.git
 cd MDEditor
 
 # Restore and build
@@ -88,15 +85,12 @@ start MDEditor.slnx
 ```
 MDEditor.slnx
 ├── MDEditor/                 # WPF Application
-│   ├── Views/                # XAML Views (MainWindow, Dialogs, etc.)
+│   ├── MainWindow.xaml/.cs   # Main window with dual-pane
 │   ├── ViewModels/           # MVVM ViewModels
-│   ├── Services/             # Platform services (File, Settings, Theme)
-│   ├── Converters/           # XAML Value Converters
-│   └── Resources/            # Styles, Templates, Themes
+│   ├── Services/             # Platform services
+│   └── FindReplaceDialog.cs  # Find/Replace dialog
 ├── MDEditor.Core/            # Core Business Logic (Class Library)
-│   ├── Models/               # Domain Models (Document, GitHub, Settings)
-│   ├── Services/             # Core Services (Markdown, GitHub, File)
-│   ├── Parsers/              # Markdig Pipeline Configuration
+│   ├── Services/             # Core Services (Markdown, Settings)
 │   └── Interfaces/           # Service Contracts
 ├── MDEditor.Tests/           # Unit Tests (xUnit + Moq)
 └── MDEditor.IntegrationTests/ # UI Automation Tests
@@ -112,11 +106,19 @@ MDEditor.slnx
 | `Ctrl+Shift+S` | Save As |
 | `Ctrl+E` | Export |
 | `Ctrl+Z / Y` | Undo / Redo |
+| `Ctrl+X / C / V` | Cut / Copy / Paste |
 | `Ctrl+F / H` | Find / Replace |
+| `Ctrl+G` | Go to Line |
+| `Ctrl+A` | Select All |
 | `Ctrl+1–6` | Heading 1–6 |
 | `Ctrl+B / I / ` ` | Bold / Italic / Inline Code |
+| `Ctrl+Shift+C` | Code Block |
+| `Ctrl+Q` | Blockquote |
 | `Ctrl+K` | Insert Link |
+| `Ctrl+Shift+L/O/T` | Lists (Unordered/Ordered/Task) |
 | `Ctrl+Shift+P` | Toggle Preview |
+| `Ctrl+Shift+N` | Toggle Line Numbers |
+| `Ctrl+Shift+W` | Toggle Word Wrap |
 
 ## Configuration
 
@@ -144,12 +146,6 @@ See [DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md) for the full roadmap, architectur
 dotnet test
 ```
 
-### Creating MSIX Package
-```bash
-dotnet publish -c Release -r win-x64 --self-contained true
-# Then use VS "Publish" → "Create App Packages"
-```
-
 ## Contributing
 
 1. Fork the repository
@@ -157,8 +153,6 @@ dotnet publish -c Release -r win-x64 --self-contained true
 3. Commit changes (`git commit -m 'Add amazing feature'`)
 4. Push to branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for coding standards and PR guidelines.
 
 ## License
 
