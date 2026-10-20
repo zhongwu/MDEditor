@@ -1,5 +1,14 @@
 # MDEditor Development Plan
 
+## ⚠️ AI Agent Rules
+
+> **IMPORTANT**: Any code changes, commits, or pushes to this repository **require explicit user review and approval** before execution. The AI agent must:
+> 1. Make changes locally
+> 2. Build and verify
+> 3. Report results to the user
+> 4. **Wait for explicit "push" or "looks good, push" approval** before committing or pushing
+> 5. Never push without explicit user permission
+
 ## Project Overview
 **MDEditor** - A modern Markdown desktop editor built with WPF (.NET 8/9), featuring a dual-pane interface with live preview, toolbar for formatting, file operations, and GitHub version synchronization.
 
