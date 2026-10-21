@@ -12,8 +12,8 @@ obj/
 # Rider
 .idea/
 
-# VS Code
-.vscode/
+# VS Code (uncomment to ignore local settings)
+# .vscode/
 
 # NuGet
 packages/
