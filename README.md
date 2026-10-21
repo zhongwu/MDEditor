@@ -9,7 +9,7 @@ A modern **Markdown desktop editor** built with **WPF** and **.NET 10**, featuri
 | **1. Foundation & Project Setup** | ✅ Complete | WPF app, DI, MVVM, settings, logging |
 | **2. Editor Core** | ✅ Complete | Syntax highlight, line numbers, find/replace, go-to-line, word wrap, live preview with KaTeX/Mermaid |
 | **3. Toolbar & Formatting** | ✅ Complete | All format commands, menus, toolbar |
-| **4. File Operations** | 🔄 In Progress | New/Open/Save/Export not yet implemented |
+| **4. File Operations** | Mostly Done | New/Open/Save/Save As/Export HTML, drag & drop |
 | **5. GitHub Integration** | ⏳ Not Started | Auth, repo browser, sync |
 | **6. Advanced Features** | ⏳ Not Started | Autocomplete, themes, settings |
 | **7. Polish & Release** | ⏳ Not Started | Tests, packaging, docs |

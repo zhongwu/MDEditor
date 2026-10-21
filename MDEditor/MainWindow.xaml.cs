@@ -106,6 +106,14 @@ public partial class MainWindow : Window
         // Handle Tab/Shift+Tab for indentation
         MarkdownEditor.PreviewKeyDown += MarkdownEditor_PreviewKeyDown;
 
+        // Enable drag & drop on editor
+        MarkdownEditor.AllowDrop = true;
+        MarkdownEditor.PreviewDragOver += MarkdownEditor_DragOver;
+        MarkdownEditor.PreviewDrop += MarkdownEditor_Drop;
+
+        // Disable drag & drop on preview - handled at OS level by WebView2
+        MarkdownPreview.AllowDrop = false;
+
         // Handle editor mouse click to scroll preview to corresponding position
         MarkdownEditor.PreviewMouseLeftButtonUp += (s, e) =>
         {
@@ -237,6 +245,121 @@ public partial class MainWindow : Window
         return null;
     }
 
+    private void MarkdownEditor_DragOver(object sender, DragEventArgs e)
+    {
+        if (e.Data.GetDataPresent(DataFormats.FileDrop))
+        {
+            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (files != null && files.Length > 0)
+            {
+                var ext = System.IO.Path.GetExtension(files[0]).ToLowerInvariant();
+                if (ext == ".md" || ext == ".markdown" || ext == ".txt" ||
+                    ext == ".png" || ext == ".jpg" || ext == ".jpeg" || ext == ".gif" || ext == ".bmp" || ext == ".svg")
+                {
+                    e.Effects = DragDropEffects.Copy;
+                    e.Handled = true;
+                    return;
+                }
+            }
+        }
+        e.Effects = DragDropEffects.None;
+        e.Handled = true;
+    }
+
+    private void MarkdownEditor_Drop(object sender, DragEventArgs e)
+    {
+        if (!e.Data.GetDataPresent(DataFormats.FileDrop))
+            return;
+
+        var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+        if (files == null || files.Length == 0)
+            return;
+
+        foreach (var file in files)
+        {
+            var ext = System.IO.Path.GetExtension(file).ToLowerInvariant();
+
+            if (ext == ".md" || ext == ".markdown" || ext == ".txt")
+            {
+                // Open markdown/text file
+                if (_isDirty)
+                {
+                    var result = MessageBox.Show("You have unsaved changes. Discard them?", "Open Dropped File", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (result != MessageBoxResult.Yes)
+                        return;
+                }
+
+                try
+                {
+                    var encoding = DetectFileEncoding(file);
+                    var content = System.IO.File.ReadAllText(file, encoding);
+                    _currentFilePath = file;
+                    SetEditorText(content);
+                    AddRecentFile(file);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error opening file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else if (ext == ".png" || ext == ".jpg" || ext == ".jpeg" || ext == ".gif" || ext == ".bmp" || ext == ".svg")
+            {
+                // Embed image
+                EmbedDroppedImage(file);
+            }
+        }
+    }
+
+    private void EmbedDroppedImage(string imagePath)
+    {
+        try
+        {
+            string assetsFolder;
+            string relativePath;
+
+            if (!string.IsNullOrEmpty(_currentFilePath))
+            {
+                // Save image to assets folder next to the current file
+                var fileDir = System.IO.Path.GetDirectoryName(_currentFilePath)!;
+                assetsFolder = System.IO.Path.Combine(fileDir, "assets");
+                System.IO.Directory.CreateDirectory(assetsFolder);
+
+                var fileName = System.IO.Path.GetFileName(imagePath);
+                var destPath = System.IO.Path.Combine(assetsFolder, fileName);
+
+                // Handle duplicate filenames
+                if (System.IO.File.Exists(destPath))
+                {
+                    var name = System.IO.Path.GetFileNameWithoutExtension(fileName);
+                    var ext = System.IO.Path.GetExtension(fileName);
+                    int counter = 1;
+                    while (System.IO.File.Exists(destPath))
+                    {
+                        destPath = System.IO.Path.Combine(assetsFolder, $"{name}_{counter}{ext}");
+                        counter++;
+                    }
+                }
+
+                System.IO.File.Copy(imagePath, destPath, true);
+                relativePath = $"assets/{System.IO.Path.GetFileName(destPath)}";
+            }
+            else
+            {
+                // No current file - use absolute path
+                relativePath = imagePath.Replace("\\", "/");
+            }
+
+            // Insert markdown image link at cursor
+            var altText = System.IO.Path.GetFileNameWithoutExtension(imagePath);
+            var imageMarkdown = $"![{altText}]({relativePath})";
+            InsertMarkdown(imageMarkdown, "");
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error embedding image: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
     private void MarkdownEditor_PreviewKeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key != Key.Tab)
@@ -303,7 +426,9 @@ public partial class MainWindow : Window
             await MarkdownPreview.EnsureCoreWebView2Async(env);
             var html = GetEmptyPreviewHtml();
             MarkdownPreview.NavigateToString(html);
-        }
+
+            }
+
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"WebView2 initialization failed: {ex.Message}");
@@ -930,6 +1055,11 @@ public partial class MainWindow : Window
 
     private void MarkdownPreview_NavigationStarting(object? sender, CoreWebView2NavigationStartingEventArgs e)
     {
+        // Block file drops and external navigations in the preview panel
+        if (e.Uri.StartsWith("file://", StringComparison.OrdinalIgnoreCase))
+        {
+            e.Cancel = true;
+        }
     }
 
     private async void StatusZoomCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)

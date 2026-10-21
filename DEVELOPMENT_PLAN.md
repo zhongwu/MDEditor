@@ -174,10 +174,10 @@
 - [ ] Export to Word (.docx) - optional
 - [ ] Copy as HTML to clipboard
 
-#### 4.3 Drag & Drop
-- [ ] Drop .md files to open
-- [ ] Drop images to embed (copy to assets folder, insert link)
-- [ ] Drag tabs to reorder (if tabbed interface)
+#### 4.3 Drag & Drop ✅ COMPLETED
+- [x] Drop .md files to open
+- [x] Drop images to embed (copy to assets folder, insert link)
+- [ ] Drag tabs to reorder (if tabbed interface) (N/A - no tabs)
 
 ---
 
