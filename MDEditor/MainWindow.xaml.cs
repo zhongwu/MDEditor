@@ -275,7 +275,11 @@ public partial class MainWindow : Window
     {
         try
         {
-            await MarkdownPreview.EnsureCoreWebView2Async();
+            var userDataFolder = System.IO.Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "MDEditor", "WebView2");
+            var env = await Microsoft.Web.WebView2.Core.CoreWebView2Environment.CreateAsync(null, userDataFolder);
+            await MarkdownPreview.EnsureCoreWebView2Async(env);
             var html = GetEmptyPreviewHtml();
             MarkdownPreview.NavigateToString(html);
         }
@@ -384,7 +388,11 @@ public partial class MainWindow : Window
     {
         if (MarkdownPreview.CoreWebView2 == null)
         {
-            await MarkdownPreview.EnsureCoreWebView2Async();
+            var userDataFolder = System.IO.Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "MDEditor", "WebView2");
+            var env = await Microsoft.Web.WebView2.Core.CoreWebView2Environment.CreateAsync(null, userDataFolder);
+            await MarkdownPreview.EnsureCoreWebView2Async(env);
             // Initial full page load
             var initMarkdown = GetEditorText();
             var initHtml = await Task.Run(() => _markdownParser.ToHtmlDocument(initMarkdown));
