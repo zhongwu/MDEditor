@@ -77,16 +77,16 @@ public partial class MainWindow : Window
         style.Setters.Add(new Setter(Paragraph.LineHeightProperty, 18.0));
         MarkdownEditor.Resources.Add(typeof(Paragraph), style);
 
-        // Setup syntax highlighting timer (debounced - longer to preserve undo)
-        _highlightTimer = new System.Windows.Threading.DispatcherTimer
-        {
-            Interval = TimeSpan.FromMilliseconds(2000)
-        };
-        _highlightTimer.Tick += (s, e) =>
-        {
-            _highlightTimer.Stop();
-            ApplySyntaxHighlighting();
-        };
+        // Syntax highlighting timer disabled to prevent scroll issues
+        // _highlightTimer = new System.Windows.Threading.DispatcherTimer
+        // {
+        //     Interval = TimeSpan.FromMilliseconds(2000)
+        // };
+        // _highlightTimer.Tick += (s, e) =>
+        // {
+        //     _highlightTimer.Stop();
+        //     ApplySyntaxHighlighting();
+        // };
 
         // Setup preview refresh timer (debounced 1000ms for better performance)
         _previewTimer = new System.Windows.Threading.DispatcherTimer
@@ -127,29 +127,74 @@ public partial class MainWindow : Window
 
         try
         {
-            // Use caret's pixel position for more accurate sync
-            var caretRect = MarkdownEditor.CaretPosition.GetCharacterRect(LogicalDirection.Forward);
-            var scrollViewer = FindVisualChild<ScrollViewer>(MarkdownEditor);
-            if (scrollViewer == null) return;
+            // Strategy: find the nearest heading before the caret in markdown,
+            // then find that heading in the preview HTML and scroll to it.
+            // This is more accurate than percentage-based scrolling because
+            // markdown and HTML have different content densities.
 
-            // Calculate the absolute Y position of the caret in the document
-            var caretY = caretRect.Top + scrollViewer.VerticalOffset;
-            var totalHeight = scrollViewer.ExtentHeight;
-            if (totalHeight <= 0) return;
+            var fullText = GetEditorText();
+            var caretRange = new TextRange(MarkdownEditor.Document.ContentStart, MarkdownEditor.CaretPosition);
+            var caretText = caretRange.Text;
 
-            var scrollPercent = caretY / totalHeight;
-            // Clamp to 0-1
-            scrollPercent = Math.Max(0, Math.Min(1, scrollPercent));
+            // Find the last heading before the caret position
+            string? targetHeading = null;
+            var lines = fullText.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+            var caretLineIndex = caretText.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None).Length - 1;
 
-            // Scroll the preview to the corresponding position
-            var script = $@"
-                (function() {{
-                    var maxScroll = document.body.scrollHeight - window.innerHeight;
-                    if (maxScroll < 0) maxScroll = 0;
-                    window.scrollTo(0, maxScroll * {scrollPercent.ToString(System.Globalization.CultureInfo.InvariantCulture)});
-                }})();
-            ";
-            MarkdownPreview.CoreWebView2.ExecuteScriptAsync(script);
+            for (int i = caretLineIndex; i >= 0; i--)
+            {
+                var line = lines[i].TrimStart();
+                if (line.StartsWith("#"))
+                {
+                    // Extract heading text (remove # and whitespace)
+                    targetHeading = line.TrimStart('#').Trim();
+                    break;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(targetHeading))
+            {
+                // Escape for JavaScript
+                var escapedHeading = targetHeading
+                    .Replace("\\", "\\\\")
+                    .Replace("'", "\\'")
+                    .Replace("\"", "\\\"");
+
+                var script = $@"
+                    (function() {{
+                        var headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+                        for (var i = 0; i < headings.length; i++) {{
+                            if (headings[i].textContent.trim() === '{escapedHeading}') {{
+                                headings[i].scrollIntoView({{ behavior: 'smooth', block: 'start' }});
+                                return;
+                            }}
+                        }}
+                        // Fallback: percentage-based scroll
+                        var maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+                        if (maxScroll < 0) maxScroll = 0;
+                        var totalLines = {lines.Length};
+                        var caretLine = {caretLineIndex};
+                        var pct = totalLines > 1 ? caretLine / (totalLines - 1) : 0;
+                        window.scrollTo(0, maxScroll * pct);
+                    }})();
+                ";
+                MarkdownPreview.CoreWebView2.ExecuteScriptAsync(script);
+            }
+            else
+            {
+                // No heading found - use line-based percentage
+                var totalLines = lines.Length;
+                var caretLine = caretLineIndex;
+                var pct = totalLines > 1 ? (double)caretLine / (totalLines - 1) : 0;
+                var script = $@"
+                    (function() {{
+                        var maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+                        if (maxScroll < 0) maxScroll = 0;
+                        window.scrollTo(0, maxScroll * {pct.ToString(System.Globalization.CultureInfo.InvariantCulture)});
+                    }})();
+                ";
+                MarkdownPreview.CoreWebView2.ExecuteScriptAsync(script);
+            }
         }
         catch (Exception ex)
         {
@@ -326,9 +371,9 @@ public partial class MainWindow : Window
         _previewTimer?.Stop();
         _previewTimer?.Start();
 
-        // Debounce syntax highlighting
-        _highlightTimer?.Stop();
-        _highlightTimer?.Start();
+        // Syntax highlighting disabled to prevent scroll issues
+        // _highlightTimer?.Stop();
+        // _highlightTimer?.Start();
 
         // Line numbers updated via separate timer to avoid layout fighting with scroll
         _lineNumbersTimer?.Stop();
@@ -627,100 +672,6 @@ public partial class MainWindow : Window
             sb.Append(i.ToString());
         }
         LineNumbers.Text = sb.ToString();
-    }
-
-    private void ApplySyntaxHighlighting()
-    {
-        var text = GetEditorText();
-
-        if (string.IsNullOrEmpty(text))
-        {
-            return;
-        }
-
-        // Save caret position and selection
-        var caretPos = MarkdownEditor.CaretPosition;
-        var selectionStart = MarkdownEditor.Selection.Start;
-        var selectionEnd = MarkdownEditor.Selection.End;
-        var hasSelection = !MarkdownEditor.Selection.IsEmpty;
-
-        // Batch document changes to reduce layout passes
-        MarkdownEditor.BeginChange();
-
-        // Clear existing foreground formatting only
-        var fullRange = new TextRange(MarkdownEditor.Document.ContentStart, MarkdownEditor.Document.ContentEnd);
-        fullRange.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Black);
-
-        // Pre-compute TextPointer lookup table (O(n) once, then O(1) per match)
-        var pointerTable = new TextPointer[text.Length + 1];
-        pointerTable[0] = MarkdownEditor.Document.ContentStart;
-        var current = MarkdownEditor.Document.ContentStart;
-        int idx = 0;
-        while (idx < text.Length && current != null)
-        {
-            var next = current.GetNextInsertionPosition(LogicalDirection.Forward);
-            if (next == null || next == current)
-                break;
-            current = next;
-            idx++;
-            if (idx <= text.Length)
-                pointerTable[idx] = current;
-        }
-
-        // Define highlighting patterns with colors
-        var highlights = new (string pattern, Color color)[]
-        {
-            (@"^#{1,6}\s+.*$", Color.FromRgb(0x00, 0x66, 0xCC)),
-            (@"^```[\s\S]*?^```", Color.FromRgb(0x22, 0x88, 0x22)),
-            (@"`[^`]+`", Color.FromRgb(0x22, 0x88, 0x22)),
-            (@"\*\*[^*]+\*\*", Color.FromRgb(0x88, 0x00, 0x88)),
-            (@"\*[^*]+\*", Color.FromRgb(0x88, 0x00, 0x88)),
-            (@"\[[^\]]+\]\([^)]+\)", Color.FromRgb(0x00, 0x66, 0xCC)),
-            (@"!\[[^\]]*\]\([^)]+\)", Color.FromRgb(0x00, 0x66, 0xCC)),
-            (@"^>\s+.*$", Color.FromRgb(0x66, 0x66, 0x66)),
-            (@"^[\s]*[-*+]\s+.*$", Color.FromRgb(0xCC, 0x66, 0x00)),
-            (@"^[\s]*\d+\.\s+.*$", Color.FromRgb(0xCC, 0x66, 0x00)),
-            (@"^[-*_]{3,}\s*$", Color.FromRgb(0x66, 0x66, 0x66)),
-            (@"~~[^~]+~~", Color.FromRgb(0x88, 0x00, 0x88)),
-        };
-
-        foreach (var (pattern, color) in highlights)
-        {
-            var brush = new SolidColorBrush(color);
-            var regex = new System.Text.RegularExpressions.Regex(pattern,
-                System.Text.RegularExpressions.RegexOptions.Multiline);
-
-            foreach (System.Text.RegularExpressions.Match match in regex.Matches(text))
-            {
-                if (!match.Success)
-                    continue;
-
-                // O(1) lookup from pre-computed table
-                int startIdx = match.Index;
-                int endIdx = match.Index + match.Length;
-                if (startIdx >= pointerTable.Length || endIdx >= pointerTable.Length)
-                    continue;
-
-                var startPointer = pointerTable[startIdx];
-                var endPointer = pointerTable[endIdx];
-
-                if (startPointer != null && endPointer != null)
-                {
-                    var range = new TextRange(startPointer, endPointer);
-                    range.ApplyPropertyValue(TextElement.ForegroundProperty, brush);
-                }
-            }
-        }
-
-        // End batched changes
-        MarkdownEditor.EndChange();
-
-        // Restore caret position and selection
-        MarkdownEditor.CaretPosition = caretPos;
-        if (hasSelection && selectionStart != null && selectionEnd != null)
-        {
-            MarkdownEditor.Selection.Select(selectionStart, selectionEnd);
-        }
     }
 
     private TextPointer? GetTextPointerAtOffset(int offset)
