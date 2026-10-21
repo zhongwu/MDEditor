@@ -164,9 +164,9 @@
 - [x] Save (Ctrl+S) - Save to existing path
 - [x] Save As (Ctrl+Shift+S) - SaveFileDialog
 - [x] Export to HTML
-- [ ] Auto-save draft (periodic, recover on crash)
-- [ ] Recent Files menu (MRU list, max 10)
-- [ ] File encoding detection (UTF-8 default, fallback)
+- [x] Auto-save draft (periodic, recover on crash)
+- [x] Recent Files menu (MRU list, max 10)
+- [x] File encoding detection (UTF-8 default, fallback)
 
 #### 4.2 Export Features
 - [ ] Export to HTML (with embedded CSS)

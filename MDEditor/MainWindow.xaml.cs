@@ -36,6 +36,9 @@ public partial class MainWindow : Window
     // File management state
     private string? _currentFilePath = null;
     private bool _isDirty = false;
+    private System.Windows.Threading.DispatcherTimer? _autoSaveTimer;
+    private readonly ISettingsService _settingsService;
+    private readonly List<string> _recentFiles = new();
 
     public MainWindow()
     {
@@ -43,6 +46,7 @@ public partial class MainWindow : Window
 
         ViewModel = App.Services.GetRequiredService<MainWindowViewModel>();
         _markdownParser = App.Services.GetRequiredService<IMarkdownParser>();
+        _settingsService = App.Services.GetRequiredService<ISettingsService>();
 
         ViewModel.InsertMarkdownCallback = InsertMarkdown;
         ViewModel.UndoCallback = () => MarkdownEditor.Undo();
@@ -119,6 +123,23 @@ public partial class MainWindow : Window
             _lineNumbersTimer.Stop();
             UpdateLineNumbers();
         };
+
+        // Load recent files
+        LoadRecentFiles();
+
+        // Setup auto-save timer (every 30 seconds)
+        _autoSaveTimer = new System.Windows.Threading.DispatcherTimer
+        {
+            Interval = TimeSpan.FromSeconds(30)
+        };
+        _autoSaveTimer.Tick += (s, e) =>
+        {
+            AutoSaveDraft();
+        };
+        _autoSaveTimer.Start();
+
+        // Check for crash recovery
+        CheckCrashRecovery();
     }
 
     private void SyncPreviewToCaret()
@@ -466,6 +487,39 @@ public partial class MainWindow : Window
         Clipboard.SetText(html);
     }
 
+    private System.Text.Encoding DetectFileEncoding(string filePath)
+    {
+        // Try UTF-8 first, fallback to system default
+        try
+        {
+            var bytes = System.IO.File.ReadAllBytes(filePath);
+            // Check BOM
+            if (bytes.Length >= 3 && bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF)
+                return System.Text.Encoding.UTF8;
+            if (bytes.Length >= 2 && bytes[0] == 0xFF && bytes[1] == 0xFE)
+                return System.Text.Encoding.Unicode;
+            if (bytes.Length >= 2 && bytes[0] == 0xFE && bytes[1] == 0xFF)
+                return System.Text.Encoding.BigEndianUnicode;
+
+            // Try UTF-8 without BOM
+            try
+            {
+                var utf8 = new System.Text.UTF8Encoding(false, true);
+                utf8.GetString(bytes);
+                return System.Text.Encoding.UTF8;
+            }
+            catch
+            {
+                // Not valid UTF-8, use system default
+                return System.Text.Encoding.Default;
+            }
+        }
+        catch
+        {
+            return System.Text.Encoding.UTF8;
+        }
+    }
+
     private void UpdateTitleBar()
     {
         var fileName = string.IsNullOrEmpty(_currentFilePath)
@@ -527,9 +581,11 @@ public partial class MainWindow : Window
         {
             try
             {
-                var content = System.IO.File.ReadAllText(dialog.FileName);
+                var encoding = DetectFileEncoding(dialog.FileName);
+                var content = System.IO.File.ReadAllText(dialog.FileName, encoding);
                 _currentFilePath = dialog.FileName;
                 SetEditorText(content);
+                AddRecentFile(dialog.FileName);
             }
             catch (Exception ex)
             {
@@ -551,6 +607,8 @@ public partial class MainWindow : Window
             var text = GetEditorText();
             System.IO.File.WriteAllText(_currentFilePath, text);
             _isDirty = false;
+            if (!string.IsNullOrEmpty(_currentFilePath))
+                AddRecentFile(_currentFilePath);
             UpdateTitleBar();
         }
         catch (Exception ex)
@@ -579,6 +637,7 @@ public partial class MainWindow : Window
                 System.IO.File.WriteAllText(dialog.FileName, text);
                 _currentFilePath = dialog.FileName;
                 _isDirty = false;
+                AddRecentFile(dialog.FileName);
                 UpdateTitleBar();
             }
             catch (Exception ex)
@@ -700,6 +759,122 @@ public partial class MainWindow : Window
         }
 
         return current;
+    }
+
+    private void LoadRecentFiles()
+    {
+        _recentFiles.Clear();
+        var recent = _settingsService.Get<List<string>>("RecentFiles", new List<string>());
+        if (recent != null)
+        {
+            foreach (var file in recent)
+            {
+                if (System.IO.File.Exists(file))
+                    _recentFiles.Add(file);
+            }
+        }
+        UpdateRecentFilesMenu();
+    }
+
+    private void AddRecentFile(string filePath)
+    {
+        if (string.IsNullOrEmpty(filePath)) return;
+        _recentFiles.Remove(filePath);
+        _recentFiles.Insert(0, filePath);
+        if (_recentFiles.Count > 10)
+            _recentFiles.RemoveRange(10, _recentFiles.Count - 10);
+        _settingsService.Set("RecentFiles", _recentFiles);
+        UpdateRecentFilesMenu();
+    }
+
+    private void UpdateRecentFilesMenu()
+    {
+        if (RecentFilesMenu == null) return;
+
+        RecentFilesMenu.Items.Clear();
+
+        if (_recentFiles.Count == 0)
+        {
+            RecentFilesMenu.Items.Add(new MenuItem { Header = "(No recent files)", IsEnabled = false });
+            return;
+        }
+
+        foreach (var file in _recentFiles)
+        {
+            var menuItem = new MenuItem
+            {
+                Header = System.IO.Path.GetFileName(file),
+                Tag = file,
+                ToolTip = file
+            };
+            menuItem.Click += (s, e) =>
+            {
+                if (menuItem.Tag is string path && System.IO.File.Exists(path))
+                {
+                    if (_isDirty)
+                    {
+                        var result = MessageBox.Show("You have unsaved changes. Discard them?", "Open Recent File", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        if (result != MessageBoxResult.Yes) return;
+                    }
+                    try
+                    {
+                        var encoding = DetectFileEncoding(path);
+                        var content = System.IO.File.ReadAllText(path, encoding);
+                        _currentFilePath = path;
+                        SetEditorText(content);
+                        AddRecentFile(path);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error opening file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            };
+            RecentFilesMenu.Items.Add(menuItem);
+        }
+    }
+
+    private string GetDraftPath()
+    {
+        var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        var folder = System.IO.Path.Combine(appData, "MDEditor");
+        System.IO.Directory.CreateDirectory(folder);
+        return System.IO.Path.Combine(folder, "draft.md");
+    }
+
+    private void AutoSaveDraft()
+    {
+        if (!_isDirty) return;
+        try
+        {
+            var text = GetEditorText();
+            System.IO.File.WriteAllText(GetDraftPath(), text);
+        }
+        catch { }
+    }
+
+    private void CheckCrashRecovery()
+    {
+        var draftPath = GetDraftPath();
+        if (System.IO.File.Exists(draftPath))
+        {
+            var result = MessageBox.Show(
+                "A draft from a previous session was found. Would you like to recover it?",
+                "Crash Recovery",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    var content = System.IO.File.ReadAllText(draftPath);
+                    SetEditorText(content);
+                }
+                catch { }
+            }
+            // Delete draft after recovery attempt
+            try { System.IO.File.Delete(draftPath); } catch { }
+        }
     }
 
     private void ShowFindDialog()

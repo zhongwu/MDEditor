@@ -10,19 +10,17 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Border x:Name="AppTitleBar" Grid.Row="0" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" Height="32" Padding="8,4" VerticalAlignment="Stretch">
-            <TextBlock x:Name="AppTitle" Text="MDEditor" VerticalAlignment="Center" FontSize="14" />
-        </Border>
-
-        <Menu x:Name="MainMenuBar" Grid.Row="1">
+        <Menu x:Name="MainMenuBar" Grid.Row="0">
             <MenuItem Header="File">
                 <MenuItem Header="New" Command="{Binding NewFileCommand}" />
                 <MenuItem Header="Open..." Command="{Binding OpenFileCommand}" />
+                <MenuItem Header="Recent Files" Name="RecentFilesMenu">
+                    <MenuItem Header="(No recent files)" IsEnabled="False" />
+                </MenuItem>
                 <Separator />
                 <MenuItem Header="Save" Command="{Binding SaveFileCommand}" />
                 <MenuItem Header="Save As..." Command="{Binding SaveAsFileCommand}" />
@@ -95,7 +93,7 @@
             </MenuItem>
         </Menu>
 
-        <ToolBar x:Name="MainCommandBar" Grid.Row="2">
+        <ToolBar x:Name="MainCommandBar" Grid.Row="1">
             <Button Command="{Binding NewFileCommand}" ToolTip="New (Ctrl+N)">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8A5;" />
@@ -210,7 +208,7 @@
             </Button>
         </ToolBar>
 
-        <Grid x:Name="MainContentGrid" Grid.Row="3">
+        <Grid x:Name="MainContentGrid" Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition x:Name="EditorColumn" Width="*" MinWidth="300" />
                 <ColumnDefinition Width="Auto" />
@@ -316,7 +314,7 @@
             </Grid>
         </Grid>
 
-        <StatusBar Grid.Row="4" Height="28" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0,1,0,0">
+        <StatusBar Grid.Row="3" Height="28" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0,1,0,0">
             <StatusBarItem>
                 <TextBlock x:Name="StatusCursorPosition" Text="Ln 1, Col 1" VerticalAlignment="Center" Margin="12,0" />
             </StatusBarItem>
