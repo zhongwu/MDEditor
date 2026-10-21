@@ -30,6 +30,7 @@ public partial class MainWindow : Window
     private bool _lineNumbersVisible = false;
     private System.Windows.Threading.DispatcherTimer? _highlightTimer;
     private System.Windows.Threading.DispatcherTimer? _previewTimer;
+    private System.Windows.Threading.DispatcherTimer? _lineNumbersTimer;
     private string _lastRenderedMarkdown = string.Empty;
 
     // File management state
@@ -87,10 +88,10 @@ public partial class MainWindow : Window
             ApplySyntaxHighlighting();
         };
 
-        // Setup preview refresh timer (debounced 300ms)
+        // Setup preview refresh timer (debounced 1000ms for better performance)
         _previewTimer = new System.Windows.Threading.DispatcherTimer
         {
-            Interval = TimeSpan.FromMilliseconds(300)
+            Interval = TimeSpan.FromMilliseconds(1000)
         };
         _previewTimer.Tick += (s, e) =>
         {
@@ -107,6 +108,17 @@ public partial class MainWindow : Window
             // Delay to ensure caret position is updated after click
             Dispatcher.BeginInvoke(new Action(() => SyncPreviewToCaret()), System.Windows.Threading.DispatcherPriority.Input);
         };
+
+        // Setup line numbers update timer
+        _lineNumbersTimer = new System.Windows.Threading.DispatcherTimer
+        {
+            Interval = TimeSpan.FromMilliseconds(500)
+        };
+        _lineNumbersTimer.Tick += (s, e) =>
+        {
+            _lineNumbersTimer.Stop();
+            UpdateLineNumbers();
+        };
     }
 
     private void SyncPreviewToCaret()
@@ -115,19 +127,28 @@ public partial class MainWindow : Window
 
         try
         {
-            // Calculate the percentage of the document where the caret is
-            // using character count via TextRange for reliability
-            var caretRange = new TextRange(MarkdownEditor.Document.ContentStart, MarkdownEditor.CaretPosition);
-            var fullRange = new TextRange(MarkdownEditor.Document.ContentStart, MarkdownEditor.Document.ContentEnd);
-            var caretText = caretRange.Text;
-            var fullText = fullRange.Text;
+            // Use caret's pixel position for more accurate sync
+            var caretRect = MarkdownEditor.CaretPosition.GetCharacterRect(LogicalDirection.Forward);
+            var scrollViewer = FindVisualChild<ScrollViewer>(MarkdownEditor);
+            if (scrollViewer == null) return;
 
-            if (fullText.Length <= 0) return;
+            // Calculate the absolute Y position of the caret in the document
+            var caretY = caretRect.Top + scrollViewer.VerticalOffset;
+            var totalHeight = scrollViewer.ExtentHeight;
+            if (totalHeight <= 0) return;
 
-            var caretPercent = (double)caretText.Length / fullText.Length;
+            var scrollPercent = caretY / totalHeight;
+            // Clamp to 0-1
+            scrollPercent = Math.Max(0, Math.Min(1, scrollPercent));
 
             // Scroll the preview to the corresponding position
-            var script = $"window.scrollTo(0, document.body.scrollHeight * {caretPercent.ToString(System.Globalization.CultureInfo.InvariantCulture)});";
+            var script = $@"
+                (function() {{
+                    var maxScroll = document.body.scrollHeight - window.innerHeight;
+                    if (maxScroll < 0) maxScroll = 0;
+                    window.scrollTo(0, maxScroll * {scrollPercent.ToString(System.Globalization.CultureInfo.InvariantCulture)});
+                }})();
+            ";
             MarkdownPreview.CoreWebView2.ExecuteScriptAsync(script);
         }
         catch (Exception ex)
@@ -301,29 +322,17 @@ public partial class MainWindow : Window
         // Mark as dirty
         MarkDirty();
 
-        // Save scroll position before content change
-        var scrollViewer = FindVisualChild<ScrollViewer>(MarkdownEditor);
-        double savedOffset = scrollViewer?.VerticalOffset ?? 0;
-
-        // Debounce preview refresh (300ms)
+        // Debounce preview refresh (1000ms)
         _previewTimer?.Stop();
         _previewTimer?.Start();
-
-        UpdateLineNumbers();
 
         // Debounce syntax highlighting
         _highlightTimer?.Stop();
         _highlightTimer?.Start();
 
-        // Restore scroll position after layout update (prevents auto-scroll to caret)
-        Dispatcher.BeginInvoke(new Action(() =>
-        {
-            var sv = FindVisualChild<ScrollViewer>(MarkdownEditor);
-            if (sv != null)
-            {
-                sv.ScrollToVerticalOffset(savedOffset);
-            }
-        }), System.Windows.Threading.DispatcherPriority.Render);
+        // Line numbers updated via separate timer to avoid layout fighting with scroll
+        _lineNumbersTimer?.Stop();
+        _lineNumbersTimer?.Start();
     }
 
     private async void UpdatePreview()
@@ -333,7 +342,7 @@ public partial class MainWindow : Window
             await MarkdownPreview.EnsureCoreWebView2Async();
             // Initial full page load
             var initMarkdown = GetEditorText();
-            var initHtml = _markdownParser.ToHtmlDocument(initMarkdown);
+            var initHtml = await Task.Run(() => _markdownParser.ToHtmlDocument(initMarkdown));
             MarkdownPreview.NavigateToString(initHtml);
             _lastRenderedMarkdown = initMarkdown;
             return;
@@ -347,9 +356,42 @@ public partial class MainWindow : Window
 
         _lastRenderedMarkdown = markdown;
 
-        // Full page reload for proper Mermaid/KaTeX rendering
-        var html = _markdownParser.ToHtmlDocument(markdown);
-        MarkdownPreview.NavigateToString(html);
+        // Run Markdig parsing on background thread to avoid UI freeze
+        var bodyHtml = await Task.Run(() => _markdownParser.ToHtml(markdown));
+        if (string.IsNullOrEmpty(bodyHtml))
+            bodyHtml = "<p></p>";
+
+        // Encode as base64 to avoid JavaScript string escaping issues
+        var base64Html = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(bodyHtml));
+
+        var script = $@"
+            (async function() {{
+                var body = document.body;
+                // Decode base64 to UTF-8 properly
+                var binaryString = atob('{base64Html}');
+                var bytes = new Uint8Array(binaryString.length);
+                for (var i = 0; i < binaryString.length; i++) {{
+                    bytes[i] = binaryString.charCodeAt(i);
+                }}
+                var decoded = new TextDecoder('utf-8').decode(bytes);
+                body.innerHTML = decoded;
+                if (typeof renderMathInElement !== 'undefined') {{
+                    renderMathInElement(body, {{
+                        delimiters: [
+                            {{left: '$$', right: '$$', display: true}},
+                            {{left: '$', right: '$', display: false}},
+                            {{left: '\\\\(', right: '\\\\)', display: false}},
+                            {{left: '\\\\[', right: '\\\\]', display: true}}
+                        ]
+                    }});
+                }}
+                if (typeof mermaid !== 'undefined') {{
+                    try {{ await mermaid.run(); }} catch(e) {{ console.error(e); }}
+                }}
+            }})();
+        ";
+
+        await MarkdownPreview.CoreWebView2.ExecuteScriptAsync(script);
     }
 
     private string GetEditorText()
@@ -589,46 +631,56 @@ public partial class MainWindow : Window
 
     private void ApplySyntaxHighlighting()
     {
+        var text = GetEditorText();
+
+        if (string.IsNullOrEmpty(text))
+        {
+            return;
+        }
+
         // Save caret position and selection
         var caretPos = MarkdownEditor.CaretPosition;
         var selectionStart = MarkdownEditor.Selection.Start;
         var selectionEnd = MarkdownEditor.Selection.End;
         var hasSelection = !MarkdownEditor.Selection.IsEmpty;
 
+        // Batch document changes to reduce layout passes
+        MarkdownEditor.BeginChange();
+
         // Clear existing foreground formatting only
         var fullRange = new TextRange(MarkdownEditor.Document.ContentStart, MarkdownEditor.Document.ContentEnd);
         fullRange.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Black);
 
-        var text = GetEditorText();
-        if (string.IsNullOrEmpty(text))
-            return;
+        // Pre-compute TextPointer lookup table (O(n) once, then O(1) per match)
+        var pointerTable = new TextPointer[text.Length + 1];
+        pointerTable[0] = MarkdownEditor.Document.ContentStart;
+        var current = MarkdownEditor.Document.ContentStart;
+        int idx = 0;
+        while (idx < text.Length && current != null)
+        {
+            var next = current.GetNextInsertionPosition(LogicalDirection.Forward);
+            if (next == null || next == current)
+                break;
+            current = next;
+            idx++;
+            if (idx <= text.Length)
+                pointerTable[idx] = current;
+        }
 
         // Define highlighting patterns with colors
         var highlights = new (string pattern, Color color)[]
         {
-            // Headings
             (@"^#{1,6}\s+.*$", Color.FromRgb(0x00, 0x66, 0xCC)),
-            // Code blocks (fenced)
             (@"^```[\s\S]*?^```", Color.FromRgb(0x22, 0x88, 0x22)),
-            // Inline code
             (@"`[^`]+`", Color.FromRgb(0x22, 0x88, 0x22)),
-            // Bold
             (@"\*\*[^*]+\*\*", Color.FromRgb(0x88, 0x00, 0x88)),
-            // Italic
             (@"\*[^*]+\*", Color.FromRgb(0x88, 0x00, 0x88)),
-            // Links
             (@"\[[^\]]+\]\([^)]+\)", Color.FromRgb(0x00, 0x66, 0xCC)),
-            // Images
             (@"!\[[^\]]*\]\([^)]+\)", Color.FromRgb(0x00, 0x66, 0xCC)),
-            // Blockquotes
             (@"^>\s+.*$", Color.FromRgb(0x66, 0x66, 0x66)),
-            // Unordered lists (entire line)
             (@"^[\s]*[-*+]\s+.*$", Color.FromRgb(0xCC, 0x66, 0x00)),
-            // Ordered lists (entire line)
             (@"^[\s]*\d+\.\s+.*$", Color.FromRgb(0xCC, 0x66, 0x00)),
-            // Horizontal rules
             (@"^[-*_]{3,}\s*$", Color.FromRgb(0x66, 0x66, 0x66)),
-            // Strikethrough
             (@"~~[^~]+~~", Color.FromRgb(0x88, 0x00, 0x88)),
         };
 
@@ -643,9 +695,14 @@ public partial class MainWindow : Window
                 if (!match.Success)
                     continue;
 
-                // Convert character index to TextPointer
-                var startPointer = GetTextPointerAtOffset(match.Index);
-                var endPointer = GetTextPointerAtOffset(match.Index + match.Length);
+                // O(1) lookup from pre-computed table
+                int startIdx = match.Index;
+                int endIdx = match.Index + match.Length;
+                if (startIdx >= pointerTable.Length || endIdx >= pointerTable.Length)
+                    continue;
+
+                var startPointer = pointerTable[startIdx];
+                var endPointer = pointerTable[endIdx];
 
                 if (startPointer != null && endPointer != null)
                 {
@@ -654,6 +711,9 @@ public partial class MainWindow : Window
                 }
             }
         }
+
+        // End batched changes
+        MarkdownEditor.EndChange();
 
         // Restore caret position and selection
         MarkdownEditor.CaretPosition = caretPos;
