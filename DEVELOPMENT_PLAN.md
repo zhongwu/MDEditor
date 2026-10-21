@@ -75,9 +75,10 @@
 
 #### 2.1 Markdown Text Editor (Left Pane)
 - [x] Use `RichTextBox` with monospace font (Cascadia Code)
-- [x] Implement syntax highlighting (regex-based, 300ms debounced)
-  - Headings, code blocks, inline code, bold, italic, strikethrough
-  - Links, images, blockquotes, lists (unordered/ordered), horizontal rules
+- [ ] Implement syntax highlighting (disabled - causes scroll issues, needs better approach)
+  - ~~Headings, code blocks, inline code, bold, italic, strikethrough~~
+  - ~~Links, images, blockquotes, lists (unordered/ordered), horizontal rules~~
+  - **TODO**: Implement using AvalonEdit or Markdig AST with incremental updates
 - [x] Line numbers gutter (paragraph-based, aligned with editor)
 - [x] Basic editing features:
   - [x] Undo/Redo

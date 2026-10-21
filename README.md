@@ -17,7 +17,7 @@ A modern **Markdown desktop editor** built with **WPF** and **.NET 10**, featuri
 ## Implemented Features
 
 ### Dual-Pane Editing
-- **Left pane**: Markdown editor with syntax highlighting (regex-based, 300ms debounced), line numbers, find/replace, go-to-line
+- **Left pane**: Markdown editor with line numbers, find/replace, go-to-line (syntax highlighting disabled - needs rework)
 - **Right pane**: Live preview with GitHub-flavored Markdown rendering (via WebView2)
 - **KaTeX math**: Inline (`$...$`) and block (`$$...$$`) math rendering
 - **Mermaid diagrams**: Flowcharts, sequence, pie, gantt, class diagrams
