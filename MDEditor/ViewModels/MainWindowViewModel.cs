@@ -101,6 +101,8 @@ public sealed partial class MainWindowViewModel : ObservableObject
     /// </summary>
     public Action? ExportHtmlCallback { get; set; }
 
+    public Action? ExportPdfCallback { get; set; }
+
     public MainWindowViewModel(ISettingsService settingsService, INavigationService navigationService, ILoggingService loggingService)
     {
         _settingsService = settingsService;
