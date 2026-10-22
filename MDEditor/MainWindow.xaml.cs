@@ -432,66 +432,44 @@ public partial class MainWindow : Window
         }
     }
 
+    private Task? _previewReady;
+
+    /// <summary>
+    /// Initializes WebView2 exactly once. Both the startup path and the first
+    /// preview update call this; calling EnsureCoreWebView2Async twice with
+    /// different environments throws and would crash the app.
+    /// </summary>
+    private Task EnsurePreviewAsync()
+    {
+        return _previewReady ??= InitializePreviewCoreAsync();
+    }
+
+    private async Task InitializePreviewCoreAsync()
+    {
+        var userDataFolder = System.IO.Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "MDEditor", "WebView2");
+        var env = await Microsoft.Web.WebView2.Core.CoreWebView2Environment.CreateAsync(null, userDataFolder);
+        await MarkdownPreview.EnsureCoreWebView2Async(env);
+    }
+
     private async void InitializePreview()
     {
         try
         {
-            var userDataFolder = System.IO.Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "MDEditor", "WebView2");
-            var env = await Microsoft.Web.WebView2.Core.CoreWebView2Environment.CreateAsync(null, userDataFolder);
-            await MarkdownPreview.EnsureCoreWebView2Async(env);
-            var html = GetEmptyPreviewHtml();
+            await EnsurePreviewAsync();
+
+            // Load the full document (with KaTeX/Mermaid script tags) instead of a
+            // bare placeholder page: later updates only replace body.innerHTML, so
+            // the libraries have to be present from the start.
+            var html = _markdownParser.ToHtmlDocument(GetEditorText());
             MarkdownPreview.NavigateToString(html);
-
-            }
-
+            _lastRenderedMarkdown = GetEditorText();
+        }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"WebView2 initialization failed: {ex.Message}");
         }
-    }
-
-    private string GetEmptyPreviewHtml()
-    {
-        return """
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <meta charset="utf-8">
-                <style>
-                    body {
-                        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-                        line-height: 1.6;
-                        padding: 20px;
-                        max-width: 900px;
-                        margin: 0 auto;
-                        color: #24292f;
-                    }
-                    .placeholder {
-                        text-align: center;
-                        color: #656d76;
-                        padding: 60px 20px;
-                    }
-                    .placeholder h3 { margin-bottom: 8px; }
-                    .placeholder kbd {
-                        background: #f6f8fa;
-                        border: 1px solid #d0d7de;
-                        border-radius: 4px;
-                        padding: 2px 6px;
-                        font-family: monospace;
-                    }
-                </style>
-            </head>
-            <body>
-                <div class="placeholder">
-                    <h3>Live Preview</h3>
-                    <p>Start typing in the editor to see the preview update in real-time.</p>
-                    <p><kbd>Ctrl+Shift+P</kbd> to toggle preview</p>
-                </div>
-            </body>
-            </html>
-            """;
     }
 
     private void SetupSplitter()
@@ -549,65 +527,92 @@ public partial class MainWindow : Window
 
     private async void UpdatePreview()
     {
-        if (MarkdownPreview.CoreWebView2 == null)
+        try
         {
-            var userDataFolder = System.IO.Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "MDEditor", "WebView2");
-            var env = await Microsoft.Web.WebView2.Core.CoreWebView2Environment.CreateAsync(null, userDataFolder);
-            await MarkdownPreview.EnsureCoreWebView2Async(env);
-            // Initial full page load
-            var initMarkdown = GetEditorText();
-            var initHtml = await Task.Run(() => _markdownParser.ToHtmlDocument(initMarkdown));
-            MarkdownPreview.NavigateToString(initHtml);
-            _lastRenderedMarkdown = initMarkdown;
-            return;
+            if (MarkdownPreview.CoreWebView2 == null)
+            {
+                await EnsurePreviewAsync();
+                // Initial full page load
+                var initMarkdown = GetEditorText();
+                var initHtml = await Task.Run(() => _markdownParser.ToHtmlDocument(initMarkdown));
+                MarkdownPreview.NavigateToString(initHtml);
+                _lastRenderedMarkdown = initMarkdown;
+                return;
+            }
+
+            var markdown = GetEditorText();
+
+            // Skip if content hasn't changed
+            if (markdown == _lastRenderedMarkdown)
+                return;
+
+            _lastRenderedMarkdown = markdown;
+
+            // Math/KaTeX and Mermaid are rendered by script tags that only exist in the
+            // full document wrapper. If the preview page was loaded without them (or the
+            // scripts failed), patch-only updates would silently skip rendering, so
+            // reload the whole document instead.
+            bool librariesReady;
+            try
+            {
+                var probe = await MarkdownPreview.CoreWebView2.ExecuteScriptAsync(
+                    "typeof renderMathInElement === 'function' && typeof mermaid !== 'undefined'");
+                librariesReady = probe == "true";
+            }
+            catch
+            {
+                librariesReady = false;
+            }
+
+            if (!librariesReady)
+            {
+                var fullHtml = await Task.Run(() => _markdownParser.ToHtmlDocument(markdown));
+                MarkdownPreview.NavigateToString(fullHtml);
+                return;
+            }
+
+            // Run Markdig parsing on background thread to avoid UI freeze
+            var bodyHtml = await Task.Run(() => _markdownParser.ToHtml(markdown));
+            if (string.IsNullOrEmpty(bodyHtml))
+                bodyHtml = "<p></p>";
+
+            // Encode as base64 to avoid JavaScript string escaping issues
+            var base64Html = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(bodyHtml));
+
+            var script = $@"
+                (async function() {{
+                    var body = document.body;
+                    // Decode base64 to UTF-8 properly
+                    var binaryString = atob('{base64Html}');
+                    var bytes = new Uint8Array(binaryString.length);
+                    for (var i = 0; i < binaryString.length; i++) {{
+                        bytes[i] = binaryString.charCodeAt(i);
+                    }}
+                    var decoded = new TextDecoder('utf-8').decode(bytes);
+                    body.innerHTML = decoded;
+                    if (typeof renderMathInElement !== 'undefined') {{
+                        // Markdig already converted $...$ / $$...$$ to \(...\) / \[...\],
+                        // so '$' delimiters are not used here: a stray dollar sign would
+                        // otherwise pair up and swallow unrelated content.
+                        renderMathInElement(body, {{
+                            delimiters: [
+                                {{left: '\\(', right: '\\)', display: false}},
+                                {{left: '\\[', right: '\\]', display: true}}
+                            ]
+                        }});
+                    }}
+                    if (typeof mermaid !== 'undefined') {{
+                        try {{ await mermaid.run(); }} catch(e) {{ console.error(e); }}
+                    }}
+                }})();
+            ";
+
+            await MarkdownPreview.CoreWebView2.ExecuteScriptAsync(script);
         }
-
-        var markdown = GetEditorText();
-
-        // Skip if content hasn't changed
-        if (markdown == _lastRenderedMarkdown)
-            return;
-
-        _lastRenderedMarkdown = markdown;
-
-        // Run Markdig parsing on background thread to avoid UI freeze
-        var bodyHtml = await Task.Run(() => _markdownParser.ToHtml(markdown));
-        if (string.IsNullOrEmpty(bodyHtml))
-            bodyHtml = "<p></p>";
-
-        // Encode as base64 to avoid JavaScript string escaping issues
-        var base64Html = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(bodyHtml));
-
-        var script = $@"
-            (async function() {{
-                var body = document.body;
-                // Decode base64 to UTF-8 properly
-                var binaryString = atob('{base64Html}');
-                var bytes = new Uint8Array(binaryString.length);
-                for (var i = 0; i < binaryString.length; i++) {{
-                    bytes[i] = binaryString.charCodeAt(i);
-                }}
-                var decoded = new TextDecoder('utf-8').decode(bytes);
-                body.innerHTML = decoded;
-                if (typeof renderMathInElement !== 'undefined') {{
-                    renderMathInElement(body, {{
-                        delimiters: [
-                            {{left: '$$', right: '$$', display: true}},
-                            {{left: '$', right: '$', display: false}},
-                            {{left: '\\\\(', right: '\\\\)', display: false}},
-                            {{left: '\\\\[', right: '\\\\]', display: true}}
-                        ]
-                    }});
-                }}
-                if (typeof mermaid !== 'undefined') {{
-                    try {{ await mermaid.run(); }} catch(e) {{ console.error(e); }}
-                }}
-            }})();
-        ";
-
-        await MarkdownPreview.CoreWebView2.ExecuteScriptAsync(script);
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Preview update failed: {ex.Message}");
+        }
     }
 
     private string GetEditorText()

@@ -105,9 +105,10 @@ public class MarkdownParser : IMarkdownParser
             "    document.addEventListener('DOMContentLoaded', function() {\n" +
             "        if (typeof renderMathInElement !== 'undefined') {\n" +
             "            renderMathInElement(document.body, {\n" +
+            "                // Markdig already converts $...$ and $$...$$ to \\(...\\) and \\[...\\],\n" +
+            "                // so only those delimiters are needed here. Leaving '$' enabled lets\n" +
+            "                // stray dollar signs pair up and swallow chunks of the document.\n" +
             "                delimiters: [\n" +
-            "                    {left: '$$', right: '$$', display: true},\n" +
-            "                    {left: '$', right: '$', display: false},\n" +
             "                    {left: '\\\\(', right: '\\\\)', display: false},\n" +
             "                    {left: '\\\\[', right: '\\\\]', display: true}\n" +
             "                ]\n" +
