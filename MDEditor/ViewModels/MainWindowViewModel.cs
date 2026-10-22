@@ -152,7 +152,7 @@ public sealed partial class MainWindowViewModel : ObservableObject
     private void ExportPdf()
     {
         _loggingService.LogInformation("Export PDF requested");
-        // TODO: Implement export PDF
+        ExportPdfCallback?.Invoke();
     }
 
     [RelayCommand]

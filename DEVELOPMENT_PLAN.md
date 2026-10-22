@@ -168,11 +168,11 @@
 - [x] Recent Files menu (MRU list, max 10)
 - [x] File encoding detection (UTF-8 default, fallback)
 
-#### 4.2 Export Features
-- [ ] Export to HTML (with embedded CSS)
-- [ ] Export to PDF (via WebView2 print or PDF library)
+#### 4.2 Export Features ✅ COMPLETED
+- [x] Export to HTML (with embedded CSS)
+- [x] Export to PDF (via WebView2 print or PDF library)
 - [ ] Export to Word (.docx) - optional
-- [ ] Copy as HTML to clipboard
+- [x] Copy as HTML to clipboard
 
 #### 4.3 Drag & Drop ✅ COMPLETED
 - [x] Drop .md files to open

@@ -235,16 +235,20 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock x:Name="LineNumbers"
-                                   Grid.Column="0"
-                                   FontFamily="Cascadia Code, Consolas, monospace"
-                                   FontSize="14"
-                                   Foreground="Gray"
-                                   Padding="8,0,8,0"
-                                   TextAlignment="Right"
-                                   LineHeight="18"
-                                   LineStackingStrategy="BlockLineHeight"
-                                   Visibility="Collapsed" />
+                        <ScrollViewer x:Name="LineNumbersScrollViewer"
+                                      Grid.Column="0"
+                                      VerticalScrollBarVisibility="Hidden"
+                                      HorizontalScrollBarVisibility="Disabled"
+                                      Visibility="Collapsed">
+                            <TextBlock x:Name="LineNumbers"
+                                       FontFamily="Cascadia Code, Consolas, monospace"
+                                       FontSize="14"
+                                       Foreground="Gray"
+                                       Padding="8,0,8,0"
+                                       TextAlignment="Right"
+                                       LineHeight="18"
+                                       LineStackingStrategy="BlockLineHeight" />
+                        </ScrollViewer>
                         <RichTextBox x:Name="MarkdownEditor"
                                      Grid.Column="1"
                                      FontFamily="Cascadia Code, Consolas, monospace"

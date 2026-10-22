@@ -64,6 +64,7 @@ public partial class MainWindow : Window
         ViewModel.SaveFileCallback = SaveFile;
         ViewModel.SaveAsFileCallback = SaveAsFile;
         ViewModel.ExportHtmlCallback = ExportHtml;
+        ViewModel.ExportPdfCallback = ExportPdf;
 
         // Line numbers toggle
         ViewModel.ToggleLineNumbersCallback = ToggleLineNumbers;
@@ -74,6 +75,22 @@ public partial class MainWindow : Window
 
         InitializePreview();
         SetupSplitter();
+
+        // Sync line numbers scroll with editor scroll
+        Loaded += (s, e) =>
+        {
+            var scrollViewer = FindVisualChild<ScrollViewer>(MarkdownEditor);
+            if (scrollViewer != null)
+            {
+                scrollViewer.ScrollChanged += (sender, args) =>
+                {
+                    if (LineNumbersScrollViewer != null && _lineNumbersVisible)
+                    {
+                        LineNumbersScrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset);
+                    }
+                };
+            }
+        };
 
         // Set paragraph style for consistent line height
         var style = new Style(typeof(Paragraph));
@@ -801,6 +818,45 @@ public partial class MainWindow : Window
     }
 
 
+    private async void ExportPdf()
+    {
+        var dialog = new Microsoft.Win32.SaveFileDialog
+        {
+            Title = "Export as PDF",
+            Filter = "PDF Files (*.pdf)|*.pdf|All Files (*.*)|*.*",
+            DefaultExt = ".pdf",
+            FileName = string.IsNullOrEmpty(_currentFilePath)
+                ? "Untitled.pdf"
+                : System.IO.Path.ChangeExtension(System.IO.Path.GetFileName(_currentFilePath), ".pdf")
+        };
+
+        if (dialog.ShowDialog() == true)
+        {
+            try
+            {
+                if (MarkdownPreview.CoreWebView2 != null)
+                {
+                    bool success = await MarkdownPreview.CoreWebView2.PrintToPdfAsync(dialog.FileName);
+                    if (success)
+                    {
+                        MessageBox.Show($"Exported to {dialog.FileName}", "Export Complete", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("PDF export failed. The WebView2 engine may not support printing to PDF.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Preview not initialized yet.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"PDF export failed: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+    }
 
     private void InsertMarkdown(string before, string after)
     {
@@ -834,7 +890,7 @@ public partial class MainWindow : Window
     private void ToggleLineNumbers()
     {
         _lineNumbersVisible = !_lineNumbersVisible;
-        LineNumbers.Visibility = _lineNumbersVisible ? Visibility.Visible : Visibility.Collapsed;
+        LineNumbersScrollViewer.Visibility = _lineNumbersVisible ? Visibility.Visible : Visibility.Collapsed;
         if (_lineNumbersVisible)
         {
             UpdateLineNumbers();
@@ -845,24 +901,62 @@ public partial class MainWindow : Window
     {
         if (!_lineNumbersVisible) return;
 
-        var paragraphs = new System.Collections.Generic.List<Paragraph>();
-        foreach (Block block in MarkdownEditor.Document.Blocks)
-        {
-            if (block is Paragraph p)
-                paragraphs.Add(p);
-        }
-
-        int lineCount = paragraphs.Count;
-        if (lineCount == 0)
-            lineCount = 1;
-
         var sb = new System.Text.StringBuilder();
-        for (int i = 1; i <= lineCount; i++)
+        var contentStart = MarkdownEditor.Document.ContentStart;
+        var contentEnd = MarkdownEditor.Document.ContentEnd;
+
+        if (contentStart == null || contentEnd == null || contentStart.CompareTo(contentEnd) >= 0)
         {
-            if (i > 1)
-                sb.Append('\n');
-            sb.Append(i.ToString());
+            LineNumbers.Text = "1";
+            return;
         }
+
+        // Count visual lines (including wrapped lines) and map each to its paragraph number.
+        // This ensures that when text wraps, the line number stays the same for all
+        // visual lines of a wrapped paragraph instead of incrementing.
+        var current = contentStart.GetLineStartPosition(0);
+        if (current == null)
+        {
+            LineNumbers.Text = "1";
+            return;
+        }
+
+        Paragraph? currentParagraph = null;
+        int paragraphNumber = 0;
+        bool isFirstLineOfParagraph = true;
+
+        while (current != null && current.CompareTo(contentEnd) < 0)
+        {
+            var para = current.Paragraph;
+            if (para != null && para != currentParagraph)
+            {
+                currentParagraph = para;
+                paragraphNumber++;
+                isFirstLineOfParagraph = true;
+            }
+            else
+            {
+                isFirstLineOfParagraph = false;
+            }
+
+            if (paragraphNumber == 0)
+                paragraphNumber = 1;
+
+            if (sb.Length > 0)
+                sb.Append('\n');
+            if (isFirstLineOfParagraph)
+                sb.Append(paragraphNumber);
+            // else: append nothing (blank) for wrapped lines
+
+            var next = current.GetLineStartPosition(1);
+            if (next == null || next.CompareTo(current) <= 0)
+                break;
+            current = next;
+        }
+
+        if (sb.Length == 0)
+            sb.Append("1");
+
         LineNumbers.Text = sb.ToString();
     }
 
@@ -1011,7 +1105,7 @@ public partial class MainWindow : Window
             return;
         }
 
-        _findDialog = new FindReplaceDialog(MarkdownEditor, false);
+        _findDialog = new FindReplaceDialog(MarkdownEditor, false, () => SyncPreviewToCaret());
         _findDialog.Owner = this;
         _findDialog.WindowStartupLocation = WindowStartupLocation.Manual;
         _findDialog.Left = this.Left + this.Width - 420;
@@ -1029,7 +1123,7 @@ public partial class MainWindow : Window
             return;
         }
 
-        _replaceDialog = new FindReplaceDialog(MarkdownEditor, true);
+        _replaceDialog = new FindReplaceDialog(MarkdownEditor, true, () => SyncPreviewToCaret());
         _replaceDialog.Owner = this;
         _replaceDialog.WindowStartupLocation = WindowStartupLocation.Manual;
         _replaceDialog.Left = this.Left + this.Width - 420;
@@ -1047,7 +1141,7 @@ public partial class MainWindow : Window
             return;
         }
 
-        _goToLineDialog = new GoToLineDialog(MarkdownEditor);
+        _goToLineDialog = new GoToLineDialog(MarkdownEditor, () => SyncPreviewToCaret());
         _goToLineDialog.Owner = this;
         _goToLineDialog.Closed += (s, e) => _goToLineDialog = null;
         _goToLineDialog.Show();
