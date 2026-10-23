@@ -10,6 +10,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Documents;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MDEditor;
 
@@ -65,6 +67,14 @@ public partial class MainWindow : Window
         _settingsService = App.Services.GetRequiredService<ISettingsService>();
         _smartTypographyMenuItem = SmartTypographyMenuItem;
 
+        // Load persisted view settings (Preview state is now managed by ViewModel)
+        _lineNumbersVisible = _settingsService.Get<bool>("editor.lineNumbers", false);
+        ViewModel.IsPreviewVisible = _settingsService.Get<bool>("editor.preview", true);
+        _minimapVisible = _settingsService.Get<bool>("editor.minimap", true);
+        _scrollSyncEnabled = _settingsService.Get<bool>("editor.scrollSync", true);
+        _smartTypographyEnabled = _settingsService.Get<bool>("editor.smartTypography", true);
+
+        ViewModel.TogglePreviewCallback = TogglePreview;
         ViewModel.InsertMarkdownCallback = InsertMarkdown;
         ViewModel.UndoCallback = () => MarkdownEditor.Undo();
         ViewModel.RedoCallback = () => MarkdownEditor.Redo();
@@ -120,6 +130,19 @@ public partial class MainWindow : Window
 
             // Minimap overview on the right side of the editor.
             Minimap.Attach(MarkdownEditor);
+
+            // Apply loaded view settings to UI elements (Grid layout logic removed, relies on XAML DataTriggers)
+            PreviewMenuItem.IsChecked = ViewModel.IsPreviewVisible;
+
+            LineNumbersScrollViewer.Visibility = _lineNumbersVisible ? Visibility.Visible : Visibility.Collapsed;
+            LineNumbersMenuItem.IsChecked = _lineNumbersVisible;
+            if (_lineNumbersVisible) UpdateLineNumbers();
+
+            Minimap.Visibility = _minimapVisible ? Visibility.Visible : Visibility.Collapsed;
+            MinimapMenuItem.IsChecked = _minimapVisible;
+
+            ScrollSyncMenuItem.IsChecked = _scrollSyncEnabled;
+            SmartTypographyMenuItem.IsChecked = _smartTypographyEnabled;
         };
 
         // Set paragraph style for consistent line height
@@ -204,16 +227,10 @@ public partial class MainWindow : Window
 
         try
         {
-            // Strategy: find the nearest heading before the caret in markdown,
-            // then find that heading in the preview HTML and scroll to it.
-            // This is more accurate than percentage-based scrolling because
-            // markdown and HTML have different content densities.
-
             var fullText = GetEditorText();
             var caretRange = new TextRange(MarkdownEditor.Document.ContentStart, MarkdownEditor.CaretPosition);
             var caretText = caretRange.Text;
 
-            // Find the last heading before the caret position
             string? targetHeading = null;
             var lines = fullText.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
             var caretLineIndex = caretText.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None).Length - 1;
@@ -223,7 +240,6 @@ public partial class MainWindow : Window
                 var line = lines[i].TrimStart();
                 if (line.StartsWith("#"))
                 {
-                    // Extract heading text (remove # and whitespace)
                     targetHeading = line.TrimStart('#').Trim();
                     break;
                 }
@@ -231,7 +247,6 @@ public partial class MainWindow : Window
 
             if (!string.IsNullOrEmpty(targetHeading))
             {
-                // Escape for JavaScript
                 var escapedHeading = targetHeading
                     .Replace("\\", "\\\\")
                     .Replace("'", "\\'")
@@ -246,7 +261,6 @@ public partial class MainWindow : Window
                                 return;
                             }}
                         }}
-                        // Fallback: percentage-based scroll
                         var maxScroll = document.documentElement.scrollHeight - window.innerHeight;
                         if (maxScroll < 0) maxScroll = 0;
                         var totalLines = {lines.Length};
@@ -259,7 +273,6 @@ public partial class MainWindow : Window
             }
             else
             {
-                // No heading found - use line-based percentage
                 var totalLines = lines.Length;
                 var caretLine = caretLineIndex;
                 var pct = totalLines > 1 ? (double)caretLine / (totalLines - 1) : 0;
@@ -409,7 +422,6 @@ public partial class MainWindow : Window
 
             if (ext == ".md" || ext == ".markdown" || ext == ".txt")
             {
-                // Open markdown/text file
                 if (_isDirty)
                 {
                     var result = MessageBox.Show("You have unsaved changes. Discard them?", "Open Dropped File", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -432,7 +444,6 @@ public partial class MainWindow : Window
             }
             else if (ext == ".png" || ext == ".jpg" || ext == ".jpeg" || ext == ".gif" || ext == ".bmp" || ext == ".svg")
             {
-                // Embed image
                 EmbedDroppedImage(file);
             }
         }
@@ -447,7 +458,6 @@ public partial class MainWindow : Window
 
             if (!string.IsNullOrEmpty(_currentFilePath))
             {
-                // Save image to assets folder next to the current file
                 var fileDir = System.IO.Path.GetDirectoryName(_currentFilePath)!;
                 assetsFolder = System.IO.Path.Combine(fileDir, "assets");
                 System.IO.Directory.CreateDirectory(assetsFolder);
@@ -455,7 +465,6 @@ public partial class MainWindow : Window
                 var fileName = System.IO.Path.GetFileName(imagePath);
                 var destPath = System.IO.Path.Combine(assetsFolder, fileName);
 
-                // Handle duplicate filenames
                 if (System.IO.File.Exists(destPath))
                 {
                     var name = System.IO.Path.GetFileNameWithoutExtension(fileName);
@@ -473,11 +482,9 @@ public partial class MainWindow : Window
             }
             else
             {
-                // No current file - use absolute path
                 relativePath = imagePath.Replace("\\", "/");
             }
 
-            // Insert markdown image link at cursor
             var altText = System.IO.Path.GetFileNameWithoutExtension(imagePath);
             var imageMarkdown = $"![{altText}]({relativePath})";
             InsertMarkdown(imageMarkdown, "");
@@ -496,7 +503,6 @@ public partial class MainWindow : Window
             _completionSuppressed = false;
         }
 
-        // Completion popup captures navigation keys while it is open
         if (_completionPopup.IsOpen)
         {
             switch (e.Key)
@@ -525,7 +531,6 @@ public partial class MainWindow : Window
                         e.Handled = true;
                         return;
                     }
-
                     break;
                 case Key.Escape:
                     HideCompletion();
@@ -535,7 +540,6 @@ public partial class MainWindow : Window
             }
         }
 
-        // Ctrl+Space lists every Markdown snippet
         if (e.Key == Key.Space && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
         {
             UpdateCompletions(CompletionTrigger.Manual);
@@ -543,8 +547,6 @@ public partial class MainWindow : Window
             return;
         }
 
-        // Smart typography runs synchronously from the key event: changing the
-        // document from the text-input events is unreliable in a RichTextBox.
         if (_smartTypographyEnabled &&
             (Keyboard.Modifiers & (ModifierKeys.Control | ModifierKeys.Alt)) == 0 &&
             MarkdownEditor.Selection.IsEmpty &&
@@ -646,10 +648,6 @@ public partial class MainWindow : Window
         }
     }
 
-    // ------------------------------------------------------------------
-    // Phase 6.1 editor enhancements
-    // ------------------------------------------------------------------
-
     private void SetupCompletionTimer()
     {
         _completionTimer = new System.Windows.Threading.DispatcherTimer
@@ -682,9 +680,6 @@ public partial class MainWindow : Window
     private void MarkdownEditor_PreviewTextInput(object sender, TextCompositionEventArgs e)
     {
         _completionSuppressed = false;
-
-        // The inserted text only reaches the document after this handler, so
-        // completion runs on a short timer.
         ScheduleCompletionUpdate();
     }
 
@@ -752,7 +747,6 @@ public partial class MainWindow : Window
                 MarkdownEditor.CaretPosition = target;
         }
 
-        // Do not immediately reopen the popup for the text we just inserted.
         _completionSuppressed = true;
     }
 
@@ -763,18 +757,14 @@ public partial class MainWindow : Window
             _completionPopup.Hide();
     }
 
-    /// <summary>Cached document text for the Phase 6.1 features (null when too large).</summary>
     private string? GetFeatureText()
     {
         _cachedEditorText ??= EditorText.GetText(MarkdownEditor.Document);
-
         return _cachedEditorText.Length > MaxEditorFeatureLength ? null : _cachedEditorText;
     }
 
     private void SetupBracketOverlay()
     {
-        // The overlay lives in the XAML on top of the editor, so it only needs
-        // to know which editor to measure its characters from.
         _bracketOverlay = BracketOverlay;
         _bracketOverlay.Editor = MarkdownEditor;
     }
@@ -811,11 +801,6 @@ public partial class MainWindow : Window
 
     private Task? _previewReady;
 
-    /// <summary>
-    /// Initializes WebView2 exactly once. Both the startup path and the first
-    /// preview update call this; calling EnsureCoreWebView2Async twice with
-    /// different environments throws and would crash the app.
-    /// </summary>
     private Task EnsurePreviewAsync()
     {
         return _previewReady ??= InitializePreviewCoreAsync();
@@ -829,7 +814,6 @@ public partial class MainWindow : Window
         var env = await Microsoft.Web.WebView2.Core.CoreWebView2Environment.CreateAsync(null, userDataFolder);
         await MarkdownPreview.EnsureCoreWebView2Async(env);
 
-        // Report preview scroll position back to the host for bidirectional sync.
         MarkdownPreview.CoreWebView2.WebMessageReceived += Preview_WebMessageReceived;
         await MarkdownPreview.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(
             "window.addEventListener('scroll',function(){var m=document.documentElement.scrollHeight-window.innerHeight;if(m<0)m=0;var p=m>0?window.scrollY/m:0;if(window.chrome&&window.chrome.webview){window.chrome.webview.postMessage(JSON.stringify({type:'scroll',pct:p}));}}, {passive:true});");
@@ -840,13 +824,11 @@ public partial class MainWindow : Window
         try
         {
             await EnsurePreviewAsync();
-
-            // Load the full document (with KaTeX/Mermaid script tags) instead of a
-            // bare placeholder page: later updates only replace body.innerHTML, so
-            // the libraries have to be present from the start.
             var html = _markdownParser.ToHtmlDocument(GetEditorText());
             MarkdownPreview.NavigateToString(html);
             _lastRenderedMarkdown = GetEditorText();
+
+            PreviewMenuItem.IsChecked = ViewModel.IsPreviewVisible;
         }
         catch (Exception ex)
         {
@@ -891,18 +873,14 @@ public partial class MainWindow : Window
 
     private void MarkdownEditor_TextChanged(object sender, TextChangedEventArgs e)
     {
-        // Mark as dirty
         MarkDirty();
 
-        // Phase 6.1 features share one cached snapshot of the text
         _cachedEditorText = null;
         UpdateBracketHighlight();
 
-        // Debounce preview refresh (1000ms)
         _previewTimer?.Stop();
         _previewTimer?.Start();
 
-        // Line numbers updated via separate timer to avoid layout fighting with scroll
         _lineNumbersTimer?.Stop();
         _lineNumbersTimer?.Start();
     }
@@ -914,7 +892,6 @@ public partial class MainWindow : Window
             if (MarkdownPreview.CoreWebView2 == null)
             {
                 await EnsurePreviewAsync();
-                // Initial full page load
                 var initMarkdown = GetEditorText();
                 var initHtml = await Task.Run(() => _markdownParser.ToHtmlDocument(initMarkdown));
                 MarkdownPreview.NavigateToString(initHtml);
@@ -923,17 +900,11 @@ public partial class MainWindow : Window
             }
 
             var markdown = GetEditorText();
-
-            // Skip if content hasn't changed
             if (markdown == _lastRenderedMarkdown)
                 return;
 
             _lastRenderedMarkdown = markdown;
 
-            // Math/KaTeX and Mermaid are rendered by script tags that only exist in the
-            // full document wrapper. If the preview page was loaded without them (or the
-            // scripts failed), patch-only updates would silently skip rendering, so
-            // reload the whole document instead.
             bool librariesReady;
             try
             {
@@ -953,18 +924,15 @@ public partial class MainWindow : Window
                 return;
             }
 
-            // Run Markdig parsing on background thread to avoid UI freeze
             var bodyHtml = await Task.Run(() => _markdownParser.ToHtml(markdown));
             if (string.IsNullOrEmpty(bodyHtml))
                 bodyHtml = "<p></p>";
 
-            // Encode as base64 to avoid JavaScript string escaping issues
             var base64Html = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(bodyHtml));
 
             var script = $@"
                 (async function() {{
                     var body = document.body;
-                    // Decode base64 to UTF-8 properly
                     var binaryString = atob('{base64Html}');
                     var bytes = new Uint8Array(binaryString.length);
                     for (var i = 0; i < binaryString.length; i++) {{
@@ -973,9 +941,6 @@ public partial class MainWindow : Window
                     var decoded = new TextDecoder('utf-8').decode(bytes);
                     body.innerHTML = decoded;
                     if (typeof renderMathInElement !== 'undefined') {{
-                        // Markdig already converted $...$ / $$...$$ to \(...\) / \[...\],
-                        // so '$' delimiters are not used here: a stray dollar sign would
-                        // otherwise pair up and swallow unrelated content.
                         renderMathInElement(body, {{
                             delimiters: [
                                 {{left: '\\(', right: '\\)', display: false}},
@@ -1018,11 +983,9 @@ public partial class MainWindow : Window
 
     private System.Text.Encoding DetectFileEncoding(string filePath)
     {
-        // Try UTF-8 first, fallback to system default
         try
         {
             var bytes = System.IO.File.ReadAllBytes(filePath);
-            // Check BOM
             if (bytes.Length >= 3 && bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF)
                 return System.Text.Encoding.UTF8;
             if (bytes.Length >= 2 && bytes[0] == 0xFF && bytes[1] == 0xFE)
@@ -1030,7 +993,6 @@ public partial class MainWindow : Window
             if (bytes.Length >= 2 && bytes[0] == 0xFE && bytes[1] == 0xFF)
                 return System.Text.Encoding.BigEndianUnicode;
 
-            // Try UTF-8 without BOM
             try
             {
                 var utf8 = new System.Text.UTF8Encoding(false, true);
@@ -1039,7 +1001,6 @@ public partial class MainWindow : Window
             }
             catch
             {
-                // Not valid UTF-8, use system default
                 return System.Text.Encoding.Default;
             }
         }
@@ -1252,7 +1213,6 @@ public partial class MainWindow : Window
             var selection = MarkdownEditor.Selection;
             var selectedText = selection.Text;
             selection.Text = before + selectedText + after;
-            System.Diagnostics.Debug.WriteLine($"InsertMarkdown: inserted '{before}{selectedText}{after}'");
         }
         catch (Exception ex)
         {
@@ -1260,10 +1220,20 @@ public partial class MainWindow : Window
         }
     }
 
+    private void TogglePreview()
+    {
+        // Do NOT flip the ViewModel boolean here! The ViewModel command already flipped it.
+        // The ViewModel property setter also already saved it to settings.
+
+        // Just sync the UI menu checkmark
+        PreviewMenuItem.IsChecked = ViewModel.IsPreviewVisible;
+        
+        // Save state to settings
+        _settingsService.Set("editor.preview", ViewModel.IsPreviewVisible);
+    }
+
     private void ToggleWordWrap()
     {
-        // WPF RichTextBox doesn't support TextWrapping directly
-        // Toggle horizontal scrollbar visibility instead
         if (MarkdownEditor.HorizontalScrollBarVisibility == ScrollBarVisibility.Auto)
         {
             MarkdownEditor.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
@@ -1278,6 +1248,8 @@ public partial class MainWindow : Window
     {
         _lineNumbersVisible = !_lineNumbersVisible;
         LineNumbersScrollViewer.Visibility = _lineNumbersVisible ? Visibility.Visible : Visibility.Collapsed;
+        LineNumbersMenuItem.IsChecked = _lineNumbersVisible;
+        _settingsService.Set("editor.lineNumbers", _lineNumbersVisible);
         if (_lineNumbersVisible)
         {
             UpdateLineNumbers();
@@ -1288,11 +1260,15 @@ public partial class MainWindow : Window
     {
         _minimapVisible = !_minimapVisible;
         Minimap.Visibility = _minimapVisible ? Visibility.Visible : Visibility.Collapsed;
+        MinimapMenuItem.IsChecked = _minimapVisible;
+        _settingsService.Set("editor.minimap", _minimapVisible);
     }
 
     private void ToggleScrollSync_Click(object sender, RoutedEventArgs e)
     {
         _scrollSyncEnabled = !_scrollSyncEnabled;
+        ScrollSyncMenuItem.IsChecked = _scrollSyncEnabled;
+        _settingsService.Set("editor.scrollSync", _scrollSyncEnabled);
     }
 
     private void UpdateLineNumbers()
@@ -1309,9 +1285,6 @@ public partial class MainWindow : Window
             return;
         }
 
-        // Count visual lines (including wrapped lines) and map each to its paragraph number.
-        // This ensures that when text wraps, the line number stays the same for all
-        // visual lines of a wrapped paragraph instead of incrementing.
         var current = contentStart.GetLineStartPosition(0);
         if (current == null)
         {
@@ -1344,7 +1317,6 @@ public partial class MainWindow : Window
                 sb.Append('\n');
             if (isFirstLineOfParagraph)
                 sb.Append(paragraphNumber);
-            // else: append nothing (blank) for wrapped lines
 
             var next = current.GetLineStartPosition(1);
             if (next == null || next.CompareTo(current) <= 0)

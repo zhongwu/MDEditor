@@ -17,6 +17,20 @@ public sealed partial class MainWindowViewModel : ObservableObject
     private readonly ILoggingService _loggingService;
 
     /// <summary>
+    /// Controls the visibility of the Markdown Preview Pane.
+    /// </summary>
+    [ObservableProperty]
+    private bool _isPreviewVisible = true;
+
+    /// <summary>
+    /// Automatically saves the preview state to settings whenever it changes.
+    /// </summary>
+    partial void OnIsPreviewVisibleChanged(bool value)
+    {
+        _settingsService?.Set("editor.preview", value);
+    }
+
+    /// <summary>
     /// Callback to insert markdown around selected text in the editor.
     /// </summary>
     public Action<string, string>? InsertMarkdownCallback { get; set; }
@@ -69,6 +83,7 @@ public sealed partial class MainWindowViewModel : ObservableObject
     /// <summary>
     /// Callback for word wrap toggle.
     /// </summary>
+    public Action? TogglePreviewCallback { get; set; }
     public Action? ToggleWordWrapCallback { get; set; }
 
     /// <summary>
@@ -238,7 +253,11 @@ public sealed partial class MainWindowViewModel : ObservableObject
     private void TogglePreview()
     {
         _loggingService.LogInformation("Toggle preview requested");
-        // TODO: Implement preview toggle
+
+        // Toggle the observable property to trigger the XAML DataTriggers
+        IsPreviewVisible = !IsPreviewVisible;
+
+        TogglePreviewCallback?.Invoke();
     }
 
     [RelayCommand]
