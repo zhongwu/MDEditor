@@ -44,7 +44,7 @@ A modern **Markdown desktop editor** built with **WPF** and **.NET 10**, featuri
 - **Syntax highlighting**: Headings, code blocks, inline code, bold, italic, strikethrough, links, images, blockquotes, lists, horizontal rules
 - **Line numbers**: Paragraph-based, aligned with editor content
 - **Find/Replace** (Ctrl+F / Ctrl+H): Find bar above the editor — live search while typing, all matches highlighted, match count, next/previous (Enter / Shift+Enter, F3 / Shift+F3), match case, Replace (Enter) / Replace All (Ctrl+Enter, single undo step)
-- **Go to Line** (Ctrl+G): Paragraph-aware navigation with offset fallback
+- **Go to Line** (Ctrl+G): Inline bar above the editor; accepts `line` or `line:column`, previews the target while typing, Enter jumps, Esc restores the view
 - **Word wrap toggle** (Ctrl+Shift+W)
 - **Undo/Redo/Cut/Copy/Paste/Select All**: Standard editing commands
 

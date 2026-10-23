@@ -74,6 +74,7 @@ public partial class MainWindow
 
     private void ShowEditorFind(bool replace)
     {
+        GoToLineBar.Visibility = Visibility.Collapsed;
         EditorFindBar.Visibility = Visibility.Visible;
         if (replace)
             SetEditorReplaceVisible(true);

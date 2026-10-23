@@ -24,9 +24,6 @@ public partial class MainWindow : Window
     private double _initialEditorWidth;
     private double _initialMouseX;
 
-    // Single-instance dialog tracking
-    private GoToLineDialog? _goToLineDialog;
-
     // Line numbers state
     private bool _lineNumbersVisible = false;
     private bool _minimapVisible = true;
@@ -35,7 +32,6 @@ public partial class MainWindow : Window
     private System.Windows.Threading.DispatcherTimer? _previewScrollTimer;
     private bool _syncingScroll;
     private DateTime _syncCooldownUntil = DateTime.MinValue;
-    private System.Windows.Threading.DispatcherTimer? _lineNumbersTimer;
     private string _lastRenderedMarkdown = string.Empty;
 
     // Editor enhancements (Phase 6.1)
@@ -82,7 +78,7 @@ public partial class MainWindow : Window
         ViewModel.SelectAllCallback = () => MarkdownEditor.SelectAll();
         ViewModel.FindCallback = () => ShowEditorFind(replace: false);
         ViewModel.ReplaceCallback = () => ShowEditorFind(replace: true);
-        ViewModel.GoToLineCallback = ShowGoToLineDialog;
+        ViewModel.GoToLineCallback = ShowGoToLine;
         ViewModel.ToggleWordWrapCallback = ToggleWordWrap;
         ViewModel.NewFileCallback = NewFile;
         ViewModel.OpenFileCallback = OpenFile;
@@ -117,15 +113,13 @@ public partial class MainWindow : Window
             {
                 scrollViewer.ScrollChanged += (sender, args) =>
                 {
-                    if (LineNumbersScrollViewer != null && _lineNumbersVisible)
-                    {
-                        LineNumbersScrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset);
-                    }
-
-                    // Bracket highlights are drawn in screen space, so they have to
+                    // Line numbers and highlights are drawn in screen space, so they have to
                     // be repainted when the viewport moves.
+                    if (_lineNumbersVisible)
+                        LineNumberGutter.InvalidateVisual();
                     _bracketOverlay?.InvalidateVisual();
                     EditorFindOverlay.InvalidateVisual();
+                    GoToLineOverlay.InvalidateVisual();
 
                     // Keep the preview pane in sync with editor scrolling.
                     SchedulePreviewScrollSync();
@@ -141,9 +135,9 @@ public partial class MainWindow : Window
             // Apply loaded view settings to UI elements (Grid layout logic removed, relies on XAML DataTriggers)
             PreviewMenuItem.IsChecked = ViewModel.IsPreviewVisible;
 
-            LineNumbersScrollViewer.Visibility = _lineNumbersVisible ? Visibility.Visible : Visibility.Collapsed;
+            LineNumberGutter.Visibility = _lineNumbersVisible ? Visibility.Visible : Visibility.Collapsed;
             LineNumbersMenuItem.IsChecked = _lineNumbersVisible;
-            if (_lineNumbersVisible) UpdateLineNumbers();
+            LineNumberGutter.Attach(MarkdownEditor);
 
             Minimap.Visibility = _minimapVisible ? Visibility.Visible : Visibility.Collapsed;
             MinimapMenuItem.IsChecked = _minimapVisible;
@@ -158,6 +152,9 @@ public partial class MainWindow : Window
         var style = new Style(typeof(Paragraph));
         style.Setters.Add(new Setter(Paragraph.MarginProperty, new Thickness(0)));
         style.Setters.Add(new Setter(Paragraph.LineHeightProperty, 18.0));
+        // Without BlockLineHeight a line containing taller fallback glyphs (emoji such as ✅)
+        // grows past 18px and the rows become uneven.
+        style.Setters.Add(new Setter(Paragraph.LineStackingStrategyProperty, LineStackingStrategy.BlockLineHeight));
         MarkdownEditor.Resources.Add(typeof(Paragraph), style);
 
         // Setup preview refresh timer (debounced 1000ms for better performance)
@@ -200,17 +197,6 @@ public partial class MainWindow : Window
         {
             // Delay to ensure caret position is updated after click
             Dispatcher.BeginInvoke(new Action(() => SyncPreviewToCaret()), System.Windows.Threading.DispatcherPriority.Input);
-        };
-
-        // Setup line numbers update timer
-        _lineNumbersTimer = new System.Windows.Threading.DispatcherTimer
-        {
-            Interval = TimeSpan.FromMilliseconds(500)
-        };
-        _lineNumbersTimer.Tick += (s, e) =>
-        {
-            _lineNumbersTimer.Stop();
-            UpdateLineNumbers();
         };
 
         // Load recent files
@@ -891,9 +877,6 @@ public partial class MainWindow : Window
 
         _previewTimer?.Stop();
         _previewTimer?.Start();
-
-        _lineNumbersTimer?.Stop();
-        _lineNumbersTimer?.Start();
     }
 
     private async void UpdatePreview()
@@ -1216,12 +1199,12 @@ public partial class MainWindow : Window
     private void ToggleLineNumbers()
     {
         _lineNumbersVisible = !_lineNumbersVisible;
-        LineNumbersScrollViewer.Visibility = _lineNumbersVisible ? Visibility.Visible : Visibility.Collapsed;
+        LineNumberGutter.Visibility = _lineNumbersVisible ? Visibility.Visible : Visibility.Collapsed;
         LineNumbersMenuItem.IsChecked = _lineNumbersVisible;
         _settingsService.Set("editor.lineNumbers", _lineNumbersVisible);
         if (_lineNumbersVisible)
         {
-            UpdateLineNumbers();
+            LineNumberGutter.Refresh();
         }
     }
 
@@ -1238,65 +1221,6 @@ public partial class MainWindow : Window
         _scrollSyncEnabled = !_scrollSyncEnabled;
         ScrollSyncMenuItem.IsChecked = _scrollSyncEnabled;
         _settingsService.Set("editor.scrollSync", _scrollSyncEnabled);
-    }
-
-    private void UpdateLineNumbers()
-    {
-        if (!_lineNumbersVisible) return;
-
-        var sb = new System.Text.StringBuilder();
-        var contentStart = MarkdownEditor.Document.ContentStart;
-        var contentEnd = MarkdownEditor.Document.ContentEnd;
-
-        if (contentStart == null || contentEnd == null || contentStart.CompareTo(contentEnd) >= 0)
-        {
-            LineNumbers.Text = "1";
-            return;
-        }
-
-        var current = contentStart.GetLineStartPosition(0);
-        if (current == null)
-        {
-            LineNumbers.Text = "1";
-            return;
-        }
-
-        Paragraph? currentParagraph = null;
-        int paragraphNumber = 0;
-        bool isFirstLineOfParagraph = true;
-
-        while (current != null && current.CompareTo(contentEnd) < 0)
-        {
-            var para = current.Paragraph;
-            if (para != null && para != currentParagraph)
-            {
-                currentParagraph = para;
-                paragraphNumber++;
-                isFirstLineOfParagraph = true;
-            }
-            else
-            {
-                isFirstLineOfParagraph = false;
-            }
-
-            if (paragraphNumber == 0)
-                paragraphNumber = 1;
-
-            if (sb.Length > 0)
-                sb.Append('\n');
-            if (isFirstLineOfParagraph)
-                sb.Append(paragraphNumber);
-
-            var next = current.GetLineStartPosition(1);
-            if (next == null || next.CompareTo(current) <= 0)
-                break;
-            current = next;
-        }
-
-        if (sb.Length == 0)
-            sb.Append("1");
-
-        LineNumbers.Text = sb.ToString();
     }
 
     private TextPointer? GetTextPointerAtOffset(int offset)
@@ -1433,21 +1357,6 @@ public partial class MainWindow : Window
             // Delete draft after recovery attempt
             try { System.IO.File.Delete(draftPath); } catch { }
         }
-    }
-
-    private void ShowGoToLineDialog()
-    {
-        if (_goToLineDialog != null && _goToLineDialog.IsVisible)
-        {
-            _goToLineDialog.Activate();
-            _goToLineDialog.Focus();
-            return;
-        }
-
-        _goToLineDialog = new GoToLineDialog(MarkdownEditor, () => SyncPreviewToCaret());
-        _goToLineDialog.Owner = this;
-        _goToLineDialog.Closed += (s, e) => _goToLineDialog = null;
-        _goToLineDialog.Show();
     }
 
     private void MarkdownPreview_NavigationStarting(object? sender, CoreWebView2NavigationStartingEventArgs e)

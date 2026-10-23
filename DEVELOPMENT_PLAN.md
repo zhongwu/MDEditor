@@ -83,7 +83,7 @@
 - [x] Basic editing features:
   - [x] Undo/Redo
   - [x] Find/Replace (Ctrl+F, Ctrl+H) - inline find bar above the editor (live search, highlights all matches, match count, F3 navigation, replace / replace all)
-  - [x] Go to Line (Ctrl+G) - paragraph-aware + offset fallback
+  - [x] Go to Line (Ctrl+G) - inline bar (line or line:column, live preview, Esc restores view)
   - [x] Word wrap toggle
   - [x] Tab/Shift+Tab for indentation
 

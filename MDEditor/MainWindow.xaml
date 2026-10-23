@@ -12,6 +12,7 @@
         <KeyBinding Key="E" Modifiers="Control+Shift" Command="{Binding ToggleOutlineCommand}" />
         <KeyBinding Key="F" Modifiers="Control" Command="{Binding FindCommand}" />
         <KeyBinding Key="H" Modifiers="Control" Command="{Binding ReplaceCommand}" />
+        <KeyBinding Key="G" Modifiers="Control" Command="{Binding GoToLineCommand}" />
         <KeyBinding Key="F" Modifiers="Control+Shift" Command="{Binding FindInPreviewCommand}" />
         <KeyBinding Key="P" Modifiers="Control" Command="{Binding PrintPreviewCommand}" />
         <KeyBinding Key="F5" Command="{Binding PresentationModeCommand}" />
@@ -66,7 +67,7 @@
                 <MenuItem Header="Find" Command="{Binding FindCommand}" InputGestureText="Ctrl+F" />
                 <MenuItem Header="Replace" Command="{Binding ReplaceCommand}" InputGestureText="Ctrl+H" />
                 <MenuItem Header="Find in Preview" Command="{Binding FindInPreviewCommand}" InputGestureText="Ctrl+Shift+F" />
-                <MenuItem Header="Go to Line..." Command="{Binding GoToLineCommand}" />
+                <MenuItem Header="Go to Line..." Command="{Binding GoToLineCommand}" InputGestureText="Ctrl+G" />
                 <Separator />
                 <MenuItem Header="Select All" Command="{Binding SelectAllCommand}" />
             </MenuItem>
@@ -431,26 +432,25 @@
                     </Grid>
                 </Border>
 
+                <!-- Go to line bar (same slot as the find bar; only one is shown at a time) -->
+                <Border x:Name="GoToLineBar" Grid.Row="1" Visibility="Collapsed" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0,0,0,1" Padding="8,4">
+                    <DockPanel LastChildFill="True">
+                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE711;" ToolTip="Close (Esc)" Click="GoToLineClose_Click" />
+                        <TextBlock x:Name="GoToLineStatus" DockPanel.Dock="Right" MinWidth="72" Margin="8,0,4,0" TextAlignment="Right" VerticalAlignment="Center" Foreground="Gray" />
+                        <TextBlock DockPanel.Dock="Left" Text="Go to line:" VerticalAlignment="Center" Margin="0,0,6,0" />
+                        <TextBox x:Name="GoToLineBox" VerticalContentAlignment="Center" Padding="2,1" ToolTip="Line number, or line:column" TextChanged="GoToLineBox_TextChanged" PreviewKeyDown="GoToLineBox_PreviewKeyDown" LostKeyboardFocus="GoToLineBox_LostKeyboardFocus" />
+                    </DockPanel>
+                </Border>
+
                 <Border Grid.Row="2" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="1" Margin="8" CornerRadius="4">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <ScrollViewer x:Name="LineNumbersScrollViewer"
-                                      Grid.Column="0"
-                                      VerticalScrollBarVisibility="Hidden"
-                                      HorizontalScrollBarVisibility="Disabled"
-                                      Visibility="Collapsed">
-                            <TextBlock x:Name="LineNumbers"
-                                       FontFamily="Cascadia Code, Consolas, monospace"
-                                       FontSize="14"
-                                       Foreground="Gray"
-                                       Padding="8,0,8,0"
-                                       TextAlignment="Right"
-                                       LineHeight="18"
-                                       LineStackingStrategy="BlockLineHeight" />
-                        </ScrollViewer>
+                        <editor:LineNumberGutter x:Name="LineNumberGutter"
+                                                 Grid.Column="0"
+                                                 Visibility="Collapsed" />
                         <Grid Grid.Column="1">
                             <RichTextBox x:Name="MarkdownEditor"
                                      FontFamily="Cascadia Code, Consolas, monospace"
@@ -497,6 +497,9 @@
                                     </ContextMenu>
                                 </RichTextBox.ContextMenu>
                             </RichTextBox>
+                            <editor:LineHighlightOverlay x:Name="GoToLineOverlay"
+                                                     IsHitTestVisible="False"
+                                                     Panel.ZIndex="30" />
                             <editor:FindHighlightOverlay x:Name="EditorFindOverlay"
                                                      IsHitTestVisible="False"
                                                      Panel.ZIndex="40" />
