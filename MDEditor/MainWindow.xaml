@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+        xmlns:editor="clr-namespace:MDEditor.Editor"
         Title="MDEditor" Height="600" Width="1000"
         mc:Ignorable="d">
     <Grid x:Name="RootGrid">
@@ -82,6 +83,12 @@
                 <MenuItem Header="Math Block" Command="{Binding MathBlockCommand}" />
             </MenuItem>
             <MenuItem Header="Tools">
+                <MenuItem x:Name="SmartTypographyMenuItem"
+                          Header="Smart Typography"
+                          IsCheckable="True"
+                          IsChecked="True"
+                          Click="SmartTypography_Click" />
+                <Separator />
                 <MenuItem Header="GitHub Sync" Command="{Binding GitHubSyncCommand}" />
                 <MenuItem Header="Settings" Command="{Binding SettingsCommand}" />
             </MenuItem>
@@ -249,8 +256,8 @@
                                        LineHeight="18"
                                        LineStackingStrategy="BlockLineHeight" />
                         </ScrollViewer>
+                        <Grid Grid.Column="1">
                         <RichTextBox x:Name="MarkdownEditor"
-                                     Grid.Column="1"
                                      FontFamily="Cascadia Code, Consolas, monospace"
                                      FontSize="14"
                                      AcceptsReturn="True"
@@ -295,6 +302,10 @@
                                 </ContextMenu>
                             </RichTextBox.ContextMenu>
                         </RichTextBox>
+                        <editor:BracketHighlightOverlay x:Name="BracketOverlay"
+                                                        IsHitTestVisible="False"
+                                                        Panel.ZIndex="99" />
+                        </Grid>
                     </Grid>
                 </Border>
             </Grid>

@@ -2,6 +2,7 @@
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
 using MDEditor.Core.Interfaces;
+using MDEditor.Editor;
 using MDEditor.ViewModels;
 using System;
 using System.Windows;
@@ -28,10 +29,20 @@ public partial class MainWindow : Window
 
     // Line numbers state
     private bool _lineNumbersVisible = false;
-    private System.Windows.Threading.DispatcherTimer? _highlightTimer;
     private System.Windows.Threading.DispatcherTimer? _previewTimer;
     private System.Windows.Threading.DispatcherTimer? _lineNumbersTimer;
     private string _lastRenderedMarkdown = string.Empty;
+
+    // Editor enhancements (Phase 6.1)
+    private const int MaxEditorFeatureLength = 1_000_000;
+    private readonly CompletionPopup _completionPopup = new();
+    private CompletionResult? _completionResult;
+    private System.Windows.Threading.DispatcherTimer? _completionTimer;
+    private bool _completionSuppressed;
+    private bool _smartTypographyEnabled = true;
+    private BracketHighlightOverlay? _bracketOverlay;
+    private string? _cachedEditorText;
+    private MenuItem? _smartTypographyMenuItem;
 
     // File management state
     private string? _currentFilePath = null;
@@ -47,6 +58,7 @@ public partial class MainWindow : Window
         ViewModel = App.Services.GetRequiredService<MainWindowViewModel>();
         _markdownParser = App.Services.GetRequiredService<IMarkdownParser>();
         _settingsService = App.Services.GetRequiredService<ISettingsService>();
+        _smartTypographyMenuItem = SmartTypographyMenuItem;
 
         ViewModel.InsertMarkdownCallback = InsertMarkdown;
         ViewModel.UndoCallback = () => MarkdownEditor.Undo();
@@ -88,8 +100,15 @@ public partial class MainWindow : Window
                     {
                         LineNumbersScrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset);
                     }
+
+                    // Bracket highlights are drawn in screen space, so they have to
+                    // be repainted when the viewport moves.
+                    _bracketOverlay?.InvalidateVisual();
                 };
             }
+
+            SetupBracketOverlay();
+            UpdateBracketHighlight();
         };
 
         // Set paragraph style for consistent line height
@@ -97,17 +116,6 @@ public partial class MainWindow : Window
         style.Setters.Add(new Setter(Paragraph.MarginProperty, new Thickness(0)));
         style.Setters.Add(new Setter(Paragraph.LineHeightProperty, 18.0));
         MarkdownEditor.Resources.Add(typeof(Paragraph), style);
-
-        // Syntax highlighting timer disabled to prevent scroll issues
-        // _highlightTimer = new System.Windows.Threading.DispatcherTimer
-        // {
-        //     Interval = TimeSpan.FromMilliseconds(2000)
-        // };
-        // _highlightTimer.Tick += (s, e) =>
-        // {
-        //     _highlightTimer.Stop();
-        //     ApplySyntaxHighlighting();
-        // };
 
         // Setup preview refresh timer (debounced 1000ms for better performance)
         _previewTimer = new System.Windows.Threading.DispatcherTimer
@@ -122,6 +130,18 @@ public partial class MainWindow : Window
 
         // Handle Tab/Shift+Tab for indentation
         MarkdownEditor.PreviewKeyDown += MarkdownEditor_PreviewKeyDown;
+
+        // Phase 6.1: smart typography, completion popup and bracket highlighting
+        MarkdownEditor.PreviewTextInput += MarkdownEditor_PreviewTextInput;
+        MarkdownEditor.SelectionChanged += (s, e) => UpdateBracketHighlight();
+        MarkdownEditor.LostKeyboardFocus += (s, e) => HideCompletion();
+
+        // The completion popup is sticky so it cannot swallow the first click.
+        // Dismiss it on any mouse press that reaches the main window.
+        PreviewMouseDown += (s, e) => HideCompletion();
+        _completionPopup.ItemAccepted += (s, item) => AcceptCompletion(item);
+        SetupCompletionTimer();
+        LoadEditorEnhancementSettings();
 
         // Enable drag & drop on editor
         MarkdownEditor.AllowDrop = true;
@@ -379,6 +399,91 @@ public partial class MainWindow : Window
 
     private void MarkdownEditor_PreviewKeyDown(object sender, KeyEventArgs e)
     {
+        if (e.Key != Key.LeftCtrl && e.Key != Key.RightCtrl && e.Key != Key.LeftShift &&
+            e.Key != Key.RightShift && e.Key != Key.LeftAlt && e.Key != Key.RightAlt)
+        {
+            _completionSuppressed = false;
+        }
+
+        // Completion popup captures navigation keys while it is open
+        if (_completionPopup.IsOpen)
+        {
+            switch (e.Key)
+            {
+                case Key.Down:
+                    _completionPopup.MoveSelection(1);
+                    e.Handled = true;
+                    return;
+                case Key.Up:
+                    _completionPopup.MoveSelection(-1);
+                    e.Handled = true;
+                    return;
+                case Key.PageDown:
+                    _completionPopup.MoveSelection(6);
+                    e.Handled = true;
+                    return;
+                case Key.PageUp:
+                    _completionPopup.MoveSelection(-6);
+                    e.Handled = true;
+                    return;
+                case Key.Enter:
+                case Key.Tab:
+                    if (_completionPopup.SelectedItem is { } selected)
+                    {
+                        AcceptCompletion(selected);
+                        e.Handled = true;
+                        return;
+                    }
+
+                    break;
+                case Key.Escape:
+                    HideCompletion();
+                    _completionSuppressed = true;
+                    e.Handled = true;
+                    return;
+            }
+        }
+
+        // Ctrl+Space lists every Markdown snippet
+        if (e.Key == Key.Space && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+        {
+            UpdateCompletions(CompletionTrigger.Manual);
+            e.Handled = true;
+            return;
+        }
+
+        // Smart typography runs synchronously from the key event: changing the
+        // document from the text-input events is unreliable in a RichTextBox.
+        if (_smartTypographyEnabled &&
+            (Keyboard.Modifiers & (ModifierKeys.Control | ModifierKeys.Alt)) == 0 &&
+            MarkdownEditor.Selection.IsEmpty &&
+            TryGetSmartTypographyChar(e, out char smartChar) &&
+            GetFeatureText() is { } featureText)
+        {
+            int caretOffset = EditorText.GetOffset(MarkdownEditor.Document, MarkdownEditor.CaretPosition);
+            if (SmartTypography.TryGetReplacement(featureText, caretOffset, smartChar, out string insert, out int removeBefore))
+            {
+                e.Handled = true;
+
+                if (removeBefore > 0)
+                {
+                    var start = MarkdownEditor.CaretPosition
+                        .GetPositionAtOffset(-removeBefore, LogicalDirection.Backward);
+                    if (start != null)
+                        MarkdownEditor.Selection.Select(start, MarkdownEditor.CaretPosition);
+                }
+
+                MarkdownEditor.Selection.Text = insert;
+
+                var newCaret = MarkdownEditor.CaretPosition
+                    .GetPositionAtOffset(insert.Length, LogicalDirection.Forward);
+                if (newCaret != null)
+                    MarkdownEditor.CaretPosition = newCaret;
+
+                return;
+            }
+        }
+
         if (e.Key != Key.Tab)
             return;
 
@@ -429,6 +534,187 @@ public partial class MainWindow : Window
                 var indented = string.Join("\n", Array.ConvertAll(lines, l => indent + l));
                 MarkdownEditor.Selection.Text = indented;
             }
+        }
+    }
+
+    private static bool TryGetSmartTypographyChar(KeyEventArgs e, out char typed)
+    {
+        typed = '\0';
+        bool shift = (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift;
+
+        switch (e.Key)
+        {
+            case Key.OemQuotes:
+                typed = shift ? '"' : '\'';
+                return true;
+            case Key.OemMinus when !shift:
+                typed = '-';
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // Phase 6.1 editor enhancements
+    // ------------------------------------------------------------------
+
+    private void SetupCompletionTimer()
+    {
+        _completionTimer = new System.Windows.Threading.DispatcherTimer
+        {
+            Interval = TimeSpan.FromMilliseconds(120)
+        };
+
+        _completionTimer.Tick += (s, e) =>
+        {
+            _completionTimer.Stop();
+            UpdateCompletions(CompletionTrigger.Typing);
+        };
+    }
+
+    private void LoadEditorEnhancementSettings()
+    {
+        _smartTypographyEnabled = _settingsService.Get("editor.smartTypography", true);
+
+        if (_smartTypographyMenuItem != null)
+            _smartTypographyMenuItem.IsChecked = _smartTypographyEnabled;
+    }
+
+    private void SmartTypography_Click(object sender, RoutedEventArgs e)
+    {
+        _smartTypographyEnabled = sender is MenuItem item && item.IsChecked;
+        _settingsService.Set("editor.smartTypography", _smartTypographyEnabled);
+        _settingsService.Save();
+    }
+
+    private void MarkdownEditor_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        _completionSuppressed = false;
+
+        // The inserted text only reaches the document after this handler, so
+        // completion runs on a short timer.
+        ScheduleCompletionUpdate();
+    }
+
+    private void ScheduleCompletionUpdate()
+    {
+        if (_completionSuppressed || _completionTimer == null)
+            return;
+
+        _completionTimer.Stop();
+        _completionTimer.Start();
+    }
+
+    private void UpdateCompletions(CompletionTrigger trigger)
+    {
+        if (!MarkdownEditor.IsKeyboardFocusWithin)
+        {
+            HideCompletion();
+            return;
+        }
+
+        var text = GetFeatureText();
+        if (text == null || text.Length > MaxEditorFeatureLength)
+        {
+            HideCompletion();
+            return;
+        }
+
+        int caret = EditorText.GetOffset(MarkdownEditor.Document, MarkdownEditor.CaretPosition);
+        var result = MarkdownCompletionProvider.GetCompletions(text, caret, _currentFilePath, trigger);
+
+        if (result == null || result.Items.Count == 0)
+        {
+            HideCompletion();
+            return;
+        }
+
+        _completionResult = result;
+        var caretRect = MarkdownEditor.CaretPosition.GetCharacterRect(LogicalDirection.Forward);
+        _completionPopup.Show(result.Items, MarkdownEditor, caretRect);
+    }
+
+    private void AcceptCompletion(CompletionItem item)
+    {
+        var result = _completionResult;
+        _completionResult = null;
+        HideCompletion();
+
+        if (result == null)
+            return;
+
+        var document = MarkdownEditor.Document;
+        var start = EditorText.GetPointer(document, result.TokenStart);
+        var end = EditorText.GetPointer(document, result.TokenEnd);
+        if (start == null || end == null)
+            return;
+
+        MarkdownEditor.Selection.Select(start, end);
+        MarkdownEditor.Selection.Text = item.Insert;
+
+        int after = item.Insert.Length - item.CaretOffsetInInsert;
+        if (after > 0)
+        {
+            var target = MarkdownEditor.CaretPosition.GetPositionAtOffset(-after, LogicalDirection.Backward);
+            if (target != null)
+                MarkdownEditor.CaretPosition = target;
+        }
+
+        // Do not immediately reopen the popup for the text we just inserted.
+        _completionSuppressed = true;
+    }
+
+    private void HideCompletion()
+    {
+        _completionResult = null;
+        if (_completionPopup.IsOpen)
+            _completionPopup.Hide();
+    }
+
+    /// <summary>Cached document text for the Phase 6.1 features (null when too large).</summary>
+    private string? GetFeatureText()
+    {
+        _cachedEditorText ??= EditorText.GetText(MarkdownEditor.Document);
+
+        return _cachedEditorText.Length > MaxEditorFeatureLength ? null : _cachedEditorText;
+    }
+
+    private void SetupBracketOverlay()
+    {
+        // The overlay lives in the XAML on top of the editor, so it only needs
+        // to know which editor to measure its characters from.
+        _bracketOverlay = BracketOverlay;
+        _bracketOverlay.Editor = MarkdownEditor;
+    }
+
+    private void UpdateBracketHighlight()
+    {
+        if (_bracketOverlay == null || !MarkdownEditor.Selection.IsEmpty)
+        {
+            _bracketOverlay?.SetPair(null, null);
+            return;
+        }
+
+        var text = GetFeatureText();
+        if (text == null)
+        {
+            _bracketOverlay.SetPair(null, null);
+            return;
+        }
+
+        var document = MarkdownEditor.Document;
+        int caret = EditorText.GetOffset(document, MarkdownEditor.CaretPosition);
+
+        if (BracketMatcher.TryFindMatch(text, caret, out int open, out int close))
+        {
+            _bracketOverlay.SetPair(
+                EditorText.GetPointer(document, open),
+                EditorText.GetPointer(document, close));
+        }
+        else
+        {
+            _bracketOverlay.SetPair(null, null);
         }
     }
 
@@ -512,13 +798,13 @@ public partial class MainWindow : Window
         // Mark as dirty
         MarkDirty();
 
+        // Phase 6.1 features share one cached snapshot of the text
+        _cachedEditorText = null;
+        UpdateBracketHighlight();
+
         // Debounce preview refresh (1000ms)
         _previewTimer?.Stop();
         _previewTimer?.Start();
-
-        // Syntax highlighting disabled to prevent scroll issues
-        // _highlightTimer?.Stop();
-        // _highlightTimer?.Start();
 
         // Line numbers updated via separate timer to avoid layout fighting with scroll
         _lineNumbersTimer?.Stop();

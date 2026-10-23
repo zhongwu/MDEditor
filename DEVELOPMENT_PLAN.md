@@ -212,15 +212,15 @@
 ### Phase 6: Advanced Features (Week 6-7)
 
 #### 6.1 Editor Enhancements
-- [ ] Auto-complete for:
-  - Markdown syntax
-  - Emoji (:smile:)
-  - @mentions (if GitHub context)
+- [x] Auto-complete for:
+  - Markdown syntax (headings, lists, blockquotes, tables, code blocks)
+  - Emoji (:smile:) with popup and mouse/keyboard selection
   - File paths (for links/images)
-- [ ] Multiple cursors (Alt+Click)
-- [ ] Minimap (code overview)
-- [ ] Bracket matching
-- [ ] Smart quotes/dashes
+  - Line-start markdown markers
+- [x] Bracket matching (highlight matching pairs with overlay)
+- [x] Smart quotes/dashes (curly quotes/apostrophes, em dash via `---`, with toggle in Tools menu)
+- [ ] Multiple cursors (Alt+Click) — deferred
+- [ ] Minimap (code overview) — pending
 
 #### 6.2 Preview Enhancements
 - [ ] Outline/TOC panel (collapsible)
