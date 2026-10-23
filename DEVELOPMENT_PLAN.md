@@ -223,6 +223,7 @@
 - [x] Minimap (code overview) — scaled document overview with viewport indicator and click/drag scrolling
 
 #### 6.2 Preview Enhancements
+- [x] Scroll sync between editor and preview (bidirectional)
 - [ ] Outline/TOC panel (collapsible)
 - [ ] Find in preview
 - [ ] Print preview
