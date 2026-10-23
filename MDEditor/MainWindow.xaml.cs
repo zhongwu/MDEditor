@@ -30,7 +30,11 @@ public partial class MainWindow : Window
     // Line numbers state
     private bool _lineNumbersVisible = false;
     private bool _minimapVisible = true;
+    private bool _scrollSyncEnabled = true;
     private System.Windows.Threading.DispatcherTimer? _previewTimer;
+    private System.Windows.Threading.DispatcherTimer? _previewScrollTimer;
+    private bool _syncingScroll;
+    private DateTime _syncCooldownUntil = DateTime.MinValue;
     private System.Windows.Threading.DispatcherTimer? _lineNumbersTimer;
     private string _lastRenderedMarkdown = string.Empty;
 
@@ -105,6 +109,9 @@ public partial class MainWindow : Window
                     // Bracket highlights are drawn in screen space, so they have to
                     // be repainted when the viewport moves.
                     _bracketOverlay?.InvalidateVisual();
+
+                    // Keep the preview pane in sync with editor scrolling.
+                    SchedulePreviewScrollSync();
                 };
             }
 
@@ -269,6 +276,86 @@ public partial class MainWindow : Window
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"SyncPreviewToCaret error: {ex.Message}");
+        }
+    }
+
+    private void SchedulePreviewScrollSync()
+    {
+        if (!_scrollSyncEnabled || _syncingScroll) return;
+        if (DateTime.Now < _syncCooldownUntil) return;
+
+        if (_previewScrollTimer == null)
+        {
+            _previewScrollTimer = new System.Windows.Threading.DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(60)
+            };
+            _previewScrollTimer.Tick += (s, e) =>
+            {
+                _previewScrollTimer?.Stop();
+                DoPreviewScrollSync();
+            };
+        }
+
+        _previewScrollTimer.Stop();
+        _previewScrollTimer.Start();
+    }
+
+    private void DoPreviewScrollSync()
+    {
+        if (!_scrollSyncEnabled || _syncingScroll) return;
+        if (DateTime.Now < _syncCooldownUntil) return;
+        if (MarkdownPreview.CoreWebView2 == null) return;
+
+        var scrollViewer = FindVisualChild<ScrollViewer>(MarkdownEditor);
+        if (scrollViewer == null || scrollViewer.ExtentHeight <= 0) return;
+
+        double maxScroll = scrollViewer.ExtentHeight - scrollViewer.ViewportHeight;
+        if (maxScroll < 0) maxScroll = 0;
+        double pct = maxScroll > 0 ? scrollViewer.VerticalOffset / maxScroll : 0;
+        pct = Math.Clamp(pct, 0, 1);
+
+        _syncingScroll = true;
+        _syncCooldownUntil = DateTime.Now.AddMilliseconds(300);
+
+        var script = $"(function(){{var m=document.documentElement.scrollHeight-window.innerHeight;if(m<0)m=0;window.scrollTo(0,m*{pct.ToString(System.Globalization.CultureInfo.InvariantCulture)});}})();";
+        MarkdownPreview.CoreWebView2.ExecuteScriptAsync(script);
+
+        Dispatcher.BeginInvoke(new Action(() => _syncingScroll = false), System.Windows.Threading.DispatcherPriority.Input);
+    }
+
+    private void Preview_WebMessageReceived(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2WebMessageReceivedEventArgs e)
+    {
+        if (!_scrollSyncEnabled) return;
+        if (DateTime.Now < _syncCooldownUntil) return;
+
+        try
+        {
+            var json = e.TryGetWebMessageAsString();
+            if (string.IsNullOrEmpty(json) || !json.Contains("\"scroll\"")) return;
+
+            using var doc = System.Text.Json.JsonDocument.Parse(json);
+            if (doc.RootElement.GetProperty("type").GetString() != "scroll") return;
+
+            double pct = doc.RootElement.GetProperty("pct").GetDouble();
+            pct = Math.Clamp(pct, 0, 1);
+
+            _syncingScroll = true;
+            _syncCooldownUntil = DateTime.Now.AddMilliseconds(300);
+
+            var scrollViewer = FindVisualChild<ScrollViewer>(MarkdownEditor);
+            if (scrollViewer != null && scrollViewer.ExtentHeight > 0)
+            {
+                double maxScroll = scrollViewer.ExtentHeight - scrollViewer.ViewportHeight;
+                if (maxScroll < 0) maxScroll = 0;
+                scrollViewer.ScrollToVerticalOffset(maxScroll * pct);
+            }
+
+            Dispatcher.BeginInvoke(new Action(() => _syncingScroll = false), System.Windows.Threading.DispatcherPriority.Input);
+        }
+        catch
+        {
+            // ignore malformed messages
         }
     }
 
@@ -741,6 +828,11 @@ public partial class MainWindow : Window
             "MDEditor", "WebView2");
         var env = await Microsoft.Web.WebView2.Core.CoreWebView2Environment.CreateAsync(null, userDataFolder);
         await MarkdownPreview.EnsureCoreWebView2Async(env);
+
+        // Report preview scroll position back to the host for bidirectional sync.
+        MarkdownPreview.CoreWebView2.WebMessageReceived += Preview_WebMessageReceived;
+        await MarkdownPreview.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(
+            "window.addEventListener('scroll',function(){var m=document.documentElement.scrollHeight-window.innerHeight;if(m<0)m=0;var p=m>0?window.scrollY/m:0;if(window.chrome&&window.chrome.webview){window.chrome.webview.postMessage(JSON.stringify({type:'scroll',pct:p}));}}, {passive:true});");
     }
 
     private async void InitializePreview()
@@ -1196,6 +1288,11 @@ public partial class MainWindow : Window
     {
         _minimapVisible = !_minimapVisible;
         Minimap.Visibility = _minimapVisible ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    private void ToggleScrollSync_Click(object sender, RoutedEventArgs e)
+    {
+        _scrollSyncEnabled = !_scrollSyncEnabled;
     }
 
     private void UpdateLineNumbers()

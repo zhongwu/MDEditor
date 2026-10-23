@@ -49,6 +49,7 @@
                 <MenuItem Header="Toggle Preview" Command="{Binding TogglePreviewCommand}" />
                 <MenuItem Header="Toggle Line Numbers" Command="{Binding ToggleLineNumbersCommand}" />
                 <MenuItem Header="Toggle Minimap" Click="ToggleMinimap_Click" />
+                <MenuItem Header="Toggle Scroll Sync" Click="ToggleScrollSync_Click" />
                 <MenuItem Header="Word Wrap" Command="{Binding ToggleWordWrapCommand}" />
                 <Separator />
                 <MenuItem Header="Zoom In" Command="{Binding ZoomInCommand}" />
