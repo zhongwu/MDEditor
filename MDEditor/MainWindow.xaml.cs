@@ -29,6 +29,7 @@ public partial class MainWindow : Window
 
     // Line numbers state
     private bool _lineNumbersVisible = false;
+    private bool _minimapVisible = true;
     private System.Windows.Threading.DispatcherTimer? _previewTimer;
     private System.Windows.Threading.DispatcherTimer? _lineNumbersTimer;
     private string _lastRenderedMarkdown = string.Empty;
@@ -109,6 +110,9 @@ public partial class MainWindow : Window
 
             SetupBracketOverlay();
             UpdateBracketHighlight();
+
+            // Minimap overview on the right side of the editor.
+            Minimap.Attach(MarkdownEditor);
         };
 
         // Set paragraph style for consistent line height
@@ -1186,6 +1190,12 @@ public partial class MainWindow : Window
         {
             UpdateLineNumbers();
         }
+    }
+
+    private void ToggleMinimap_Click(object sender, RoutedEventArgs e)
+    {
+        _minimapVisible = !_minimapVisible;
+        Minimap.Visibility = _minimapVisible ? Visibility.Visible : Visibility.Collapsed;
     }
 
     private void UpdateLineNumbers()

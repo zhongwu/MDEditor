@@ -220,7 +220,7 @@
 - [x] Bracket matching (highlight matching pairs with overlay)
 - [x] Smart quotes/dashes (curly quotes/apostrophes, em dash via `---`, with toggle in Tools menu)
 - [ ] Multiple cursors (Alt+Click) — deferred
-- [ ] Minimap (code overview) — pending
+- [x] Minimap (code overview) — scaled document overview with viewport indicator and click/drag scrolling
 
 #### 6.2 Preview Enhancements
 - [ ] Outline/TOC panel (collapsible)
