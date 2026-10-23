@@ -25,8 +25,6 @@ public partial class MainWindow : Window
     private double _initialMouseX;
 
     // Single-instance dialog tracking
-    private FindReplaceDialog? _findDialog;
-    private FindReplaceDialog? _replaceDialog;
     private GoToLineDialog? _goToLineDialog;
 
     // Line numbers state
@@ -82,8 +80,8 @@ public partial class MainWindow : Window
         ViewModel.CopyCallback = () => MarkdownEditor.Copy();
         ViewModel.PasteCallback = () => MarkdownEditor.Paste();
         ViewModel.SelectAllCallback = () => MarkdownEditor.SelectAll();
-        ViewModel.FindCallback = ShowFindDialog;
-        ViewModel.ReplaceCallback = ShowReplaceDialog;
+        ViewModel.FindCallback = () => ShowEditorFind(replace: false);
+        ViewModel.ReplaceCallback = () => ShowEditorFind(replace: true);
         ViewModel.GoToLineCallback = ShowGoToLineDialog;
         ViewModel.ToggleWordWrapCallback = ToggleWordWrap;
         ViewModel.NewFileCallback = NewFile;
@@ -95,6 +93,14 @@ public partial class MainWindow : Window
 
         // Line numbers toggle
         ViewModel.ToggleLineNumbersCallback = ToggleLineNumbers;
+
+        // Phase 6.2: outline panel, find in preview, print preview, presentation mode
+        ViewModel.ToggleOutlineCallback = ToggleOutline;
+        ViewModel.FindInPreviewCallback = ShowPreviewFind;
+        ViewModel.PrintPreviewCallback = ShowPrintPreview;
+        ViewModel.PresentationModeCallback = TogglePresentationMode;
+        InitializePreviewEnhancements();
+        InitializeEditorFind();
 
         DataContext = ViewModel;
 
@@ -119,6 +125,7 @@ public partial class MainWindow : Window
                     // Bracket highlights are drawn in screen space, so they have to
                     // be repainted when the viewport moves.
                     _bracketOverlay?.InvalidateVisual();
+                    EditorFindOverlay.InvalidateVisual();
 
                     // Keep the preview pane in sync with editor scrolling.
                     SchedulePreviewScrollSync();
@@ -143,6 +150,8 @@ public partial class MainWindow : Window
 
             ScrollSyncMenuItem.IsChecked = _scrollSyncEnabled;
             SmartTypographyMenuItem.IsChecked = _smartTypographyEnabled;
+
+            ApplyOutlineVisibility();
         };
 
         // Set paragraph style for consistent line height
@@ -160,6 +169,7 @@ public partial class MainWindow : Window
         {
             _previewTimer.Stop();
             UpdatePreview();
+            UpdateOutline();
         };
 
         // Handle Tab/Shift+Tab for indentation
@@ -808,15 +818,15 @@ public partial class MainWindow : Window
 
     private async Task InitializePreviewCoreAsync()
     {
-        var userDataFolder = System.IO.Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "MDEditor", "WebView2");
-        var env = await Microsoft.Web.WebView2.Core.CoreWebView2Environment.CreateAsync(null, userDataFolder);
+        // Shared with the presentation / print preview windows.
+        var env = await MDEditor.Preview.PreviewHost.GetEnvironmentAsync();
         await MarkdownPreview.EnsureCoreWebView2Async(env);
 
         MarkdownPreview.CoreWebView2.WebMessageReceived += Preview_WebMessageReceived;
+        MarkdownPreview.CoreWebView2.NavigationCompleted += (s, e) => RestorePreviewFind();
         await MarkdownPreview.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(
             "window.addEventListener('scroll',function(){var m=document.documentElement.scrollHeight-window.innerHeight;if(m<0)m=0;var p=m>0?window.scrollY/m:0;if(window.chrome&&window.chrome.webview){window.chrome.webview.postMessage(JSON.stringify({type:'scroll',pct:p}));}}, {passive:true});");
+        await MarkdownPreview.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(MDEditor.Preview.PreviewHost.FindScript);
     }
 
     private async void InitializePreview()
@@ -859,7 +869,8 @@ public partial class MainWindow : Window
         var delta = currentX - _initialMouseX;
         var newWidth = _initialEditorWidth + delta;
 
-        newWidth = Math.Clamp(newWidth, 300, MainContentGrid.ActualWidth - 300 - SplitterColumn.ActualWidth);
+        var maxWidth = MainContentGrid.ActualWidth - OutlineColumn.ActualWidth - 300 - SplitterColumn.ActualWidth;
+        newWidth = Math.Clamp(newWidth, 300, Math.Max(300, maxWidth));
         EditorColumn.Width = new GridLength(newWidth);
     }
 
@@ -905,56 +916,14 @@ public partial class MainWindow : Window
 
             _lastRenderedMarkdown = markdown;
 
-            bool librariesReady;
-            try
-            {
-                var probe = await MarkdownPreview.CoreWebView2.ExecuteScriptAsync(
-                    "typeof renderMathInElement === 'function' && typeof mermaid !== 'undefined'");
-                librariesReady = probe == "true";
-            }
-            catch
-            {
-                librariesReady = false;
-            }
+            // Keep an open presentation window in step with the editor.
+            _presentationWindow?.UpdateMarkdown(markdown);
 
-            if (!librariesReady)
-            {
-                var fullHtml = await Task.Run(() => _markdownParser.ToHtmlDocument(markdown));
-                MarkdownPreview.NavigateToString(fullHtml);
-                return;
-            }
-
-            var bodyHtml = await Task.Run(() => _markdownParser.ToHtml(markdown));
-            if (string.IsNullOrEmpty(bodyHtml))
-                bodyHtml = "<p></p>";
-
-            var base64Html = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(bodyHtml));
-
-            var script = $@"
-                (async function() {{
-                    var body = document.body;
-                    var binaryString = atob('{base64Html}');
-                    var bytes = new Uint8Array(binaryString.length);
-                    for (var i = 0; i < binaryString.length; i++) {{
-                        bytes[i] = binaryString.charCodeAt(i);
-                    }}
-                    var decoded = new TextDecoder('utf-8').decode(bytes);
-                    body.innerHTML = decoded;
-                    if (typeof renderMathInElement !== 'undefined') {{
-                        renderMathInElement(body, {{
-                            delimiters: [
-                                {{left: '\\(', right: '\\)', display: false}},
-                                {{left: '\\[', right: '\\]', display: true}}
-                            ]
-                        }});
-                    }}
-                    if (typeof mermaid !== 'undefined') {{
-                        try {{ await mermaid.run(); }} catch(e) {{ console.error(e); }}
-                    }}
-                }})();
-            ";
-
-            await MarkdownPreview.CoreWebView2.ExecuteScriptAsync(script);
+            // Full navigations re-apply the find highlights from NavigationCompleted;
+            // in-place body swaps drop them, so re-apply here.
+            var navigated = await MDEditor.Preview.PreviewHost.RenderAsync(MarkdownPreview.CoreWebView2, _markdownParser, markdown);
+            if (!navigated)
+                RestorePreviewFind();
         }
         catch (Exception ex)
         {
@@ -1464,42 +1433,6 @@ public partial class MainWindow : Window
             // Delete draft after recovery attempt
             try { System.IO.File.Delete(draftPath); } catch { }
         }
-    }
-
-    private void ShowFindDialog()
-    {
-        if (_findDialog != null && _findDialog.IsVisible)
-        {
-            _findDialog.Activate();
-            _findDialog.Focus();
-            return;
-        }
-
-        _findDialog = new FindReplaceDialog(MarkdownEditor, false, () => SyncPreviewToCaret());
-        _findDialog.Owner = this;
-        _findDialog.WindowStartupLocation = WindowStartupLocation.Manual;
-        _findDialog.Left = this.Left + this.Width - 420;
-        _findDialog.Top = this.Top + 80;
-        _findDialog.Closed += (s, e) => _findDialog = null;
-        _findDialog.Show();
-    }
-
-    private void ShowReplaceDialog()
-    {
-        if (_replaceDialog != null && _replaceDialog.IsVisible)
-        {
-            _replaceDialog.Activate();
-            _replaceDialog.Focus();
-            return;
-        }
-
-        _replaceDialog = new FindReplaceDialog(MarkdownEditor, true, () => SyncPreviewToCaret());
-        _replaceDialog.Owner = this;
-        _replaceDialog.WindowStartupLocation = WindowStartupLocation.Manual;
-        _replaceDialog.Left = this.Left + this.Width - 420;
-        _replaceDialog.Top = this.Top + 80;
-        _replaceDialog.Closed += (s, e) => _replaceDialog = null;
-        _replaceDialog.Show();
     }
 
     private void ShowGoToLineDialog()

@@ -121,4 +121,51 @@ public static class EditorText
 
         return null;
     }
+
+    /// <summary>
+    /// Resolves many offsets in a single document walk. <paramref name="sortedOffsets"/>
+    /// must be ascending; entries past the end of the document stay null.
+    /// </summary>
+    public static TextPointer?[] GetPointers(FlowDocument document, IReadOnlyList<int> sortedOffsets)
+    {
+        var result = new TextPointer?[sortedOffsets.Count];
+        int next = 0;
+        int offset = 0;
+        var position = document.ContentStart;
+
+        while (position != null && next < sortedOffsets.Count)
+        {
+            switch (position.GetPointerContext(LogicalDirection.Forward))
+            {
+                case TextPointerContext.Text:
+                    var run = position.GetTextInRun(LogicalDirection.Forward);
+                    while (next < sortedOffsets.Count && sortedOffsets[next] <= offset + run.Length)
+                    {
+                        result[next] = position.GetPositionAtOffset(Math.Max(0, sortedOffsets[next] - offset), LogicalDirection.Forward);
+                        next++;
+                    }
+
+                    offset += run.Length;
+                    position = position.GetPositionAtOffset(run.Length, LogicalDirection.Forward);
+                    break;
+
+                case TextPointerContext.ElementEnd when position.Parent is Paragraph:
+                    while (next < sortedOffsets.Count && sortedOffsets[next] <= offset)
+                    {
+                        result[next] = position;
+                        next++;
+                    }
+
+                    offset++;
+                    position = position.GetNextContextPosition(LogicalDirection.Forward);
+                    break;
+
+                default:
+                    position = position.GetNextContextPosition(LogicalDirection.Forward);
+                    break;
+            }
+        }
+
+        return result;
+    }
 }

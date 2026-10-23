@@ -8,6 +8,27 @@
         Title="MDEditor" Height="600" Width="1000"
         mc:Ignorable="d">
 
+    <Window.InputBindings>
+        <KeyBinding Key="E" Modifiers="Control+Shift" Command="{Binding ToggleOutlineCommand}" />
+        <KeyBinding Key="F" Modifiers="Control" Command="{Binding FindCommand}" />
+        <KeyBinding Key="H" Modifiers="Control" Command="{Binding ReplaceCommand}" />
+        <KeyBinding Key="F" Modifiers="Control+Shift" Command="{Binding FindInPreviewCommand}" />
+        <KeyBinding Key="P" Modifiers="Control" Command="{Binding PrintPreviewCommand}" />
+        <KeyBinding Key="F5" Command="{Binding PresentationModeCommand}" />
+    </Window.InputBindings>
+
+    <Window.Resources>
+        <Style x:Key="PaneHeaderButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="4,1" />
+            <Setter Property="Margin" Value="2,0,0,0" />
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+    </Window.Resources>
+
     <Grid x:Name="RootGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -30,6 +51,8 @@
                 <MenuItem Header="Export HTML" Command="{Binding ExportHtmlCommand}" />
                 <MenuItem Header="Export PDF" Command="{Binding ExportPdfCommand}" />
                 <Separator />
+                <MenuItem Header="Print Preview..." Command="{Binding PrintPreviewCommand}" InputGestureText="Ctrl+P" />
+                <Separator />
                 <MenuItem Header="Exit" Command="{Binding ExitCommand}" />
             </MenuItem>
             <MenuItem Header="Edit">
@@ -40,14 +63,16 @@
                 <MenuItem Header="Copy" Command="{Binding CopyCommand}" />
                 <MenuItem Header="Paste" Command="{Binding PasteCommand}" />
                 <Separator />
-                <MenuItem Header="Find" Command="{Binding FindCommand}" />
-                <MenuItem Header="Replace" Command="{Binding ReplaceCommand}" />
+                <MenuItem Header="Find" Command="{Binding FindCommand}" InputGestureText="Ctrl+F" />
+                <MenuItem Header="Replace" Command="{Binding ReplaceCommand}" InputGestureText="Ctrl+H" />
+                <MenuItem Header="Find in Preview" Command="{Binding FindInPreviewCommand}" InputGestureText="Ctrl+Shift+F" />
                 <MenuItem Header="Go to Line..." Command="{Binding GoToLineCommand}" />
                 <Separator />
                 <MenuItem Header="Select All" Command="{Binding SelectAllCommand}" />
             </MenuItem>
             <MenuItem Header="View">
                 <MenuItem x:Name="PreviewMenuItem" Header="Show Preview" Command="{Binding TogglePreviewCommand}" IsCheckable="True" IsChecked="{Binding IsPreviewVisible, Mode=OneWay}"/>
+                <MenuItem x:Name="OutlineMenuItem" Header="Show Outline" Command="{Binding ToggleOutlineCommand}" IsCheckable="True" InputGestureText="Ctrl+Shift+E" />
                 <MenuItem x:Name="LineNumbersMenuItem" Header="Show Line Numbers" Command="{Binding ToggleLineNumbersCommand}" IsCheckable="True" />
                 <MenuItem x:Name="MinimapMenuItem" Header="Show Minimap" Click="ToggleMinimap_Click" IsCheckable="True" />
                 <MenuItem x:Name="ScrollSyncMenuItem" Header="Show Scroll Sync" Click="ToggleScrollSync_Click" IsCheckable="True" />
@@ -56,6 +81,8 @@
                 <MenuItem Header="Zoom In" Command="{Binding ZoomInCommand}" />
                 <MenuItem Header="Zoom Out" Command="{Binding ZoomOutCommand}" />
                 <MenuItem Header="Reset Zoom" Command="{Binding ResetZoomCommand}" />
+                <Separator />
+                <MenuItem Header="Presentation Mode" Command="{Binding PresentationModeCommand}" InputGestureText="F5" />
                 <Separator />
                 <MenuItem Header="Theme" Command="{Binding CycleThemeCommand}" />
             </MenuItem>
@@ -216,10 +243,32 @@
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8A1;" />
                 </Button.Content>
             </Button>
+            <Button Command="{Binding ToggleOutlineCommand}" ToolTip="Toggle Outline (Ctrl+Shift+E)">
+                <Button.Content>
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE700;" />
+                </Button.Content>
+            </Button>
+            <Button Command="{Binding FindInPreviewCommand}" ToolTip="Find in Preview (Ctrl+Shift+F)">
+                <Button.Content>
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE721;" />
+                </Button.Content>
+            </Button>
+            <Separator />
+            <Button Command="{Binding PrintPreviewCommand}" ToolTip="Print Preview (Ctrl+P)">
+                <Button.Content>
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE749;" />
+                </Button.Content>
+            </Button>
+            <Button Command="{Binding PresentationModeCommand}" ToolTip="Presentation Mode (F5)">
+                <Button.Content>
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE740;" />
+                </Button.Content>
+            </Button>
         </ToolBar>
 
         <Grid x:Name="MainContentGrid" Grid.Row="2">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="OutlineColumn" Width="Auto" />
                 <ColumnDefinition x:Name="EditorColumn" Width="*" MinWidth="300" />
                 <ColumnDefinition Width="Auto" />
 
@@ -264,8 +313,81 @@
                 </ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Grid x:Name="EditorPane" Grid.Column="0">
+            <!-- Outline / TOC panel (collapsible, resizable via the thumb on its right edge) -->
+            <Grid x:Name="OutlinePane" Grid.Column="0" Width="240" Visibility="Collapsed">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0,0,0,1" Padding="8,4">
+                    <DockPanel LastChildFill="False">
+                        <TextBlock DockPanel.Dock="Left" Text="OUTLINE" FontSize="12" Foreground="Gray" VerticalAlignment="Center" />
+                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE711;" ToolTip="Close Outline (Ctrl+Shift+E)" Command="{Binding ToggleOutlineCommand}" />
+                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE70E;" ToolTip="Collapse All" Click="OutlineCollapseAll_Click" />
+                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE70D;" ToolTip="Expand All" Click="OutlineExpandAll_Click" />
+                    </DockPanel>
+                </Border>
+
+                <Border Grid.Row="1" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="1" Margin="8,8,4,8" CornerRadius="4">
+                    <Grid>
+                        <TreeView x:Name="OutlineTree"
+                                  BorderThickness="0"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  PreviewMouseLeftButtonUp="OutlineTree_PreviewMouseLeftButtonUp"
+                                  KeyDown="OutlineTree_KeyDown">
+                            <TreeView.ItemContainerStyle>
+                                <Style TargetType="TreeViewItem">
+                                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                                    <Setter Property="ToolTip" Value="{Binding Title}" />
+                                </Style>
+                            </TreeView.ItemContainerStyle>
+                            <TreeView.ItemTemplate>
+                                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                                    <TextBlock Text="{Binding Title}" TextTrimming="CharacterEllipsis" Padding="2,1">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsCurrent}" Value="True">
+                                                        <Setter Property="FontWeight" Value="SemiBold" />
+                                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </HierarchicalDataTemplate>
+                            </TreeView.ItemTemplate>
+                        </TreeView>
+                        <TextBlock x:Name="OutlineEmptyText"
+                                   Text="No headings in this document."
+                                   Foreground="Gray"
+                                   TextWrapping="Wrap"
+                                   TextAlignment="Center"
+                                   Margin="12"
+                                   VerticalAlignment="Top"
+                                   IsHitTestVisible="False" />
+                    </Grid>
+                </Border>
+
+                <Thumb x:Name="OutlineResizeThumb"
+                       Grid.RowSpan="2"
+                       Width="5"
+                       HorizontalAlignment="Right"
+                       Cursor="SizeWE"
+                       DragDelta="OutlineResizeThumb_DragDelta"
+                       DragCompleted="OutlineResizeThumb_DragCompleted">
+                    <Thumb.Template>
+                        <ControlTemplate TargetType="Thumb">
+                            <Border Background="Transparent" />
+                        </ControlTemplate>
+                    </Thumb.Template>
+                </Thumb>
+            </Grid>
+
+            <Grid x:Name="EditorPane" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
@@ -278,7 +400,38 @@
                     </StackPanel>
                 </Border>
 
-                <Border Grid.Row="1" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="1" Margin="8" CornerRadius="4">
+                <!-- Find / replace bar for the editor (mirrors the find in preview bar) -->
+                <Border x:Name="EditorFindBar" Grid.Row="1" Visibility="Collapsed" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0,0,0,1" Padding="8,4">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Button x:Name="EditorFindToggleReplace" Grid.Row="0" Grid.Column="0" Style="{StaticResource PaneHeaderButton}" Margin="0,0,4,0" Content="&#xE76C;" ToolTip="Toggle Replace (Ctrl+H)" Click="EditorFindToggleReplace_Click" />
+                        <TextBox x:Name="EditorFindBox" Grid.Row="0" Grid.Column="1" VerticalContentAlignment="Center" Padding="2,1" ToolTip="Find" TextChanged="EditorFindBox_TextChanged" PreviewKeyDown="EditorFindBox_PreviewKeyDown" />
+                        <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
+                            <CheckBox x:Name="EditorFindMatchCase" Content="Aa" ToolTip="Match Case" Margin="8,0,0,0" VerticalAlignment="Center" Click="EditorFindMatchCase_Click" />
+                            <TextBlock x:Name="EditorFindStatus" MinWidth="72" Margin="8,0,4,0" TextAlignment="Right" VerticalAlignment="Center" Foreground="Gray" />
+                            <Button Style="{StaticResource PaneHeaderButton}" Content="&#xE70E;" ToolTip="Previous Match (Shift+Enter / Shift+F3)" Click="EditorFindPrevious_Click" />
+                            <Button Style="{StaticResource PaneHeaderButton}" Content="&#xE70D;" ToolTip="Next Match (Enter / F3)" Click="EditorFindNext_Click" />
+                            <Button Style="{StaticResource PaneHeaderButton}" Content="&#xE711;" ToolTip="Close (Esc)" Click="EditorFindClose_Click" />
+                        </StackPanel>
+
+                        <TextBox x:Name="EditorReplaceBox" Grid.Row="1" Grid.Column="1" Margin="0,4,0,0" Visibility="Collapsed" VerticalContentAlignment="Center" Padding="2,1" ToolTip="Replace" PreviewKeyDown="EditorReplaceBox_PreviewKeyDown" />
+                        <StackPanel x:Name="EditorReplaceActions" Grid.Row="1" Grid.Column="2" Orientation="Horizontal" Margin="8,4,0,0" Visibility="Collapsed">
+                            <Button Content="Replace" Padding="8,0" Margin="0,0,4,0" ToolTip="Replace (Enter)" Click="EditorReplace_Click" />
+                            <Button Content="Replace All" Padding="8,0" ToolTip="Replace All (Ctrl+Enter)" Click="EditorReplaceAll_Click" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Row="2" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="1" Margin="8" CornerRadius="4">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -344,6 +497,9 @@
                                     </ContextMenu>
                                 </RichTextBox.ContextMenu>
                             </RichTextBox>
+                            <editor:FindHighlightOverlay x:Name="EditorFindOverlay"
+                                                     IsHitTestVisible="False"
+                                                     Panel.ZIndex="40" />
                             <editor:BracketHighlightOverlay x:Name="BracketOverlay"
                                                         IsHitTestVisible="False"
                                                         Panel.ZIndex="99" />
@@ -358,7 +514,7 @@
             </Grid>
 
             <!-- Animated Grid Splitter -->
-            <GridSplitter x:Name="SplitterColumn" Grid.Column="1" Background="Transparent" AutomationProperties.AutomationId="SplitterColumn">
+            <GridSplitter x:Name="SplitterColumn" Grid.Column="2" Background="Transparent" AutomationProperties.AutomationId="SplitterColumn">
                 <GridSplitter.Style>
                     <Style TargetType="GridSplitter">
                         <Setter Property="Width" Value="6" />
@@ -394,7 +550,7 @@
             </GridSplitter>
 
             <!-- Animated Preview Pane Opacity -->
-            <Grid x:Name="PreviewPane" Grid.Column="2">
+            <Grid x:Name="PreviewPane" Grid.Column="3">
                 <Grid.Style>
                     <Style TargetType="Grid">
                         <Setter Property="Opacity" Value="1" />
@@ -425,6 +581,7 @@
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
@@ -432,7 +589,19 @@
                     <TextBlock Text="PREVIEW" FontSize="12" Foreground="Gray" VerticalAlignment="Center" />
                 </Border>
 
-                <Border Grid.Row="1" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="1" Margin="8" CornerRadius="4">
+                <!-- Find in preview bar (its own row: WPF content cannot overlay the WebView2 HWND) -->
+                <Border x:Name="PreviewFindBar" Grid.Row="1" Visibility="Collapsed" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0,0,0,1" Padding="8,4">
+                    <DockPanel LastChildFill="True">
+                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE711;" ToolTip="Close (Esc)" Click="PreviewFindClose_Click" />
+                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE70D;" ToolTip="Next Match (Enter / F3)" Click="PreviewFindNext_Click" />
+                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE70E;" ToolTip="Previous Match (Shift+Enter / Shift+F3)" Click="PreviewFindPrevious_Click" />
+                        <TextBlock x:Name="PreviewFindStatus" DockPanel.Dock="Right" MinWidth="72" Margin="8,0,4,0" TextAlignment="Right" VerticalAlignment="Center" Foreground="Gray" />
+                        <CheckBox x:Name="PreviewFindMatchCase" DockPanel.Dock="Right" Content="Aa" ToolTip="Match Case" Margin="8,0,0,0" VerticalAlignment="Center" Click="PreviewFindMatchCase_Click" />
+                        <TextBox x:Name="PreviewFindBox" VerticalContentAlignment="Center" Padding="2,1" TextChanged="PreviewFindBox_TextChanged" PreviewKeyDown="PreviewFindBox_PreviewKeyDown" />
+                    </DockPanel>
+                </Border>
+
+                <Border Grid.Row="2" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="1" Margin="8" CornerRadius="4">
                     <wpf:WebView2 x:Name="MarkdownPreview"
                                   NavigationStarting="MarkdownPreview_NavigationStarting" />
                 </Border>

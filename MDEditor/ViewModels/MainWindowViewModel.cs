@@ -118,6 +118,26 @@ public sealed partial class MainWindowViewModel : ObservableObject
 
     public Action? ExportPdfCallback { get; set; }
 
+    /// <summary>
+    /// Callback for toggling the outline (table of contents) panel.
+    /// </summary>
+    public Action? ToggleOutlineCallback { get; set; }
+
+    /// <summary>
+    /// Callback for opening the find bar in the preview pane.
+    /// </summary>
+    public Action? FindInPreviewCallback { get; set; }
+
+    /// <summary>
+    /// Callback for opening the print preview window.
+    /// </summary>
+    public Action? PrintPreviewCallback { get; set; }
+
+    /// <summary>
+    /// Callback for entering/leaving full-screen presentation mode.
+    /// </summary>
+    public Action? PresentationModeCallback { get; set; }
+
     public MainWindowViewModel(ISettingsService settingsService, INavigationService navigationService, ILoggingService loggingService)
     {
         _settingsService = settingsService;
@@ -265,6 +285,34 @@ public sealed partial class MainWindowViewModel : ObservableObject
     {
         _loggingService.LogInformation("Toggle line numbers requested");
         ToggleLineNumbersCallback?.Invoke();
+    }
+
+    [RelayCommand]
+    private void ToggleOutline()
+    {
+        _loggingService.LogInformation("Toggle outline requested");
+        ToggleOutlineCallback?.Invoke();
+    }
+
+    [RelayCommand]
+    private void FindInPreview()
+    {
+        _loggingService.LogInformation("Find in preview requested");
+        FindInPreviewCallback?.Invoke();
+    }
+
+    [RelayCommand]
+    private void PrintPreview()
+    {
+        _loggingService.LogInformation("Print preview requested");
+        PrintPreviewCallback?.Invoke();
+    }
+
+    [RelayCommand]
+    private void PresentationMode()
+    {
+        _loggingService.LogInformation("Presentation mode requested");
+        PresentationModeCallback?.Invoke();
     }
 
     [RelayCommand]

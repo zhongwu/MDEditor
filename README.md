@@ -11,7 +11,7 @@ A modern **Markdown desktop editor** built with **WPF** and **.NET 10**, featuri
 | **3. Toolbar & Formatting** | ✅ Complete | All format commands, menus, toolbar |
 | **4. File Operations** | Mostly Done | New/Open/Save/Save As/Export HTML, drag & drop |
 | **5. GitHub Integration** | ⏳ Not Started | Auth, repo browser, sync |
-| **6. Advanced Features** | ⏳ Not Started | Autocomplete, themes, settings |
+| **6. Advanced Features** | 🔄 In Progress | 6.1 editor enhancements and 6.2 preview enhancements done; settings & themes pending |
 | **7. Polish & Release** | ⏳ Not Started | Tests, packaging, docs |
 
 ## Implemented Features
@@ -23,6 +23,12 @@ A modern **Markdown desktop editor** built with **WPF** and **.NET 10**, featuri
 - **Mermaid diagrams**: Flowcharts, sequence, pie, gantt, class diagrams
 - **Click-to-sync preview**: Click in editor → preview scrolls to corresponding position
 - **Real-time updates** (300ms debounced)
+
+### Preview Enhancements
+- **Outline / TOC panel** (Ctrl+Shift+E): Collapsible heading tree; click a heading to jump the editor and preview to it; highlights the section containing the caret; resizable
+- **Find in preview** (Ctrl+Shift+F, or Ctrl+F while the preview has focus): Highlights all matches, match count, next/previous (Enter / Shift+Enter, F3 / Shift+F3), match case
+- **Print preview** (Ctrl+P): Separate window with the browser print preview plus the Windows print dialog
+- **Presentation mode** (F5): Full-screen preview with larger type that follows editor changes live; Esc or F5 to exit
 
 ### Rich Formatting Toolbar
 | Category | Actions |
@@ -37,7 +43,7 @@ A modern **Markdown desktop editor** built with **WPF** and **.NET 10**, featuri
 ### Editor Features
 - **Syntax highlighting**: Headings, code blocks, inline code, bold, italic, strikethrough, links, images, blockquotes, lists, horizontal rules
 - **Line numbers**: Paragraph-based, aligned with editor content
-- **Find/Replace** (Ctrl+F / Ctrl+H): Single-instance dialogs, proper text highlighting, status inline with buttons
+- **Find/Replace** (Ctrl+F / Ctrl+H): Find bar above the editor — live search while typing, all matches highlighted, match count, next/previous (Enter / Shift+Enter, F3 / Shift+F3), match case, Replace (Enter) / Replace All (Ctrl+Enter, single undo step)
 - **Go to Line** (Ctrl+G): Paragraph-aware navigation with offset fallback
 - **Word wrap toggle** (Ctrl+Shift+W)
 - **Undo/Redo/Cut/Copy/Paste/Select All**: Standard editing commands
@@ -123,6 +129,10 @@ MDEditor.slnx
 | `Ctrl+Shift+P` | Toggle Preview |
 | `Ctrl+Shift+N` | Toggle Line Numbers |
 | `Ctrl+Shift+W` | Toggle Word Wrap |
+| `Ctrl+Shift+E` | Toggle Outline Panel |
+| `Ctrl+Shift+F` | Find in Preview |
+| `Ctrl+P` | Print Preview |
+| `F5` | Presentation Mode (Esc to exit) |
 
 ## Configuration
 

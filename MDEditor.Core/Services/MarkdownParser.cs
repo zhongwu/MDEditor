@@ -1,6 +1,12 @@
+using System.IO;
+using System.Net;
 using System.Text.RegularExpressions;
 using Markdig;
+using Markdig.Renderers;
+using Markdig.Renderers.Html;
+using Markdig.Syntax;
 using MDEditor.Core.Interfaces;
+using MDEditor.Core.Models;
 
 namespace MDEditor.Core.Services;
 
@@ -45,6 +51,53 @@ public class MarkdownParser : IMarkdownParser
         }
 
         return Markdown.ToHtml(markdown, _pipeline);
+    }
+
+    /// <summary>
+    /// Extracts the heading outline. Uses the same pipeline as rendering so
+    /// heading ids (from UseAutoIdentifiers / generic attributes) match the preview.
+    /// </summary>
+    public IReadOnlyList<OutlineItem> GetOutline(string markdown)
+    {
+        if (string.IsNullOrWhiteSpace(markdown))
+        {
+            return Array.Empty<OutlineItem>();
+        }
+
+        var document = Markdown.Parse(markdown, _pipeline);
+        var headings = new List<OutlineItem>();
+
+        foreach (var heading in document.Descendants<HeadingBlock>())
+        {
+            var title = GetHeadingText(heading);
+            if (string.IsNullOrWhiteSpace(title))
+                continue;
+
+            headings.Add(new OutlineItem(
+                Math.Clamp(heading.Level, 1, 6),
+                title,
+                heading.Line,
+                heading.TryGetAttributes()?.Id));
+        }
+
+        return OutlineItem.BuildTree(headings);
+    }
+
+    private string GetHeadingText(HeadingBlock heading)
+    {
+        if (heading.Inline == null)
+            return string.Empty;
+
+        // Render the heading inlines with HTML disabled: this yields the same text the
+        // preview shows (emoji, smart quotes, entities, link text) without any markup.
+        using var writer = new StringWriter();
+        var renderer = new HtmlRenderer(writer) { EnableHtmlForInline = false };
+        _pipeline.Setup(renderer);
+        renderer.WriteChildren(heading.Inline);
+        writer.Flush();
+
+        var text = WebUtility.HtmlDecode(writer.ToString());
+        return Regex.Replace(text, @"\s+", " ").Trim();
     }
 
     /// <summary>
@@ -96,6 +149,13 @@ public class MarkdownParser : IMarkdownParser
             "        .alert-danger { background: #ffebee; border-color: #d32f2f; }\n" +
             "        details { margin: 1em 0; }\n" +
             "        summary { cursor: pointer; font-weight: 600; }\n" +
+            "        @media print {\n" +
+            "            body { max-width: none; padding: 0; }\n" +
+            "            pre, blockquote, table, figure, img, .mermaid, .katex-display { page-break-inside: avoid; break-inside: avoid; }\n" +
+            "            h1, h2, h3, h4, h5, h6 { page-break-after: avoid; break-after: avoid; }\n" +
+            "            pre { white-space: pre-wrap; word-wrap: break-word; }\n" +
+            "            a { color: inherit; }\n" +
+            "        }\n" +
             "    </style>\n" +
             "</head>\n" +
             "<body>\n" +

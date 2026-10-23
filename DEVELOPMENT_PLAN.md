@@ -82,7 +82,7 @@
 - [x] Line numbers gutter (paragraph-based, aligned with editor)
 - [x] Basic editing features:
   - [x] Undo/Redo
-  - [x] Find/Replace (Ctrl+F, Ctrl+H) - single-instance dialogs
+  - [x] Find/Replace (Ctrl+F, Ctrl+H) - inline find bar above the editor (live search, highlights all matches, match count, F3 navigation, replace / replace all)
   - [x] Go to Line (Ctrl+G) - paragraph-aware + offset fallback
   - [x] Word wrap toggle
   - [x] Tab/Shift+Tab for indentation
@@ -222,12 +222,12 @@
 - [ ] Multiple cursors (Alt+Click) — deferred
 - [x] Minimap (code overview) — scaled document overview with viewport indicator and click/drag scrolling
 
-#### 6.2 Preview Enhancements
+#### 6.2 Preview Enhancements ✅ COMPLETED
 - [x] Scroll sync between editor and preview (bidirectional)
-- [ ] Outline/TOC panel (collapsible)
-- [ ] Find in preview
-- [ ] Print preview
-- [ ] Presentation mode (fullscreen preview)
+- [x] Outline/TOC panel (collapsible) — Markdig heading tree (`IMarkdownParser.GetOutline`), click/Enter to jump editor + preview, current-section highlight, expand/collapse all, resizable, persisted (Ctrl+Shift+E)
+- [x] Find in preview — find bar above the preview, highlights all matches, match count, next/prev (Enter/F3), match case; re-applied after live updates; hidden in print/PDF (Ctrl+Shift+F, Ctrl+F in preview)
+- [x] Print preview — dedicated window using WebView2 browser print preview + Windows print dialog, print-friendly CSS (Ctrl+P)
+- [x] Presentation mode (fullscreen preview) — borderless full-screen WebView2, larger type, live updates, opens at the current scroll position, Esc/F5 to exit (F5)
 
 #### 6.3 Settings & Customization
 - [ ] Theme: Light / Dark / System / Custom
