@@ -82,6 +82,7 @@ public partial class MainWindow : Window
     private System.Windows.Threading.DispatcherTimer? _autoSaveTimer;
     private readonly ISettingsService _settingsService;
     private readonly IGitHubAuthService _gitHubAuthService;
+    private readonly IGitHubRepositoryService _gitHubRepoService;
     private readonly List<string> _recentFiles = new();
 
     public MainWindow()
@@ -146,9 +147,12 @@ public partial class MainWindow : Window
         // Settings
         ViewModel.SettingsCallback = ShowSettingsWindow;
 
-        // GitHub (Phase 5.1)
+        // GitHub (Phase 5)
         ViewModel.GitHubAccountsCallback = ShowGitHubAccountsWindow;
+        ViewModel.OpenFromGitHubCallback = OpenFromGitHub;
+        ViewModel.GitHubSyncCallback = CommitToGitHub;
         _gitHubAuthService = App.Services.GetRequiredService<IGitHubAuthService>();
+        _gitHubRepoService = App.Services.GetRequiredService<IGitHubRepositoryService>();
         _gitHubAuthService.AccountsChanged += (s, e) => UpdateGitHubStatus();
         UpdateGitHubStatus();
 
@@ -526,6 +530,7 @@ public partial class MainWindow : Window
                     var encoding = DetectFileEncoding(file);
                     var content = System.IO.File.ReadAllText(file, encoding);
                     _currentFilePath = file;
+                    _gitHubDocument = null;
                     SetEditorText(content);
                     AddRecentFile(file);
                 }
@@ -1093,33 +1098,6 @@ public partial class MainWindow : Window
         _settingsWindow.Show();
     }
 
-    private GitHubAccountsWindow? _gitHubAccountsWindow;
-
-    internal void ShowGitHubAccountsWindow()
-    {
-        if (_gitHubAccountsWindow != null)
-        {
-            _gitHubAccountsWindow.Activate();
-            return;
-        }
-
-        _gitHubAccountsWindow = new GitHubAccountsWindow(_gitHubAuthService) { Owner = this };
-        _gitHubAccountsWindow.Closed += (s, e) => _gitHubAccountsWindow = null;
-        _gitHubAccountsWindow.Show();
-    }
-
-    private void UpdateGitHubStatus()
-    {
-        var active = _gitHubAuthService.ActiveAccount;
-        int count = _gitHubAuthService.Accounts.Count;
-        StatusGitHubAccount.Text = active?.Login ?? "Sign in";
-        StatusGitHubItem.ToolTip = active != null
-            ? $"GitHub: signed in as {active.Login}{(count > 1 ? $" ({count} accounts)" : string.Empty)}. Click to manage accounts."
-            : "GitHub: not signed in. Click to connect an account.";
-    }
-
-    private void StatusGitHub_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) => ShowGitHubAccountsWindow();
-
     private void OnThemeChanged(bool isDark)
     {
         ThemeService.ApplyTitleBar(this, isDark);
@@ -1278,12 +1256,16 @@ public partial class MainWindow : Window
 
     private void UpdateTitleBar()
     {
-        var fileName = string.IsNullOrEmpty(_currentFilePath)
-            ? "Untitled.md"
-            : System.IO.Path.GetFileName(_currentFilePath);
+        var fileName = _gitHubDocument != null
+            ? _gitHubDocument.FileName
+            : string.IsNullOrEmpty(_currentFilePath)
+                ? "Untitled.md"
+                : System.IO.Path.GetFileName(_currentFilePath);
+        var location = _gitHubDocument != null ? $" ({_gitHubDocument.RepoFullName}@{_gitHubDocument.Branch})" : "";
         var dirty = _isDirty ? " ●" : "";
-        Title = $"MDEditor - {fileName}{dirty}";
-        EditorFileName.Text = fileName;
+        Title = $"MDEditor - {fileName}{location}{dirty}";
+        EditorFileName.Text = fileName + location;
+        EditorFileName.ToolTip = _gitHubDocument?.DisplayName ?? _currentFilePath;
         EditorDirtyIndicator.Visibility = _isDirty ? Visibility.Visible : Visibility.Collapsed;
     }
 
@@ -1314,6 +1296,7 @@ public partial class MainWindow : Window
         }
 
         _currentFilePath = null;
+        _gitHubDocument = null;
         SetEditorText("");
     }
 
@@ -1340,6 +1323,7 @@ public partial class MainWindow : Window
                 var encoding = DetectFileEncoding(dialog.FileName);
                 var content = System.IO.File.ReadAllText(dialog.FileName, encoding);
                 _currentFilePath = dialog.FileName;
+                _gitHubDocument = null;
                 SetEditorText(content);
                 AddRecentFile(dialog.FileName);
             }
@@ -1352,6 +1336,12 @@ public partial class MainWindow : Window
 
     private void SaveFile()
     {
+        if (_gitHubDocument != null)
+        {
+            CommitToGitHub();
+            return;
+        }
+
         if (string.IsNullOrEmpty(_currentFilePath))
         {
             SaveAsFile();
@@ -1380,9 +1370,9 @@ public partial class MainWindow : Window
             Title = "Save Markdown File As",
             Filter = "Markdown Files (*.md)|*.md|Text Files (*.txt)|*.txt|All Files (*.*)|*.*",
             DefaultExt = ".md",
-            FileName = string.IsNullOrEmpty(_currentFilePath)
+            FileName = _gitHubDocument?.FileName ?? (string.IsNullOrEmpty(_currentFilePath)
                 ? "Untitled.md"
-                : System.IO.Path.GetFileName(_currentFilePath)
+                : System.IO.Path.GetFileName(_currentFilePath))
         };
 
         if (dialog.ShowDialog() == true)
@@ -1392,6 +1382,7 @@ public partial class MainWindow : Window
                 var text = MDEditor.Core.Services.LineEndingNormalizer.Normalize(GetEditorText(), _lineEnding);
                 System.IO.File.WriteAllText(dialog.FileName, text);
                 _currentFilePath = dialog.FileName;
+                _gitHubDocument = null;
                 _isDirty = false;
                 AddRecentFile(dialog.FileName);
                 UpdateTitleBar();
@@ -1657,6 +1648,7 @@ public partial class MainWindow : Window
                         var encoding = DetectFileEncoding(path);
                         var content = System.IO.File.ReadAllText(path, encoding);
                         _currentFilePath = path;
+                        _gitHubDocument = null;
                         SetEditorText(content);
                         AddRecentFile(path);
                     }

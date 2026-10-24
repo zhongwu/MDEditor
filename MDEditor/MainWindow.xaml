@@ -50,6 +50,7 @@
             <MenuItem Header="File">
                 <MenuItem Header="New" Command="{Binding NewFileCommand}" />
                 <MenuItem Header="Open..." Command="{Binding OpenFileCommand}" />
+                <MenuItem Header="Open from GitHub..." Command="{Binding OpenFromGitHubCommand}" />
                 <MenuItem Header="Recent Files" Name="RecentFilesMenu">
                     <MenuItem Header="(No recent files)" IsEnabled="False" />
                 </MenuItem>
@@ -128,7 +129,7 @@
                           Click="SmartTypography_Click" />
                 <Separator />
                 <MenuItem Header="GitHub Accounts..." Command="{Binding GitHubAccountsCommand}" />
-                <MenuItem Header="GitHub Sync" Command="{Binding GitHubSyncCommand}" />
+                <MenuItem Header="Commit to GitHub..." Command="{Binding GitHubSyncCommand}" />
                 <MenuItem Header="Settings" Command="{Binding SettingsCommand}" />
             </MenuItem>
             <MenuItem Header="Help">

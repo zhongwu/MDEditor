@@ -189,14 +189,15 @@
 - [x] Secure token storage — Windows Credential Manager (`CredentialManagerTokenStore`, targets `MDEditor:github:<login>`); only non-secret account metadata goes to settings.json
 - [x] Multi-account support — Tools > GitHub Accounts... (add / set active / remove), active account shown in the status bar; `IGitHubAuthService.CreateClient()` hands authenticated clients to 5.2+
 
-#### 5.2 Repository Operations
-- [ ] Browse repositories (list user/org repos)
-- [ ] Browse files in repository (tree view)
-- [ ] Open file from GitHub (download to temp, open in editor)
-- [ ] Save/Sync back to GitHub:
-  - [ ] Commit changes with message
-  - [ ] Create new branch / PR option
-  - [ ] Handle merge conflicts (basic)
+#### 5.2 Repository Operations ✅ COMPLETED
+- [x] Browse repositories (list user/org repos) — File > Open from GitHub...: filterable list (owned, collaborator, org), private/read-only markers, remembers the last repo
+- [x] Browse files in repository (tree view) — branch picker (default first), recursive tree with "Markdown files only" filter (folders without Markdown pruned), truncation warning for huge repos
+- [x] Open file from GitHub — downloaded straight into the editor (no temp file); title shows `file (owner/repo@branch)`; branch head commit pinned at open
+- [x] Save/Sync back to GitHub (Save, or Tools > Commit to GitHub...):
+  - [x] Commit changes with message (+ optional description); preserves the file's original line endings
+  - [x] Create new branch / PR option — branch created from the opened commit, optional PR into the original branch; later saves follow the new branch
+  - [x] Handle merge conflicts (basic) — stale SHA detected (409/422) → choose: commit to new branch (recommended), overwrite theirs, or discard mine and load theirs
+- Save As detaches the document from GitHub (becomes a local file); read-only repos explain that Save As is the way to keep changes
 
 #### 5.3 Version History
 - [ ] View commit history for current file

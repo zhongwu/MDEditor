@@ -133,6 +133,16 @@ public sealed partial class MainWindowViewModel : ObservableObject
     public Action? GitHubAccountsCallback { get; set; }
 
     /// <summary>
+    /// Callback for opening a file from a GitHub repository.
+    /// </summary>
+    public Action? OpenFromGitHubCallback { get; set; }
+
+    /// <summary>
+    /// Callback for committing the current GitHub file.
+    /// </summary>
+    public Action? GitHubSyncCallback { get; set; }
+
+    /// <summary>
     /// Callback for new file.
     /// </summary>
     public Action? NewFileCallback { get; set; }
@@ -539,7 +549,14 @@ public sealed partial class MainWindowViewModel : ObservableObject
     private void GitHubSync()
     {
         _loggingService.LogInformation("GitHub sync requested");
-        // TODO: Implement GitHub sync
+        GitHubSyncCallback?.Invoke();
+    }
+
+    [RelayCommand]
+    private void OpenFromGitHub()
+    {
+        _loggingService.LogInformation("Open from GitHub requested");
+        OpenFromGitHubCallback?.Invoke();
     }
 
     [RelayCommand]

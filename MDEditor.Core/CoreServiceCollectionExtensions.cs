@@ -34,6 +34,7 @@ public static class CoreServiceCollectionExtensions
             sp.GetRequiredService<ISettingsService>(),
             sp.GetRequiredService<ITokenStore>(),
             sp.GetRequiredService<ILoggingService>()));
+        services.AddSingleton<IGitHubRepositoryService, GitHubRepositoryService>();
 
         return services;
     }
