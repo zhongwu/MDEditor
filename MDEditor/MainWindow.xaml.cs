@@ -301,6 +301,17 @@ public partial class MainWindow : Window
 
         try
         {
+            // This scrolls the preview programmatically, which the preview's injected scroll
+            // listener reports back via postMessage like any other scroll. Without these guards
+            // Preview_WebMessageReceived would treat that as the user scrolling the preview and
+            // re-scroll the editor to match it - visibly jumping the editor's own view right
+            // after a click. The cooldown is longer than DoPreviewScrollSync's because the
+            // heading-match branch below uses a 'smooth' (animated) scroll, which keeps firing
+            // scroll events for a bit longer than an instant jump does.
+            _syncingScroll = true;
+            _syncCooldownUntil = DateTime.Now.AddMilliseconds(600);
+            Dispatcher.BeginInvoke(new Action(() => _syncingScroll = false), System.Windows.Threading.DispatcherPriority.Input);
+
             var fullText = GetEditorText();
             var caretRange = new TextRange(MarkdownEditor.Document.ContentStart, MarkdownEditor.CaretPosition);
             var caretText = caretRange.Text;
