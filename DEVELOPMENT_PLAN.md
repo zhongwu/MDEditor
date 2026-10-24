@@ -245,6 +245,18 @@
 - [x] Auto-save interval — configurable (10s-2min), applied live to the existing auto-save timer
 - [x] Line ending style (LF/CRLF) — applied on Save/Save As via `LineEndingNormalizer`; auto-save draft and HTML export stay unaffected
 
+#### 6.4 Multi-Language Support (UI Localization)
+- [ ] String externalization — move every user-visible string (menus, toolbar tooltips, dialogs, message boxes, status bar, Settings, GitHub windows) out of XAML/C# into `.resx` resources (`Resources/Strings.resx` as the English default + one `Strings.<culture>.resx` per language)
+- [ ] Localization service — `ILocalizationService` (current culture, available languages, `LanguageChanged` event) plus a XAML markup extension (e.g. `{loc:Tr Menu_File}`) so bindings refresh when the language changes
+- [ ] Language picker in Settings — "Match Windows" (default, follows `CultureInfo.CurrentUICulture`) or an explicit language; persisted as `appearance.language`; applied live without restart where possible (restart prompt as fallback)
+- [ ] Initial languages — English (default) plus at least one more (target list TBD); missing keys fall back to English
+- [ ] Culture-aware formatting — dates (history list, recovery prompts), numbers (word count, zoom %) via the selected culture; keep file content and Markdown output culture-invariant
+- [ ] Keyboard shortcut display — localize modifier names in menus/Settings (e.g. "Strg" for German) while keeping stored gestures invariant
+- [ ] Layout robustness — avoid fixed widths that clip longer translations (German/French run ~30% longer); verify dialogs with a pseudo-localized build (padded/accented strings)
+- [ ] Localized bundled content — Markdown Guide / user guide per language (fallback to English)
+- [ ] Right-to-left languages (stretch) — `FlowDirection.RightToLeft` for RTL cultures (Arabic, Hebrew) in the app chrome; editor/preview follow the document's own direction
+- [ ] Tests — every key in `Strings.resx` exists in each translation (or is intentionally English), no unused keys, format placeholders (`{0}`) match across languages
+
 ---
 
 ### Phase 7: Polish & Release (Week 7-8)
