@@ -1,5 +1,6 @@
 using System.IO;
 using MDEditor.Core.Interfaces;
+using MDEditor.Core.Models;
 using Microsoft.Web.WebView2.Core;
 
 namespace MDEditor.Preview;
@@ -32,10 +33,13 @@ internal static class PreviewHost
     /// <summary>
     /// Renders <paramref name="markdown"/> into an already-loaded preview document.
     /// When KaTeX/Mermaid are ready only the body is swapped (keeps scroll position);
-    /// otherwise the whole document is reloaded.
+    /// otherwise the whole document is reloaded. <paramref name="previewOptions"/> (dark theme /
+    /// custom CSS) only affects the full-reload path, since the body-swap script never touches
+    /// &lt;head&gt;/&lt;style&gt; - a theme/CSS change must force a full reload to take effect.
+    /// Pass null for export-portable/print rendering (always light, no custom CSS).
     /// </summary>
     /// <returns>True when a full navigation was started, false when the body was swapped in place.</returns>
-    public static async Task<bool> RenderAsync(CoreWebView2 webView, IMarkdownParser parser, string markdown)
+    public static async Task<bool> RenderAsync(CoreWebView2 webView, IMarkdownParser parser, string markdown, PreviewRenderOptions? previewOptions = null)
     {
         bool librariesReady;
         try
@@ -51,7 +55,9 @@ internal static class PreviewHost
 
         if (!librariesReady)
         {
-            var fullHtml = await Task.Run(() => parser.ToHtmlDocument(markdown));
+            var fullHtml = await Task.Run(() => previewOptions.HasValue
+                ? parser.ToHtmlDocument(markdown, previewOptions.Value)
+                : parser.ToHtmlDocument(markdown));
             webView.NavigateToString(fullHtml);
             return true;
         }

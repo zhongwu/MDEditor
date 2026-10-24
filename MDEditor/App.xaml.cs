@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MDEditor.Core;
+using MDEditor.Core.Interfaces;
+using MDEditor.Themes;
 using MDEditor.ViewModels;
 
 namespace MDEditor;
@@ -33,6 +35,12 @@ public partial class App : Application
             .Build();
 
         Services = _host.Services;
+
+        // Apply the persisted theme before MainWindow is constructed (StartupUri creates it
+        // after OnStartup returns), so the window's DynamicResource bindings resolve themed
+        // values from the first paint.
+        var settingsService = Services.GetRequiredService<ISettingsService>();
+        ThemeService.Apply(settingsService.Get("appearance.theme", "System"));
     }
 
     protected override void OnExit(ExitEventArgs e)

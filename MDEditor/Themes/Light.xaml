@@ -1,0 +1,17 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Re-keying these SystemColors brushes overrides them for every existing DynamicResource
+         consumer in MainWindow.xaml automatically - no XAML changes needed for those spots. -->
+    <SolidColorBrush x:Key="{x:Static SystemColors.ControlLightBrushKey}" Color="#F3F3F3" />
+    <SolidColorBrush x:Key="{x:Static SystemColors.ControlDarkBrushKey}" Color="#D6D6D6" />
+    <SolidColorBrush x:Key="{x:Static SystemColors.HotTrackBrushKey}" Color="#0066CC" />
+
+    <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="WindowForegroundBrush" Color="#1E1E1E" />
+    <SolidColorBrush x:Key="ControlBackgroundBrush" Color="#F3F3F3" />
+    <SolidColorBrush x:Key="ControlForegroundBrush" Color="#1E1E1E" />
+    <SolidColorBrush x:Key="EditorBackgroundBrush" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="EditorForegroundBrush" Color="#1E1E1E" />
+    <SolidColorBrush x:Key="AppBorderBrush" Color="#D6D6D6" />
+</ResourceDictionary>

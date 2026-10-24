@@ -235,14 +235,14 @@
 - [x] Print preview — dedicated window using WebView2 browser print preview + Windows print dialog, print-friendly CSS (Ctrl+P)
 - [x] Presentation mode (fullscreen preview) — borderless full-screen WebView2, larger type, live updates, opens at the current scroll position, Esc/F5 to exit (F5)
 
-#### 6.3 Settings & Customization
-- [ ] Theme: Light / Dark / System / Custom
-- [ ] Editor font family/size
-- [ ] Preview CSS customization
-- [ ] Keyboard shortcuts editor
-- [ ] Markdown flavor settings (GFM, CommonMark, etc.)
-- [ ] Auto-save interval
-- [ ] Line ending style (LF/CRLF)
+#### 6.3 Settings & Customization ✅ COMPLETED
+- [x] Theme: Light / Dark / System (follows `AppsUseLightTheme`) — app-wide resource-dictionary swap (`Themes/Light.xaml`, `Themes/Dark.xaml`), dark title bar via `DwmSetWindowAttribute`, themed preview CSS; no custom color picker
+- [x] Editor font family/size — curated font list + size picker in Settings; size is the base the zoom feature scales against
+- [x] Preview CSS customization — custom CSS textbox in Settings, appended after the base/dark stylesheet in the live preview only (exported/copied HTML stays portable)
+- [x] Keyboard shortcuts editor — rebind UI for the 10 commands that already have a real `KeyBinding` (Show Outline, Find, Replace, Go to Line, Find in Preview, Print Preview, Presentation Mode, Zoom In/Out/Reset), with conflict detection and reset-to-default; replaces the removed `CycleTheme` stub
+- [x] Markdown flavor settings — checkboxes for Math (KaTeX), Diagrams (Mermaid), Emoji, Footnotes, Task Lists (`IMarkdownParser.UpdateOptions`); core GFM parsing always on, not a full CommonMark/GFM preset switcher
+- [x] Auto-save interval — configurable (10s-2min), applied live to the existing auto-save timer
+- [x] Line ending style (LF/CRLF) — applied on Save/Save As via `LineEndingNormalizer`; auto-save draft and HTML export stay unaffected
 
 ---
 

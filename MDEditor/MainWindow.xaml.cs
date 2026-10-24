@@ -2,7 +2,9 @@
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
 using MDEditor.Core.Interfaces;
+using MDEditor.Core.Models;
 using MDEditor.Editor;
+using MDEditor.Themes;
 using MDEditor.ViewModels;
 using System;
 using System.Windows;
@@ -35,8 +37,33 @@ public partial class MainWindow : Window
     private string _lastRenderedMarkdown = string.Empty;
 
     // Zoom (editor font size + preview zoom, driven by the status bar zoom combo)
-    private const double BaseEditorFontSize = 14.0;
+    private double _baseEditorFontSize = 14.0;
     private const int DefaultZoomIndex = 2; // "100%" item in StatusZoomCombo
+
+    // Preview customization (Settings window wires the real value in; empty until then)
+    private string? _customCss;
+
+    // Line ending used when saving (Settings window changes this live)
+    private string _lineEnding = Environment.NewLine == "\n" ? "LF" : "CRLF";
+
+    // Keyboard shortcuts rebindable from the Settings window - only the commands that already
+    // have a real Window.InputBindings entry (per the known-true 10; zoom in/out also have a
+    // fixed, unlisted numpad alias binding that a rebind doesn't touch).
+    private static readonly (string Key, string Label, Func<MainWindowViewModel, ICommand> GetCommand)[] RebindableShortcuts =
+    {
+        ("toggleOutline", "Show Outline", vm => vm.ToggleOutlineCommand),
+        ("find", "Find", vm => vm.FindCommand),
+        ("replace", "Replace", vm => vm.ReplaceCommand),
+        ("goToLine", "Go to Line", vm => vm.GoToLineCommand),
+        ("findInPreview", "Find in Preview", vm => vm.FindInPreviewCommand),
+        ("printPreview", "Print Preview", vm => vm.PrintPreviewCommand),
+        ("presentationMode", "Presentation Mode", vm => vm.PresentationModeCommand),
+        ("zoomIn", "Zoom In", vm => vm.ZoomInCommand),
+        ("zoomOut", "Zoom Out", vm => vm.ZoomOutCommand),
+        ("resetZoom", "Reset Zoom", vm => vm.ResetZoomCommand),
+    };
+
+    private readonly Dictionary<string, (ModifierKeys Modifiers, Key Key)> _defaultShortcuts = new();
 
     // Editor enhancements (Phase 6.1)
     private const int MaxEditorFeatureLength = 1_000_000;
@@ -73,6 +100,21 @@ public partial class MainWindow : Window
         _scrollSyncEnabled = _settingsService.Get<bool>("editor.scrollSync", true);
         _smartTypographyEnabled = _settingsService.Get<bool>("editor.smartTypography", true);
 
+        // Phase 6.3: settings-driven editor/preview/markdown customization
+        _baseEditorFontSize = _settingsService.Get("editor.fontSize", 14.0);
+        _customCss = _settingsService.Get<string?>("preview.customCss", null);
+        _lineEnding = _settingsService.Get("editor.lineEnding", _lineEnding);
+        MarkdownEditor.FontFamily = new FontFamily(_settingsService.Get("editor.fontFamily", "Cascadia Code, Consolas, monospace"));
+        StatusLineEnding.Text = _lineEnding;
+        _markdownParser.UpdateOptions(new MarkdownParserOptions
+        {
+            EnableMath = _settingsService.Get("markdown.enableMath", true),
+            EnableDiagrams = _settingsService.Get("markdown.enableDiagrams", true),
+            EnableEmoji = _settingsService.Get("markdown.enableEmoji", true),
+            EnableFootnotes = _settingsService.Get("markdown.enableFootnotes", true),
+            EnableTaskLists = _settingsService.Get("markdown.enableTaskLists", true),
+        });
+
         ViewModel.TogglePreviewCallback = TogglePreview;
         ViewModel.InsertMarkdownCallback = InsertMarkdown;
         ViewModel.UndoCallback = () => MarkdownEditor.Undo();
@@ -100,6 +142,9 @@ public partial class MainWindow : Window
         ViewModel.ZoomOutCallback = ZoomOut;
         ViewModel.ResetZoomCallback = ResetZoom;
 
+        // Settings
+        ViewModel.SettingsCallback = ShowSettingsWindow;
+
         // Phase 6.2: outline panel, find in preview, print preview, presentation mode
         ViewModel.ToggleOutlineCallback = ToggleOutline;
         ViewModel.FindInPreviewCallback = ShowPreviewFind;
@@ -118,6 +163,14 @@ public partial class MainWindow : Window
             if (e.PropertyName == nameof(ViewModel.IsEditorVisible) || e.PropertyName == nameof(ViewModel.IsPreviewVisible))
                 OnPaneVisibilityChanged();
         };
+
+        // Re-color the title bar and re-render the (themed) preview whenever the theme changes.
+        ThemeService.ThemeChanged += OnThemeChanged;
+
+        // KeyBinding.Command bindings only resolve once DataContext is set, so this must run
+        // after the assignment above - otherwise every kb.Command would still be null and the
+        // lookup-by-command-reference below would silently match nothing.
+        InitializeShortcuts();
 
         StatusZoomCombo.SelectedIndex = _settingsService.Get("editor.zoomIndex", DefaultZoomIndex);
 
@@ -221,10 +274,10 @@ public partial class MainWindow : Window
         // Load recent files
         LoadRecentFiles();
 
-        // Setup auto-save timer (every 30 seconds)
+        // Setup auto-save timer
         _autoSaveTimer = new System.Windows.Threading.DispatcherTimer
         {
-            Interval = TimeSpan.FromSeconds(30)
+            Interval = TimeSpan.FromSeconds(_settingsService.Get("editor.autoSaveIntervalSeconds", 30))
         };
         _autoSaveTimer.Tick += (s, e) =>
         {
@@ -234,6 +287,12 @@ public partial class MainWindow : Window
 
         // Check for crash recovery
         CheckCrashRecovery();
+    }
+
+    protected override void OnSourceInitialized(EventArgs e)
+    {
+        base.OnSourceInitialized(e);
+        ThemeService.ApplyTitleBar(this, ThemeService.IsDark);
     }
 
     private void SyncPreviewToCaret()
@@ -843,7 +902,7 @@ public partial class MainWindow : Window
         try
         {
             await EnsurePreviewAsync();
-            var html = _markdownParser.ToHtmlDocument(GetEditorText());
+            var html = _markdownParser.ToHtmlDocument(GetEditorText(), GetPreviewRenderOptions());
             MarkdownPreview.NavigateToString(html);
             _lastRenderedMarkdown = GetEditorText();
 
@@ -852,6 +911,193 @@ public partial class MainWindow : Window
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"WebView2 initialization failed: {ex.Message}");
+        }
+    }
+
+    private PreviewRenderOptions GetPreviewRenderOptions() => new(ThemeService.IsDark, _customCss);
+
+    // --- Settings window hooks: these apply a change live; the Settings window itself persists
+    // the value via ISettingsService before calling in. ---
+
+    internal void SetBaseEditorFontSize(double size)
+    {
+        _baseEditorFontSize = size;
+        _ = ApplyZoomAsync(GetCurrentZoomFactor());
+    }
+
+    internal void SetEditorFontFamily(string family)
+    {
+        MarkdownEditor.FontFamily = new FontFamily(family);
+    }
+
+    internal void SetAutoSaveInterval(int seconds)
+    {
+        if (_autoSaveTimer != null)
+            _autoSaveTimer.Interval = TimeSpan.FromSeconds(seconds);
+    }
+
+    internal void SetLineEnding(string ending)
+    {
+        _lineEnding = ending;
+        StatusLineEnding.Text = ending;
+    }
+
+    internal void SetCustomCss(string? css)
+    {
+        _customCss = css;
+        ReloadPreviewFull();
+    }
+
+    internal void SetMarkdownOptions(MarkdownParserOptions options)
+    {
+        _markdownParser.UpdateOptions(options);
+        ReloadPreviewFull();
+    }
+
+    private void InitializeShortcuts()
+    {
+        foreach (var (key, _, getCommand) in RebindableShortcuts)
+        {
+            var binding = FindShortcutBinding(key, getCommand);
+            if (binding == null) continue;
+
+            _defaultShortcuts[key] = (binding.Modifiers, binding.Key);
+
+            var overrideGesture = _settingsService.Get<string?>($"shortcuts.overrides.{key}", null);
+            if (overrideGesture != null && TryParseGesture(overrideGesture, out var modifiers, out var parsedKey))
+            {
+                binding.Modifiers = modifiers;
+                binding.Key = parsedKey;
+            }
+        }
+    }
+
+    private KeyBinding? FindShortcutBinding(string key, Func<MainWindowViewModel, ICommand> getCommand)
+    {
+        var command = getCommand(ViewModel);
+        return InputBindings.OfType<KeyBinding>().FirstOrDefault(kb => kb.Command == command);
+    }
+
+    private static string FormatGesture(ModifierKeys modifiers, Key key)
+    {
+        var parts = new List<string>();
+        if (modifiers.HasFlag(ModifierKeys.Control)) parts.Add("Ctrl");
+        if (modifiers.HasFlag(ModifierKeys.Shift)) parts.Add("Shift");
+        if (modifiers.HasFlag(ModifierKeys.Alt)) parts.Add("Alt");
+        if (modifiers.HasFlag(ModifierKeys.Windows)) parts.Add("Win");
+        parts.Add(key.ToString());
+        return string.Join("+", parts);
+    }
+
+    private static bool TryParseGesture(string gesture, out ModifierKeys modifiers, out Key key)
+    {
+        modifiers = ModifierKeys.None;
+        key = Key.None;
+
+        var parts = gesture.Split('+', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        if (parts.Length == 0) return false;
+
+        for (int i = 0; i < parts.Length - 1; i++)
+        {
+            modifiers |= parts[i] switch
+            {
+                "Ctrl" => ModifierKeys.Control,
+                "Shift" => ModifierKeys.Shift,
+                "Alt" => ModifierKeys.Alt,
+                "Win" => ModifierKeys.Windows,
+                _ => ModifierKeys.None,
+            };
+        }
+
+        return Enum.TryParse(parts[^1], out key);
+    }
+
+    /// <summary>Rows for the Settings window's Keyboard Shortcuts tab: key, display label, current gesture text.</summary>
+    internal IReadOnlyList<(string Key, string Label, string Gesture)> GetShortcutRows() =>
+        RebindableShortcuts
+            .Select(s =>
+            {
+                var binding = FindShortcutBinding(s.Key, s.GetCommand);
+                var gesture = binding != null ? FormatGesture(binding.Modifiers, binding.Key) : "(unbound)";
+                return (s.Key, s.Label, gesture);
+            })
+            .ToList();
+
+    /// <summary>Checks the proposed gesture against the other 9 tracked shortcuts (not all 53 commands).</summary>
+    internal string? FindShortcutConflict(string key, ModifierKeys modifiers, Key newKey)
+    {
+        foreach (var (otherKey, label, getCommand) in RebindableShortcuts)
+        {
+            if (otherKey == key) continue;
+            var binding = FindShortcutBinding(otherKey, getCommand);
+            if (binding != null && binding.Modifiers == modifiers && binding.Key == newKey)
+                return label;
+        }
+        return null;
+    }
+
+    internal void SetShortcut(string key, ModifierKeys modifiers, Key newKey)
+    {
+        var entry = RebindableShortcuts.FirstOrDefault(s => s.Key == key);
+        var binding = FindShortcutBinding(key, entry.GetCommand);
+        if (binding == null) return;
+
+        binding.Modifiers = modifiers;
+        binding.Key = newKey;
+        _settingsService.Set($"shortcuts.overrides.{key}", FormatGesture(modifiers, newKey));
+    }
+
+    internal void ResetShortcut(string key)
+    {
+        if (!_defaultShortcuts.TryGetValue(key, out var original)) return;
+
+        var entry = RebindableShortcuts.FirstOrDefault(s => s.Key == key);
+        var binding = FindShortcutBinding(key, entry.GetCommand);
+        if (binding == null) return;
+
+        binding.Modifiers = original.Modifiers;
+        binding.Key = original.Key;
+        _settingsService.Remove($"shortcuts.overrides.{key}");
+    }
+
+    private SettingsWindow? _settingsWindow;
+
+    internal void ShowSettingsWindow()
+    {
+        if (_settingsWindow != null)
+        {
+            _settingsWindow.Activate();
+            return;
+        }
+
+        _settingsWindow = new SettingsWindow(this, _settingsService, _markdownParser) { Owner = this };
+        _settingsWindow.Closed += (s, e) => _settingsWindow = null;
+        _settingsWindow.Show();
+    }
+
+    private void OnThemeChanged(bool isDark)
+    {
+        ThemeService.ApplyTitleBar(this, isDark);
+        ReloadPreviewFull();
+    }
+
+    /// <summary>
+    /// Forces a full preview re-navigation (bypassing PreviewHost's body-swap fast path, which
+    /// never touches &lt;head&gt;/&lt;style&gt;) so theme, custom-CSS, and markdown-flavor changes
+    /// actually take effect in the live preview.
+    /// </summary>
+    private async void ReloadPreviewFull()
+    {
+        try
+        {
+            await EnsurePreviewAsync();
+            var html = _markdownParser.ToHtmlDocument(GetEditorText(), GetPreviewRenderOptions());
+            MarkdownPreview.NavigateToString(html);
+            _lastRenderedMarkdown = GetEditorText();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"ReloadPreviewFull failed: {ex.Message}");
         }
     }
 
@@ -910,7 +1156,7 @@ public partial class MainWindow : Window
             {
                 await EnsurePreviewAsync();
                 var initMarkdown = GetEditorText();
-                var initHtml = await Task.Run(() => _markdownParser.ToHtmlDocument(initMarkdown));
+                var initHtml = await Task.Run(() => _markdownParser.ToHtmlDocument(initMarkdown, GetPreviewRenderOptions()));
                 MarkdownPreview.NavigateToString(initHtml);
                 _lastRenderedMarkdown = initMarkdown;
                 return;
@@ -927,7 +1173,7 @@ public partial class MainWindow : Window
 
             // Full navigations re-apply the find highlights from NavigationCompleted;
             // in-place body swaps drop them, so re-apply here.
-            var navigated = await MDEditor.Preview.PreviewHost.RenderAsync(MarkdownPreview.CoreWebView2, _markdownParser, markdown);
+            var navigated = await MDEditor.Preview.PreviewHost.RenderAsync(MarkdownPreview.CoreWebView2, _markdownParser, markdown, GetPreviewRenderOptions());
             if (!navigated)
                 RestorePreviewFind();
         }
@@ -1069,7 +1315,7 @@ public partial class MainWindow : Window
 
         try
         {
-            var text = GetEditorText();
+            var text = MDEditor.Core.Services.LineEndingNormalizer.Normalize(GetEditorText(), _lineEnding);
             System.IO.File.WriteAllText(_currentFilePath, text);
             _isDirty = false;
             if (!string.IsNullOrEmpty(_currentFilePath))
@@ -1098,7 +1344,7 @@ public partial class MainWindow : Window
         {
             try
             {
-                var text = GetEditorText();
+                var text = MDEditor.Core.Services.LineEndingNormalizer.Normalize(GetEditorText(), _lineEnding);
                 System.IO.File.WriteAllText(dialog.FileName, text);
                 _currentFilePath = dialog.FileName;
                 _isDirty = false;
@@ -1456,8 +1702,8 @@ public partial class MainWindow : Window
     /// <summary>Scales the editor font/gutter and the preview's CSS zoom together.</summary>
     private async Task ApplyZoomAsync(double zoom)
     {
-        MarkdownEditor.FontSize = BaseEditorFontSize * zoom;
-        LineNumberGutter.NumberFontSize = BaseEditorFontSize * zoom;
+        MarkdownEditor.FontSize = _baseEditorFontSize * zoom;
+        LineNumberGutter.NumberFontSize = _baseEditorFontSize * zoom;
         LineNumberGutter.Refresh();
 
         if (MarkdownPreview.CoreWebView2 != null)

@@ -5,6 +5,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using MDEditor.Themes;
 
 namespace MDEditor.Editor;
 
@@ -29,13 +30,11 @@ public sealed class MinimapControl : Grid
     public MinimapControl()
     {
         Width = 100;
-        Background = new SolidColorBrush(Color.FromRgb(0xF2, 0xF2, 0xF2));
 
         _textBlock = new TextBlock
         {
             FontFamily = new FontFamily("Cascadia Code, Consolas, monospace"),
             FontSize = 4,
-            Foreground = new SolidColorBrush(Colors.Black),
             TextWrapping = TextWrapping.Wrap,
             IsHitTestVisible = false
         };
@@ -63,6 +62,15 @@ public sealed class MinimapControl : Grid
 
         Cursor = Cursors.Hand;
         ClipToBounds = true;
+
+        ApplyTheme(ThemeService.IsDark);
+        ThemeService.ThemeChanged += isDark => ApplyTheme(isDark);
+    }
+
+    private void ApplyTheme(bool isDark)
+    {
+        Background = new SolidColorBrush(isDark ? Color.FromRgb(0x16, 0x1B, 0x22) : Color.FromRgb(0xF2, 0xF2, 0xF2));
+        _textBlock.Foreground = new SolidColorBrush(isDark ? Colors.White : Colors.Black);
     }
 
     public void Attach(RichTextBox editor)

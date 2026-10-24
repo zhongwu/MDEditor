@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using MDEditor.Core.Interfaces;
+using MDEditor.Core.Models;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
 
@@ -56,6 +57,12 @@ public sealed class PreviewWindow : Window
     private readonly IMarkdownParser _parser;
     private readonly PreviewWindowMode _mode;
     private readonly double _initialScrollPct;
+
+    // Presentation mode mirrors the live app theme/custom CSS; print preview always renders
+    // light with no custom CSS regardless of the app's current theme (printing a dark
+    // background wastes ink, and most print/PDF engines handle it poorly).
+    private readonly PreviewRenderOptions? _previewOptions;
+
     private string _markdown;
     private bool _ready;
     private bool _firstNavigationDone;
@@ -63,14 +70,17 @@ public sealed class PreviewWindow : Window
     private string? _pendingMarkdown;
     private bool _closing;
 
-    public PreviewWindow(IMarkdownParser parser, string markdown, PreviewWindowMode mode, double initialScrollPct = 0)
+    public PreviewWindow(IMarkdownParser parser, string markdown, PreviewWindowMode mode, double initialScrollPct = 0, PreviewRenderOptions? previewOptions = null)
     {
         _parser = parser;
         _markdown = markdown;
         _mode = mode;
         _initialScrollPct = Math.Clamp(initialScrollPct, 0, 1);
+        _previewOptions = mode == PreviewWindowMode.Presentation ? previewOptions : null;
 
-        Background = Brushes.White;
+        Background = _previewOptions?.IsDarkTheme == true
+            ? new SolidColorBrush(Color.FromRgb(0x0D, 0x11, 0x17))
+            : Brushes.White;
         ShowInTaskbar = mode == PreviewWindowMode.Presentation;
 
         if (mode == PreviewWindowMode.Presentation)
@@ -142,7 +152,9 @@ public sealed class PreviewWindow : Window
             if (_mode == PreviewWindowMode.Presentation)
                 await core.AddScriptToExecuteOnDocumentCreatedAsync(PresentationScript);
 
-            var html = await Task.Run(() => _parser.ToHtmlDocument(_markdown));
+            var html = await Task.Run(() => _previewOptions.HasValue
+                ? _parser.ToHtmlDocument(_markdown, _previewOptions.Value)
+                : _parser.ToHtmlDocument(_markdown));
             if (_closing) return;
             core.NavigateToString(html);
         }
@@ -211,7 +223,7 @@ public sealed class PreviewWindow : Window
         _rendering = true;
         try
         {
-            await PreviewHost.RenderAsync(_webView.CoreWebView2, _parser, markdown);
+            await PreviewHost.RenderAsync(_webView.CoreWebView2, _parser, markdown, _previewOptions);
         }
         catch (Exception ex)
         {

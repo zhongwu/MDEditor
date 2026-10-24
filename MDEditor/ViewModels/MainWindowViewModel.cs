@@ -123,6 +123,11 @@ public sealed partial class MainWindowViewModel : ObservableObject
     public Action? ResetZoomCallback { get; set; }
 
     /// <summary>
+    /// Callback for opening the Settings window.
+    /// </summary>
+    public Action? SettingsCallback { get; set; }
+
+    /// <summary>
     /// Callback for new file.
     /// </summary>
     public Action? NewFileCallback { get; set; }
@@ -376,13 +381,6 @@ public sealed partial class MainWindowViewModel : ObservableObject
         ResetZoomCallback?.Invoke();
     }
 
-    [RelayCommand]
-    private void CycleTheme()
-    {
-        _loggingService.LogInformation("Cycle theme requested");
-        // TODO: Implement theme cycling
-    }
-
     // Format commands
     [RelayCommand]
     private void Heading1()
@@ -536,7 +534,7 @@ public sealed partial class MainWindowViewModel : ObservableObject
     private void Settings()
     {
         _loggingService.LogInformation("Settings requested");
-        // TODO: Implement settings dialog
+        SettingsCallback?.Invoke();
     }
 
     // Help commands

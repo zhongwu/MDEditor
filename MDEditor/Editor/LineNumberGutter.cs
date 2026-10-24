@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using MDEditor.Themes;
 
 namespace MDEditor.Editor;
 
@@ -18,8 +19,9 @@ public sealed class LineNumberGutter : FrameworkElement
 
     private static readonly Typeface NumberTypeface = new(new FontFamily("Cascadia Code, Consolas, monospace"), FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
     private static readonly Typeface CurrentTypeface = new(new FontFamily("Cascadia Code, Consolas, monospace"), FontStyles.Normal, FontWeights.SemiBold, FontStretches.Normal);
-    private static readonly Brush NumberBrush = CreateFrozen(new SolidColorBrush(Color.FromRgb(140, 140, 140)))!;
-    private static readonly Brush CurrentBrush = CreateFrozen(new SolidColorBrush(Color.FromRgb(40, 40, 40)))!;
+
+    private Brush _numberBrush = CreateFrozen(new SolidColorBrush(Color.FromRgb(140, 140, 140)))!;
+    private Brush _currentBrush = CreateFrozen(new SolidColorBrush(Color.FromRgb(40, 40, 40)))!;
 
     private RichTextBox? _editor;
     private int _digits = 2;
@@ -29,6 +31,16 @@ public sealed class LineNumberGutter : FrameworkElement
         IsHitTestVisible = false;
         Focusable = false;
         ClipToBounds = true;
+
+        ApplyTheme(ThemeService.IsDark);
+        ThemeService.ThemeChanged += isDark => ApplyTheme(isDark);
+    }
+
+    private void ApplyTheme(bool isDark)
+    {
+        _numberBrush = CreateFrozen(new SolidColorBrush(isDark ? Color.FromRgb(139, 148, 158) : Color.FromRgb(140, 140, 140)))!;
+        _currentBrush = CreateFrozen(new SolidColorBrush(isDark ? Color.FromRgb(230, 230, 230) : Color.FromRgb(40, 40, 40)))!;
+        InvalidateVisual();
     }
 
     public double NumberFontSize { get; set; } = 14;
@@ -61,7 +73,7 @@ public sealed class LineNumberGutter : FrameworkElement
 
     protected override Size MeasureOverride(Size availableSize)
     {
-        var sample = CreateText(new string('0', _digits), NumberTypeface, NumberBrush);
+        var sample = CreateText(new string('0', _digits), NumberTypeface, _numberBrush);
         return new Size(Math.Ceiling(sample.Width) + SidePadding * 2, 0);
     }
 
@@ -114,7 +126,7 @@ public sealed class LineNumberGutter : FrameworkElement
             bool current = paragraph == caretLine;
             var text = CreateText(number.ToString(CultureInfo.InvariantCulture),
                 current ? CurrentTypeface : NumberTypeface,
-                current ? CurrentBrush : NumberBrush);
+                current ? _currentBrush : _numberBrush);
 
             double x = ActualWidth - SidePadding - text.Width;
             double y = top + (rect.Height - text.Height) / 2;

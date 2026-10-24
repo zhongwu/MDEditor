@@ -512,7 +512,7 @@ public partial class MainWindow
             return;
         }
 
-        _presentationWindow = new PreviewWindow(_markdownParser, GetEditorText(), PreviewWindowMode.Presentation, GetEditorScrollPercent())
+        _presentationWindow = new PreviewWindow(_markdownParser, GetEditorText(), PreviewWindowMode.Presentation, GetEditorScrollPercent(), GetPreviewRenderOptions())
         {
             Owner = this
         };

@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
+using MDEditor.Themes;
 
 namespace MDEditor.Editor;
 
@@ -56,8 +57,6 @@ public sealed class CompletionPopup : Popup
 
         _border = new Border
         {
-            Background = new SolidColorBrush(Color.FromRgb(0xFE, 0xFE, 0xFE)),
-            BorderBrush = new SolidColorBrush(Color.FromRgb(0xC8, 0xC8, 0xC8)),
             BorderThickness = new Thickness(1),
             CornerRadius = new CornerRadius(4),
             Padding = new Thickness(2),
@@ -72,6 +71,16 @@ public sealed class CompletionPopup : Popup
         };
 
         Child = _border;
+
+        ApplyTheme(ThemeService.IsDark);
+        ThemeService.ThemeChanged += isDark => ApplyTheme(isDark);
+    }
+
+    private void ApplyTheme(bool isDark)
+    {
+        _border.Background = new SolidColorBrush(isDark ? Color.FromRgb(0x21, 0x26, 0x2D) : Color.FromRgb(0xFE, 0xFE, 0xFE));
+        _border.BorderBrush = new SolidColorBrush(isDark ? Color.FromRgb(0x30, 0x36, 0x3D) : Color.FromRgb(0xC8, 0xC8, 0xC8));
+        _list.Foreground = new SolidColorBrush(isDark ? Colors.White : Colors.Black);
     }
 
     public bool HasItems => _list.Items.Count > 0;
