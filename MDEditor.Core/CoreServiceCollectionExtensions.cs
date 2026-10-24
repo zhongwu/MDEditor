@@ -28,6 +28,13 @@ public static class CoreServiceCollectionExtensions
         services.AddSingleton<ILoggingService, LoggingService>();
         services.AddSingleton<IMarkdownParser, MarkdownParser>();
 
+        // GitHub (Phase 5)
+        services.AddSingleton<ITokenStore, CredentialManagerTokenStore>();
+        services.AddSingleton<IGitHubAuthService>(sp => new GitHubAuthService(
+            sp.GetRequiredService<ISettingsService>(),
+            sp.GetRequiredService<ITokenStore>(),
+            sp.GetRequiredService<ILoggingService>()));
+
         return services;
     }
 }

@@ -81,6 +81,7 @@ public partial class MainWindow : Window
     private bool _isDirty = false;
     private System.Windows.Threading.DispatcherTimer? _autoSaveTimer;
     private readonly ISettingsService _settingsService;
+    private readonly IGitHubAuthService _gitHubAuthService;
     private readonly List<string> _recentFiles = new();
 
     public MainWindow()
@@ -144,6 +145,12 @@ public partial class MainWindow : Window
 
         // Settings
         ViewModel.SettingsCallback = ShowSettingsWindow;
+
+        // GitHub (Phase 5.1)
+        ViewModel.GitHubAccountsCallback = ShowGitHubAccountsWindow;
+        _gitHubAuthService = App.Services.GetRequiredService<IGitHubAuthService>();
+        _gitHubAuthService.AccountsChanged += (s, e) => UpdateGitHubStatus();
+        UpdateGitHubStatus();
 
         // Phase 6.2: outline panel, find in preview, print preview, presentation mode
         ViewModel.ToggleOutlineCallback = ToggleOutline;
@@ -1085,6 +1092,33 @@ public partial class MainWindow : Window
         _settingsWindow.Closed += (s, e) => _settingsWindow = null;
         _settingsWindow.Show();
     }
+
+    private GitHubAccountsWindow? _gitHubAccountsWindow;
+
+    internal void ShowGitHubAccountsWindow()
+    {
+        if (_gitHubAccountsWindow != null)
+        {
+            _gitHubAccountsWindow.Activate();
+            return;
+        }
+
+        _gitHubAccountsWindow = new GitHubAccountsWindow(_gitHubAuthService) { Owner = this };
+        _gitHubAccountsWindow.Closed += (s, e) => _gitHubAccountsWindow = null;
+        _gitHubAccountsWindow.Show();
+    }
+
+    private void UpdateGitHubStatus()
+    {
+        var active = _gitHubAuthService.ActiveAccount;
+        int count = _gitHubAuthService.Accounts.Count;
+        StatusGitHubAccount.Text = active?.Login ?? "Sign in";
+        StatusGitHubItem.ToolTip = active != null
+            ? $"GitHub: signed in as {active.Login}{(count > 1 ? $" ({count} accounts)" : string.Empty)}. Click to manage accounts."
+            : "GitHub: not signed in. Click to connect an account.";
+    }
+
+    private void StatusGitHub_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) => ShowGitHubAccountsWindow();
 
     private void OnThemeChanged(bool isDark)
     {

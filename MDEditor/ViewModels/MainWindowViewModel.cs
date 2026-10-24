@@ -128,6 +128,11 @@ public sealed partial class MainWindowViewModel : ObservableObject
     public Action? SettingsCallback { get; set; }
 
     /// <summary>
+    /// Callback for opening the GitHub Accounts window.
+    /// </summary>
+    public Action? GitHubAccountsCallback { get; set; }
+
+    /// <summary>
     /// Callback for new file.
     /// </summary>
     public Action? NewFileCallback { get; set; }
@@ -523,6 +528,13 @@ public sealed partial class MainWindowViewModel : ObservableObject
     }
 
     // Tools commands
+    [RelayCommand]
+    private void GitHubAccounts()
+    {
+        _loggingService.LogInformation("GitHub accounts requested");
+        GitHubAccountsCallback?.Invoke();
+    }
+
     [RelayCommand]
     private void GitHubSync()
     {

@@ -127,6 +127,7 @@
                           IsChecked="True"
                           Click="SmartTypography_Click" />
                 <Separator />
+                <MenuItem Header="GitHub Accounts..." Command="{Binding GitHubAccountsCommand}" />
                 <MenuItem Header="GitHub Sync" Command="{Binding GitHubSyncCommand}" />
                 <MenuItem Header="Settings" Command="{Binding SettingsCommand}" />
             </MenuItem>
@@ -603,6 +604,13 @@
             <Separator />
             <StatusBarItem>
                 <TextBlock x:Name="StatusLineEnding" Text="LF" VerticalAlignment="Center" Margin="0,0,12,0" />
+            </StatusBarItem>
+            <Separator />
+            <StatusBarItem x:Name="StatusGitHubItem" Cursor="Hand" MouseLeftButtonUp="StatusGitHub_MouseLeftButtonUp">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,12,0">
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE77B;" VerticalAlignment="Center" Margin="0,0,6,0" />
+                    <TextBlock x:Name="StatusGitHubAccount" Text="Sign in" VerticalAlignment="Center" />
+                </StackPanel>
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right">
                 <ComboBox x:Name="StatusZoomCombo" Width="80" Margin="0,0,12,0" VerticalAlignment="Center" Background="{DynamicResource ControlBackgroundBrush}" Foreground="{DynamicResource ControlForegroundBrush}" SelectionChanged="StatusZoomCombo_SelectionChanged">

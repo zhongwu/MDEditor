@@ -183,11 +183,11 @@
 
 ### Phase 5: GitHub Integration (Week 5-6)
 
-#### 5.1 Authentication
-- [ ] GitHub OAuth (device flow or web auth)
-- [ ] Personal Access Token (PAT) support
-- [ ] Secure token storage (Windows Credential Manager / DPAPI)
-- [ ] Multi-account support
+#### 5.1 Authentication ✅ COMPLETED
+- [x] GitHub OAuth device flow (Octokit) — one-time code copied to clipboard + browser opened, polls until approved/denied/expired, cancellable; requests `repo gist read:org`. Uses MDEditor's registered OAuth App (`GitHubAuthService.DefaultOAuthClientId`, public client ID, no secret); overridable under Advanced in the GitHub Accounts window
+- [x] Personal Access Token (PAT) support — validated against `GET /user` before saving; classic and fine-grained tokens
+- [x] Secure token storage — Windows Credential Manager (`CredentialManagerTokenStore`, targets `MDEditor:github:<login>`); only non-secret account metadata goes to settings.json
+- [x] Multi-account support — Tools > GitHub Accounts... (add / set active / remove), active account shown in the status bar; `IGitHubAuthService.CreateClient()` hands authenticated clients to 5.2+
 
 #### 5.2 Repository Operations
 - [ ] Browse repositories (list user/org repos)
