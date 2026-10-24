@@ -100,6 +100,31 @@ public class GitHubCommitResult
 }
 
 /// <summary>
+/// A commit in a file's history.
+/// </summary>
+public class GitHubCommitInfo
+{
+    public string Sha { get; init; } = string.Empty;
+    public string ShortSha => Sha.Length > 7 ? Sha[..7] : Sha;
+    public string Message { get; init; } = string.Empty;
+
+    /// <summary>First line of <see cref="Message"/>.</summary>
+    public string Summary => Message.Split('\n', 2)[0].Trim();
+
+    public string AuthorName { get; init; } = string.Empty;
+
+    /// <summary>GitHub login of the author, when the commit email maps to an account.</summary>
+    public string? AuthorLogin { get; init; }
+
+    public DateTimeOffset Date { get; init; }
+
+    /// <summary>First parent commit, or null for a root commit.</summary>
+    public string? ParentSha { get; init; }
+
+    public string HtmlUrl { get; init; } = string.Empty;
+}
+
+/// <summary>
 /// Thrown when a commit fails because the file changed on GitHub since it was opened.
 /// </summary>
 public class GitHubConflictException : Exception

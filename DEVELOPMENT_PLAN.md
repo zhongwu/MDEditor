@@ -199,10 +199,10 @@
   - [x] Handle merge conflicts (basic) — stale SHA detected (409/422) → choose: commit to new branch (recommended), overwrite theirs, or discard mine and load theirs
 - Save As detaches the document from GitHub (becomes a local file); read-only repos explain that Save As is the way to keep changes
 
-#### 5.3 Version History
-- [ ] View commit history for current file
-- [ ] Compare with previous version (diff view)
-- [ ] Restore previous version
+#### 5.3 Version History ✅ COMPLETED
+- [x] View commit history for current file — Tools > File History (GitHub)...: last 100 commits on the branch that touched the file (summary, author, date, short SHA, full message tooltip), View Commit on GitHub
+- [x] Compare with previous version (diff view) — built-in Myers line diff (`LineDiff`, no extra package): "Changes in this commit" (vs. parent) or "This version vs. my current text"; +/- stats, old/new line numbers, unchanged runs collapsed with 3 lines of context (or "Show whole file"), virtualized list
+- [x] Restore previous version — loads the version into the editor (marked unsaved, confirms before discarding edits); the next save commits it with a pre-filled "Restore <file> to <sha>" message, so history is never rewritten
 
 #### 5.4 Gist Support (Bonus)
 - [ ] Create/Update secret/public gists

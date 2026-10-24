@@ -151,6 +151,7 @@ public partial class MainWindow : Window
         ViewModel.GitHubAccountsCallback = ShowGitHubAccountsWindow;
         ViewModel.OpenFromGitHubCallback = OpenFromGitHub;
         ViewModel.GitHubSyncCallback = CommitToGitHub;
+        ViewModel.GitHubHistoryCallback = ShowGitHubHistory;
         _gitHubAuthService = App.Services.GetRequiredService<IGitHubAuthService>();
         _gitHubRepoService = App.Services.GetRequiredService<IGitHubRepositoryService>();
         _gitHubAuthService.AccountsChanged += (s, e) => UpdateGitHubStatus();
@@ -1267,6 +1268,10 @@ public partial class MainWindow : Window
         EditorFileName.Text = fileName + location;
         EditorFileName.ToolTip = _gitHubDocument?.DisplayName ?? _currentFilePath;
         EditorDirtyIndicator.Visibility = _isDirty ? Visibility.Visible : Visibility.Collapsed;
+
+        // Every change of document identity (open, Save As, commit) ends here, so this keeps the
+        // GitHub-only menu items in sync.
+        ViewModel.IsGitHubDocument = _gitHubDocument != null;
     }
 
     private void SetEditorText(string text)

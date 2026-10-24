@@ -139,6 +139,39 @@ public class GitHubRepositoryService : IGitHubRepositoryService
         return await GetFileAsync(repo, document.Branch, document.Path, cancellationToken);
     }
 
+    public async Task<IReadOnlyList<GitHubCommitInfo>> GetFileHistoryAsync(GitHubDocument document, int maxCount = 100, CancellationToken cancellationToken = default)
+    {
+        var request = new CommitRequest { Path = document.Path, Sha = document.Branch };
+        var options = new ApiOptions { PageSize = Math.Clamp(maxCount, 1, 100), PageCount = Math.Max(1, (maxCount + 99) / 100) };
+        var commits = await Client.Repository.Commit.GetAll(document.Owner, document.Repo, request, options);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        return commits.Take(maxCount).Select(c => new GitHubCommitInfo
+        {
+            Sha = c.Sha,
+            Message = c.Commit?.Message ?? string.Empty,
+            AuthorName = c.Commit?.Author?.Name ?? c.Author?.Login ?? "unknown",
+            AuthorLogin = c.Author?.Login,
+            Date = c.Commit?.Author?.Date ?? default,
+            ParentSha = c.Parents?.FirstOrDefault()?.Sha,
+            HtmlUrl = string.IsNullOrEmpty(c.HtmlUrl) ? $"https://github.com/{document.Owner}/{document.Repo}/commit/{c.Sha}" : c.HtmlUrl,
+        }).ToList();
+    }
+
+    public async Task<string?> GetFileAtCommitAsync(GitHubDocument document, string commitSha, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var (text, _) = await ReadFileAsync(Client, document.Owner, document.Repo, document.Path, commitSha);
+            cancellationToken.ThrowIfCancellationRequested();
+            return text;
+        }
+        catch (NotFoundException)
+        {
+            return null; // the file was added after this commit (or renamed)
+        }
+    }
+
     private static async Task<(string Text, string Sha)> ReadFileAsync(IGitHubClient client, string owner, string repo, string path, string reference)
     {
         var contents = await client.Repository.Content.GetAllContentsByRef(owner, repo, path, reference);

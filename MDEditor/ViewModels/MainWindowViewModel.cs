@@ -29,6 +29,12 @@ public sealed partial class MainWindowViewModel : ObservableObject
     private bool _isEditorVisible = true;
 
     /// <summary>
+    /// True while the open document came from GitHub; shows the commit/history menu items.
+    /// </summary>
+    [ObservableProperty]
+    private bool _isGitHubDocument;
+
+    /// <summary>
     /// Automatically saves the preview state to settings whenever it changes.
     /// Also ensures at least one pane (editor or preview) stays visible.
     /// </summary>
@@ -141,6 +147,11 @@ public sealed partial class MainWindowViewModel : ObservableObject
     /// Callback for committing the current GitHub file.
     /// </summary>
     public Action? GitHubSyncCallback { get; set; }
+
+    /// <summary>
+    /// Callback for showing the current GitHub file's version history.
+    /// </summary>
+    public Action? GitHubHistoryCallback { get; set; }
 
     /// <summary>
     /// Callback for new file.
@@ -550,6 +561,13 @@ public sealed partial class MainWindowViewModel : ObservableObject
     {
         _loggingService.LogInformation("GitHub sync requested");
         GitHubSyncCallback?.Invoke();
+    }
+
+    [RelayCommand]
+    private void GitHubHistory()
+    {
+        _loggingService.LogInformation("GitHub file history requested");
+        GitHubHistoryCallback?.Invoke();
     }
 
     [RelayCommand]

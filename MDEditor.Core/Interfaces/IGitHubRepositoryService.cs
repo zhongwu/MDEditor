@@ -34,6 +34,17 @@ public interface IGitHubRepositoryService
     Task<GitHubFileContent> GetLatestAsync(GitHubDocument document, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Commits on the document's branch that changed its file, newest first.
+    /// </summary>
+    /// <param name="maxCount">Upper bound on the number of commits returned.</param>
+    Task<IReadOnlyList<GitHubCommitInfo>> GetFileHistoryAsync(GitHubDocument document, int maxCount = 100, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// The document's file as of <paramref name="commitSha"/>, or null if it didn't exist then.
+    /// </summary>
+    Task<string?> GetFileAtCommitAsync(GitHubDocument document, string commitSha, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Commits <paramref name="text"/> to the document's file.
     /// </summary>
     /// <param name="newBranch">

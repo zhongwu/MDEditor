@@ -17,6 +17,9 @@ public partial class MainWindow
     // with _currentFilePath.
     private GitHubDocument? _gitHubDocument;
 
+    // Suggested message for the next commit (e.g. after restoring an old version).
+    private string? _pendingCommitMessage;
+
     internal void ShowGitHubAccountsWindow()
     {
         if (_gitHubAccountsWindow != null)
@@ -80,7 +83,41 @@ public partial class MainWindow
     {
         _currentFilePath = null;
         _gitHubDocument = file.Document;
+        _pendingCommitMessage = null;
         SetEditorText(file.Text);
+    }
+
+    private void ShowGitHubHistory()
+    {
+        var document = _gitHubDocument;
+        if (document == null)
+        {
+            MessageBox.Show(this,
+                "History is available for files opened from GitHub (File > Open from GitHub...).",
+                "File History", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
+        if (!EnsureGitHubSignedIn())
+            return;
+
+        var history = new GitHubHistoryWindow(_gitHubRepoService, document, GetEditorText()) { Owner = this };
+        if (history.ShowDialog() != true || history.RestoredText == null || history.RestoredCommit == null)
+            return;
+
+        if (_isDirty)
+        {
+            var result = MessageBox.Show(this, "Replace your unsaved changes with this version?", "Restore Version",
+                MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result != MessageBoxResult.Yes)
+                return;
+        }
+
+        // Restoring only changes the editor; it reaches GitHub with the next save (commit), so
+        // the old version becomes the newest commit rather than rewriting history.
+        SetEditorText(history.RestoredText);
+        MarkDirty();
+        _pendingCommitMessage = $"Restore {document.FileName} to {history.RestoredCommit.ShortSha}";
     }
 
     /// <summary>
@@ -111,7 +148,7 @@ public partial class MainWindow
         }
 
         var dialog = new GitHubCommitDialog(_gitHubRepoService, document, GetEditorText(),
-            _gitHubAuthService.ActiveAccount!.Login, initialMessage, conflictMode) { Owner = this };
+            _gitHubAuthService.ActiveAccount!.Login, initialMessage ?? _pendingCommitMessage, conflictMode) { Owner = this };
         bool committed = dialog.ShowDialog() == true;
 
         if (committed && dialog.Result != null)
@@ -128,6 +165,7 @@ public partial class MainWindow
     {
         // Later saves go to wherever this commit landed (a new branch keeps updating its PR).
         _gitHubDocument = result.Document;
+        _pendingCommitMessage = null;
         _isDirty = false;
         UpdateTitleBar();
 

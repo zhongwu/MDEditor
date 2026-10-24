@@ -13,6 +13,7 @@ public class GitHubRepositoryServiceTests
     private readonly Mock<IRepositoryContentsClient> _contents = new();
     private readonly Mock<IReferencesClient> _references = new();
     private readonly Mock<IPullRequestsClient> _pullRequests = new();
+    private readonly Mock<IRepositoryCommitsClient> _commits = new();
     private readonly GitHubRepositoryService _service;
 
     private static readonly GitHubDocument Document = new()
@@ -31,6 +32,7 @@ public class GitHubRepositoryServiceTests
     {
         var repository = new Mock<IRepositoriesClient>();
         repository.Setup(r => r.Content).Returns(_contents.Object);
+        repository.Setup(r => r.Commit).Returns(_commits.Object);
 
         var git = new Mock<IGitDatabaseClient>();
         git.Setup(g => g.Reference).Returns(_references.Object);
@@ -176,6 +178,56 @@ public class GitHubRepositoryServiceTests
 
         Assert.Equal("blob-new", result.Document.Sha);
         _contents.Verify(c => c.UpdateFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<UpdateFileRequest>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task FileHistory_QueriesPathOnBranch_AndMapsCommits()
+    {
+        CommitRequest? request = null;
+        _commits.Setup(c => c.GetAll("octo", "docs", It.IsAny<CommitRequest>(), It.IsAny<ApiOptions>()))
+            .Callback<string, string, CommitRequest, ApiOptions>((_, _, r, _) => request = r)
+            .ReturnsAsync(new[]
+            {
+                FromJson<GitHubCommit>("""
+                    {"sha":"abcdef1234567","html_url":"https://github.com/octo/docs/commit/abcdef1234567",
+                     "commit":{"message":"Fix typo\n\nLonger explanation","author":{"name":"Alice A","date":"2026-10-20T10:00:00Z"}},
+                     "author":{"login":"alice"},"parents":[{"sha":"parent1"}]}
+                    """),
+                FromJson<GitHubCommit>("""
+                    {"sha":"root000","commit":{"message":"Initial","author":{"name":"Bob","date":"2026-01-01T00:00:00Z"}},"parents":[]}
+                    """),
+            });
+
+        var history = await _service.GetFileHistoryAsync(Document);
+
+        Assert.Equal("guide/intro.md", request!.Path);
+        Assert.Equal("main", request.Sha);
+
+        Assert.Equal(2, history.Count);
+        var first = history[0];
+        Assert.Equal("abcdef1", first.ShortSha);
+        Assert.Equal("Fix typo", first.Summary);
+        Assert.Equal("alice", first.AuthorLogin);
+        Assert.Equal("Alice A", first.AuthorName);
+        Assert.Equal("parent1", first.ParentSha);
+        Assert.Equal(new DateTimeOffset(2026, 10, 20, 10, 0, 0, TimeSpan.Zero), first.Date);
+
+        var root = history[1];
+        Assert.Null(root.ParentSha);
+        Assert.Null(root.AuthorLogin);
+        Assert.Equal("https://github.com/octo/docs/commit/root000", root.HtmlUrl); // synthesized when missing
+    }
+
+    [Fact]
+    public async Task FileAtCommit_ReturnsText_OrNullWhenFileAbsent()
+    {
+        _contents.Setup(c => c.GetAllContentsByRef("octo", "docs", "guide/intro.md", "abc"))
+            .ReturnsAsync(new[] { FromJson<RepositoryContent>("""{"sha":"b","type":"file","size":5,"content":"aGVsbG8=","encoding":"base64"}""") });
+        _contents.Setup(c => c.GetAllContentsByRef("octo", "docs", "guide/intro.md", "old"))
+            .ThrowsAsync(new NotFoundException("Not Found", HttpStatusCode.NotFound));
+
+        Assert.Equal("hello", await _service.GetFileAtCommitAsync(Document, "abc"));
+        Assert.Null(await _service.GetFileAtCommitAsync(Document, "old"));
     }
 
     [Fact]

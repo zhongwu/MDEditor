@@ -40,4 +40,16 @@ public class GitHubCommitDialogTests
             dialog.Close();
         });
     }
+
+    [Fact]
+    public void HistoryWindow_Constructs_WithoutThrowing()
+    {
+        // Same hazard: CommitChangesRadio is IsChecked="True" with a Checked handler.
+        RunOnSta(() =>
+        {
+            var window = new GitHubHistoryWindow(Mock.Of<IGitHubRepositoryService>(), Document, "text");
+            Assert.Null(window.RestoredText);
+            window.Close();
+        });
+    }
 }
