@@ -72,7 +72,8 @@
                 <MenuItem Header="Select All" Command="{Binding SelectAllCommand}" />
             </MenuItem>
             <MenuItem Header="View">
-                <MenuItem x:Name="PreviewMenuItem" Header="Show Preview" Command="{Binding TogglePreviewCommand}" IsCheckable="True" IsChecked="{Binding IsPreviewVisible, Mode=OneWay}"/>
+                <MenuItem x:Name="PreviewMenuItem" Header="Show Preview" Command="{Binding TogglePreviewCommand}" IsCheckable="True" />
+                <MenuItem x:Name="EditorMenuItem" Header="Show Editor" Command="{Binding ToggleEditorCommand}" IsCheckable="True" />
                 <MenuItem x:Name="OutlineMenuItem" Header="Show Outline" Command="{Binding ToggleOutlineCommand}" IsCheckable="True" InputGestureText="Ctrl+Shift+E" />
                 <MenuItem x:Name="LineNumbersMenuItem" Header="Show Line Numbers" Command="{Binding ToggleLineNumbersCommand}" IsCheckable="True" />
                 <MenuItem x:Name="MinimapMenuItem" Header="Show Minimap" Click="ToggleMinimap_Click" IsCheckable="True" />
@@ -244,6 +245,11 @@
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8A1;" />
                 </Button.Content>
             </Button>
+            <Button Command="{Binding ToggleEditorCommand}" ToolTip="Toggle Editor">
+                <Button.Content>
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE70F;" />
+                </Button.Content>
+            </Button>
             <Button Command="{Binding ToggleOutlineCommand}" ToolTip="Toggle Outline (Ctrl+Shift+E)">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE700;" />
@@ -270,48 +276,16 @@
         <Grid x:Name="MainContentGrid" Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition x:Name="OutlineColumn" Width="Auto" />
+                <!--
+                    Editor/Preview column widths are managed entirely from code-behind
+                    (MainWindow.OnPaneVisibilityChanged) rather than XAML DataTriggers.
+                    ColumnDefinition does not reliably participate in DataContext
+                    inheritance, so binding-driven triggers here silently failed to
+                    reallocate width to the sibling column when one pane was hidden.
+                -->
                 <ColumnDefinition x:Name="EditorColumn" Width="*" MinWidth="300" />
                 <ColumnDefinition Width="Auto" />
-
-                <!-- Animated Preview Column -->
-                <ColumnDefinition x:Name="PreviewColumn">
-                    <ColumnDefinition.Style>
-                        <Style TargetType="ColumnDefinition">
-                            <Setter Property="Width" Value="*" />
-                            <Setter Property="MinWidth" Value="300" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsPreviewVisible}" Value="False">
-                                    <!-- Remove MinWidth so the MaxWidth animation can shrink the column completely -->
-                                    <Setter Property="MinWidth" Value="0" />
-                                    <DataTrigger.EnterActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <!-- Animate MaxWidth down to 0 to slide it shut -->
-                                                <DoubleAnimation Storyboard.TargetProperty="MaxWidth" From="2000" To="0" Duration="0:0:0.4">
-                                                    <DoubleAnimation.EasingFunction>
-                                                        <QuarticEase EasingMode="EaseOut" />
-                                                    </DoubleAnimation.EasingFunction>
-                                                </DoubleAnimation>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </DataTrigger.EnterActions>
-                                    <DataTrigger.ExitActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <!-- Animate MaxWidth back open -->
-                                                <DoubleAnimation Storyboard.TargetProperty="MaxWidth" From="0" To="2000" Duration="0:0:0.4">
-                                                    <DoubleAnimation.EasingFunction>
-                                                        <QuarticEase EasingMode="EaseOut" />
-                                                    </DoubleAnimation.EasingFunction>
-                                                </DoubleAnimation>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </DataTrigger.ExitActions>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ColumnDefinition.Style>
-                </ColumnDefinition>
+                <ColumnDefinition x:Name="PreviewColumn" Width="*" MinWidth="300" />
             </Grid.ColumnDefinitions>
 
             <!-- Outline / TOC panel (collapsible, resizable via the thumb on its right edge) -->
@@ -387,6 +361,31 @@
             </Grid>
 
             <Grid x:Name="EditorPane" Grid.Column="1">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Opacity" Value="1" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsEditorVisible}" Value="False">
+                                <!-- Disable interaction while hidden/faded out -->
+                                <Setter Property="IsHitTestVisible" Value="False" />
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.2" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.3" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -516,41 +515,8 @@
                 </Border>
             </Grid>
 
-            <!-- Animated Grid Splitter -->
-            <GridSplitter x:Name="SplitterColumn" Grid.Column="2" Background="Transparent" AutomationProperties.AutomationId="SplitterColumn">
-                <GridSplitter.Style>
-                    <Style TargetType="GridSplitter">
-                        <Setter Property="Width" Value="6" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsPreviewVisible}" Value="False">
-                                <Setter Property="IsEnabled" Value="False" />
-                                <DataTrigger.EnterActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetProperty="Width" To="0" Duration="0:0:0.4">
-                                                <DoubleAnimation.EasingFunction>
-                                                    <QuarticEase EasingMode="EaseOut" />
-                                                </DoubleAnimation.EasingFunction>
-                                            </DoubleAnimation>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </DataTrigger.EnterActions>
-                                <DataTrigger.ExitActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetProperty="Width" To="6" Duration="0:0:0.4">
-                                                <DoubleAnimation.EasingFunction>
-                                                    <QuarticEase EasingMode="EaseOut" />
-                                                </DoubleAnimation.EasingFunction>
-                                            </DoubleAnimation>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </DataTrigger.ExitActions>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </GridSplitter.Style>
-            </GridSplitter>
+            <!-- Visibility (Visible/Collapsed) is managed from code-behind in OnPaneVisibilityChanged -->
+            <GridSplitter x:Name="SplitterColumn" Grid.Column="2" Width="6" Background="Transparent" AutomationProperties.AutomationId="SplitterColumn" />
 
             <!-- Animated Preview Pane Opacity -->
             <Grid x:Name="PreviewPane" Grid.Column="3">

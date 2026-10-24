@@ -64,6 +64,7 @@ public partial class MainWindow : Window
         // Load persisted view settings (Preview state is now managed by ViewModel)
         _lineNumbersVisible = _settingsService.Get<bool>("editor.lineNumbers", false);
         ViewModel.IsPreviewVisible = _settingsService.Get<bool>("editor.preview", true);
+        ViewModel.IsEditorVisible = _settingsService.Get<bool>("editor.editorVisible", true);
         _minimapVisible = _settingsService.Get<bool>("editor.minimap", true);
         _scrollSyncEnabled = _settingsService.Get<bool>("editor.scrollSync", true);
         _smartTypographyEnabled = _settingsService.Get<bool>("editor.smartTypography", true);
@@ -100,6 +101,15 @@ public partial class MainWindow : Window
 
         DataContext = ViewModel;
 
+        // Column widths / splitter visibility / menu checkmarks for the editor and preview
+        // panes are driven from code-behind rather than XAML DataTriggers, since
+        // ColumnDefinition does not reliably participate in DataContext inheritance.
+        ViewModel.PropertyChanged += (s, e) =>
+        {
+            if (e.PropertyName == nameof(ViewModel.IsEditorVisible) || e.PropertyName == nameof(ViewModel.IsPreviewVisible))
+                OnPaneVisibilityChanged();
+        };
+
         StatusZoomCombo.SelectedIndex = 2;
 
         InitializePreview();
@@ -132,8 +142,8 @@ public partial class MainWindow : Window
             // Minimap overview on the right side of the editor.
             Minimap.Attach(MarkdownEditor);
 
-            // Apply loaded view settings to UI elements (Grid layout logic removed, relies on XAML DataTriggers)
-            PreviewMenuItem.IsChecked = ViewModel.IsPreviewVisible;
+            // Apply loaded view settings to UI elements
+            OnPaneVisibilityChanged();
 
             LineNumberGutter.Visibility = _lineNumbersVisible ? Visibility.Visible : Visibility.Collapsed;
             LineNumbersMenuItem.IsChecked = _lineNumbersVisible;
@@ -1176,12 +1186,52 @@ public partial class MainWindow : Window
     {
         // Do NOT flip the ViewModel boolean here! The ViewModel command already flipped it.
         // The ViewModel property setter also already saved it to settings.
+        // OnPaneVisibilityChanged (wired to ViewModel.PropertyChanged) handles the rest.
+    }
 
-        // Just sync the UI menu checkmark
-        PreviewMenuItem.IsChecked = ViewModel.IsPreviewVisible;
-        
-        // Save state to settings
-        _settingsService.Set("editor.preview", ViewModel.IsPreviewVisible);
+    /// <summary>
+    /// Keeps the editor/preview column widths, splitter visibility, and View-menu checkmarks
+    /// in sync with ViewModel.IsEditorVisible / IsPreviewVisible. Deliberately avoids XAML
+    /// DataTriggers on ColumnDefinition (which don't reliably pick up DataContext) and on
+    /// MenuItem.IsChecked (which conflicts with MenuItem's own IsCheckable click handling) -
+    /// both silently failed to update, leaving stale widths/checkmarks.
+    /// </summary>
+    private void OnPaneVisibilityChanged()
+    {
+        bool editorVisible = ViewModel.IsEditorVisible;
+        bool previewVisible = ViewModel.IsPreviewVisible;
+
+        PreviewMenuItem.IsChecked = previewVisible;
+        EditorMenuItem.IsChecked = editorVisible;
+
+        if (editorVisible && previewVisible)
+        {
+            if (EditorColumn.Width.Value == 0)
+                EditorColumn.Width = new GridLength(1, GridUnitType.Star);
+            if (PreviewColumn.Width.Value == 0)
+                PreviewColumn.Width = new GridLength(1, GridUnitType.Star);
+            EditorColumn.MinWidth = 300;
+            PreviewColumn.MinWidth = 300;
+            SplitterColumn.Visibility = Visibility.Visible;
+        }
+        else if (editorVisible)
+        {
+            if (EditorColumn.Width.Value == 0)
+                EditorColumn.Width = new GridLength(1, GridUnitType.Star);
+            EditorColumn.MinWidth = 300;
+            PreviewColumn.Width = new GridLength(0);
+            PreviewColumn.MinWidth = 0;
+            SplitterColumn.Visibility = Visibility.Collapsed;
+        }
+        else
+        {
+            if (PreviewColumn.Width.Value == 0)
+                PreviewColumn.Width = new GridLength(1, GridUnitType.Star);
+            PreviewColumn.MinWidth = 300;
+            EditorColumn.Width = new GridLength(0);
+            EditorColumn.MinWidth = 0;
+            SplitterColumn.Visibility = Visibility.Collapsed;
+        }
     }
 
     private void ToggleWordWrap()

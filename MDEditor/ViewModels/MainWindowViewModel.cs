@@ -23,11 +23,35 @@ public sealed partial class MainWindowViewModel : ObservableObject
     private bool _isPreviewVisible = true;
 
     /// <summary>
+    /// Controls the visibility of the Markdown editor pane.
+    /// </summary>
+    [ObservableProperty]
+    private bool _isEditorVisible = true;
+
+    /// <summary>
     /// Automatically saves the preview state to settings whenever it changes.
+    /// Also ensures at least one pane (editor or preview) stays visible.
     /// </summary>
     partial void OnIsPreviewVisibleChanged(bool value)
     {
         _settingsService?.Set("editor.preview", value);
+        if (!value && !IsEditorVisible)
+        {
+            IsEditorVisible = true;
+        }
+    }
+
+    /// <summary>
+    /// Automatically saves the editor pane visibility to settings whenever it changes.
+    /// Also ensures at least one pane (editor or preview) stays visible.
+    /// </summary>
+    partial void OnIsEditorVisibleChanged(bool value)
+    {
+        _settingsService?.Set("editor.editorVisible", value);
+        if (!value && !IsPreviewVisible)
+        {
+            IsPreviewVisible = true;
+        }
     }
 
     /// <summary>
@@ -278,6 +302,15 @@ public sealed partial class MainWindowViewModel : ObservableObject
         IsPreviewVisible = !IsPreviewVisible;
 
         TogglePreviewCallback?.Invoke();
+    }
+
+    [RelayCommand]
+    private void ToggleEditor()
+    {
+        _loggingService.LogInformation("Toggle editor requested");
+
+        // Toggle the observable property to trigger the XAML DataTriggers
+        IsEditorVisible = !IsEditorVisible;
     }
 
     [RelayCommand]
