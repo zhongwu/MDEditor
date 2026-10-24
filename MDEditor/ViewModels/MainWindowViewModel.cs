@@ -116,6 +116,13 @@ public sealed partial class MainWindowViewModel : ObservableObject
     public Action? ToggleLineNumbersCallback { get; set; }
 
     /// <summary>
+    /// Callbacks for zoom in/out/reset.
+    /// </summary>
+    public Action? ZoomInCallback { get; set; }
+    public Action? ZoomOutCallback { get; set; }
+    public Action? ResetZoomCallback { get; set; }
+
+    /// <summary>
     /// Callback for new file.
     /// </summary>
     public Action? NewFileCallback { get; set; }
@@ -352,21 +359,21 @@ public sealed partial class MainWindowViewModel : ObservableObject
     private void ZoomIn()
     {
         _loggingService.LogInformation("Zoom in requested");
-        // TODO: Implement zoom in
+        ZoomInCallback?.Invoke();
     }
 
     [RelayCommand]
     private void ZoomOut()
     {
         _loggingService.LogInformation("Zoom out requested");
-        // TODO: Implement zoom out
+        ZoomOutCallback?.Invoke();
     }
 
     [RelayCommand]
     private void ResetZoom()
     {
         _loggingService.LogInformation("Reset zoom requested");
-        // TODO: Implement reset zoom
+        ResetZoomCallback?.Invoke();
     }
 
     [RelayCommand]

@@ -16,6 +16,12 @@
         <KeyBinding Key="F" Modifiers="Control+Shift" Command="{Binding FindInPreviewCommand}" />
         <KeyBinding Key="P" Modifiers="Control" Command="{Binding PrintPreviewCommand}" />
         <KeyBinding Key="F5" Command="{Binding PresentationModeCommand}" />
+        <KeyBinding Key="OemPlus" Modifiers="Control" Command="{Binding ZoomInCommand}" />
+        <KeyBinding Key="Add" Modifiers="Control" Command="{Binding ZoomInCommand}" />
+        <KeyBinding Key="OemMinus" Modifiers="Control" Command="{Binding ZoomOutCommand}" />
+        <KeyBinding Key="Subtract" Modifiers="Control" Command="{Binding ZoomOutCommand}" />
+        <KeyBinding Key="D0" Modifiers="Control" Command="{Binding ResetZoomCommand}" />
+        <KeyBinding Key="NumPad0" Modifiers="Control" Command="{Binding ResetZoomCommand}" />
     </Window.InputBindings>
 
     <Window.Resources>
@@ -80,9 +86,9 @@
                 <MenuItem x:Name="ScrollSyncMenuItem" Header="Show Scroll Sync" Click="ToggleScrollSync_Click" IsCheckable="True" />
                 <MenuItem Header="Word Wrap" Command="{Binding ToggleWordWrapCommand}" />
                 <Separator />
-                <MenuItem Header="Zoom In" Command="{Binding ZoomInCommand}" />
-                <MenuItem Header="Zoom Out" Command="{Binding ZoomOutCommand}" />
-                <MenuItem Header="Reset Zoom" Command="{Binding ResetZoomCommand}" />
+                <MenuItem Header="Zoom In" Command="{Binding ZoomInCommand}" InputGestureText="Ctrl++" />
+                <MenuItem Header="Zoom Out" Command="{Binding ZoomOutCommand}" InputGestureText="Ctrl+-" />
+                <MenuItem Header="Reset Zoom" Command="{Binding ResetZoomCommand}" InputGestureText="Ctrl+0" />
                 <Separator />
                 <MenuItem Header="Presentation Mode" Command="{Binding PresentationModeCommand}" InputGestureText="F5" />
                 <Separator />

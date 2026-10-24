@@ -222,6 +222,12 @@
 - [ ] Multiple cursors (Alt+Click) — deferred
 - [x] Minimap (code overview) — scaled document overview with viewport indicator and click/drag scrolling
 
+#### 6.1b View Toggles & Zoom ✅ COMPLETED
+- [x] Show/Hide Preview pane (View menu + toolbar; persisted)
+- [x] Show/Hide Editor pane (preview-only view) — mirrors the preview toggle; at least one of editor/preview always stays visible
+- [x] Show/Hide Line Numbers, Minimap, Scroll Sync (View menu; persisted)
+- [x] Zoom In / Zoom Out / Reset Zoom (Ctrl++ / Ctrl+- / Ctrl+0, also View menu + status bar combo) — scales editor font size, line-number gutter, and preview CSS zoom together; persisted and re-applied after preview reloads
+
 #### 6.2 Preview Enhancements ✅ COMPLETED
 - [x] Scroll sync between editor and preview (bidirectional)
 - [x] Outline/TOC panel (collapsible) — Markdig heading tree (`IMarkdownParser.GetOutline`), click/Enter to jump editor + preview, current-section highlight, expand/collapse all, resizable, persisted (Ctrl+Shift+E)

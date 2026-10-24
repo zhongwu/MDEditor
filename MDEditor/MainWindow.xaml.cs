@@ -34,6 +34,10 @@ public partial class MainWindow : Window
     private DateTime _syncCooldownUntil = DateTime.MinValue;
     private string _lastRenderedMarkdown = string.Empty;
 
+    // Zoom (editor font size + preview zoom, driven by the status bar zoom combo)
+    private const double BaseEditorFontSize = 14.0;
+    private const int DefaultZoomIndex = 2; // "100%" item in StatusZoomCombo
+
     // Editor enhancements (Phase 6.1)
     private const int MaxEditorFeatureLength = 1_000_000;
     private readonly CompletionPopup _completionPopup = new();
@@ -91,6 +95,11 @@ public partial class MainWindow : Window
         // Line numbers toggle
         ViewModel.ToggleLineNumbersCallback = ToggleLineNumbers;
 
+        // Zoom
+        ViewModel.ZoomInCallback = ZoomIn;
+        ViewModel.ZoomOutCallback = ZoomOut;
+        ViewModel.ResetZoomCallback = ResetZoom;
+
         // Phase 6.2: outline panel, find in preview, print preview, presentation mode
         ViewModel.ToggleOutlineCallback = ToggleOutline;
         ViewModel.FindInPreviewCallback = ShowPreviewFind;
@@ -110,7 +119,7 @@ public partial class MainWindow : Window
                 OnPaneVisibilityChanged();
         };
 
-        StatusZoomCombo.SelectedIndex = 2;
+        StatusZoomCombo.SelectedIndex = _settingsService.Get("editor.zoomIndex", DefaultZoomIndex);
 
         InitializePreview();
         SetupSplitter();
@@ -819,7 +828,11 @@ public partial class MainWindow : Window
         await MarkdownPreview.EnsureCoreWebView2Async(env);
 
         MarkdownPreview.CoreWebView2.WebMessageReceived += Preview_WebMessageReceived;
-        MarkdownPreview.CoreWebView2.NavigationCompleted += (s, e) => RestorePreviewFind();
+        MarkdownPreview.CoreWebView2.NavigationCompleted += (s, e) =>
+        {
+            RestorePreviewFind();
+            _ = ApplyZoomAsync(GetCurrentZoomFactor());
+        };
         await MarkdownPreview.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(
             "window.addEventListener('scroll',function(){var m=document.documentElement.scrollHeight-window.innerHeight;if(m<0)m=0;var p=m>0?window.scrollY/m:0;if(window.chrome&&window.chrome.webview){window.chrome.webview.postMessage(JSON.stringify({type:'scroll',pct:p}));}}, {passive:true});");
         await MarkdownPreview.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(MDEditor.Preview.PreviewHost.FindScript);
@@ -1420,12 +1433,54 @@ public partial class MainWindow : Window
 
     private async void StatusZoomCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (StatusZoomCombo.SelectedItem is ComboBoxItem item && item.Tag is string tag && double.TryParse(tag, out double zoom))
+        // The 100% ComboBoxItem has IsSelected="True" in XAML, which fires this handler once
+        // synchronously during InitializeComponent() - before _settingsService is assigned in
+        // the constructor. The explicit StatusZoomCombo.SelectedIndex assignment later in the
+        // constructor re-fires this and applies/persists the real (possibly loaded) zoom level.
+        if (_settingsService == null)
+            return;
+
+        await ApplyZoomAsync(GetCurrentZoomFactor());
+        _settingsService.Set("editor.zoomIndex", StatusZoomCombo.SelectedIndex);
+    }
+
+    /// <summary>Reads the zoom factor (e.g. 1.25) from the currently selected StatusZoomCombo item.</summary>
+    private double GetCurrentZoomFactor()
+    {
+        if (StatusZoomCombo.SelectedItem is ComboBoxItem item && item.Tag is string tag &&
+            double.TryParse(tag, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out double zoom))
+            return zoom;
+        return 1.0;
+    }
+
+    /// <summary>Scales the editor font/gutter and the preview's CSS zoom together.</summary>
+    private async Task ApplyZoomAsync(double zoom)
+    {
+        MarkdownEditor.FontSize = BaseEditorFontSize * zoom;
+        LineNumberGutter.NumberFontSize = BaseEditorFontSize * zoom;
+        LineNumberGutter.Refresh();
+
+        if (MarkdownPreview.CoreWebView2 != null)
         {
-            if (MarkdownPreview.CoreWebView2 != null)
-            {
-                await MarkdownPreview.CoreWebView2.ExecuteScriptAsync($"document.body.style.zoom = '{zoom}';");
-            }
+            await MarkdownPreview.CoreWebView2.ExecuteScriptAsync(
+                $"document.body.style.zoom = '{zoom.ToString(System.Globalization.CultureInfo.InvariantCulture)}';");
         }
+    }
+
+    private void ZoomIn()
+    {
+        if (StatusZoomCombo.SelectedIndex < StatusZoomCombo.Items.Count - 1)
+            StatusZoomCombo.SelectedIndex++;
+    }
+
+    private void ZoomOut()
+    {
+        if (StatusZoomCombo.SelectedIndex > 0)
+            StatusZoomCombo.SelectedIndex--;
+    }
+
+    private void ResetZoom()
+    {
+        StatusZoomCombo.SelectedIndex = DefaultZoomIndex;
     }
 }
