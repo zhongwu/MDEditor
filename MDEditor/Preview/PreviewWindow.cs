@@ -60,7 +60,8 @@ public sealed class PreviewWindow : Window
 
     // Presentation mode mirrors the live app theme/custom CSS; print preview always renders
     // light with no custom CSS regardless of the app's current theme (printing a dark
-    // background wastes ink, and most print/PDF engines handle it poorly).
+    // background wastes ink, and most print/PDF engines handle it poorly). Both keep the image
+    // base URL so relative images (e.g. in a GitHub file) still resolve.
     private readonly PreviewRenderOptions? _previewOptions;
 
     private string _markdown;
@@ -76,7 +77,11 @@ public sealed class PreviewWindow : Window
         _markdown = markdown;
         _mode = mode;
         _initialScrollPct = Math.Clamp(initialScrollPct, 0, 1);
-        _previewOptions = mode == PreviewWindowMode.Presentation ? previewOptions : null;
+        _previewOptions = mode == PreviewWindowMode.Presentation
+            ? previewOptions
+            : previewOptions?.ImageBaseUrl != null
+                ? new PreviewRenderOptions(IsDarkTheme: false, CustomCss: null, previewOptions.Value.ImageBaseUrl, previewOptions.Value.ImageRootUrl)
+                : null;
 
         Background = _previewOptions?.IsDarkTheme == true
             ? new SolidColorBrush(Color.FromRgb(0x0D, 0x11, 0x17))
@@ -141,6 +146,7 @@ public sealed class PreviewWindow : Window
             if (_closing) return;
 
             var core = _webView.CoreWebView2;
+            PreviewHost.AttachImageAuthorization(core);
             core.NavigationStarting += (s, e) =>
             {
                 if (e.Uri.StartsWith("file://", StringComparison.OrdinalIgnoreCase))

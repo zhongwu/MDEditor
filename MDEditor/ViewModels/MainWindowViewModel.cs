@@ -256,7 +256,8 @@ public sealed partial class MainWindowViewModel : ObservableObject
     private void Exit()
     {
         _loggingService.LogInformation("Exit requested");
-        App.Current.Shutdown();
+        // Close (not Shutdown) so MainWindow's unsaved-changes prompt can cancel the exit.
+        App.Current.MainWindow?.Close();
     }
 
     // Edit commands

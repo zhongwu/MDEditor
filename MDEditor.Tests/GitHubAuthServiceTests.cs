@@ -201,6 +201,20 @@ public class GitHubAuthServiceTests
     }
 
     [Fact]
+    public async Task GetAccessToken_ReturnsActiveOrNamedAccountsToken()
+    {
+        var service = CreateService();
+        Assert.Null(service.GetAccessToken());
+
+        await service.AddAccountWithTokenAsync("tok-alice");
+        await service.AddAccountWithTokenAsync("tok-bob");
+
+        Assert.Equal("tok-bob", service.GetAccessToken());
+        Assert.Equal("tok-alice", service.GetAccessToken("ALICE"));
+        Assert.Null(service.GetAccessToken("nobody"));
+    }
+
+    [Fact]
     public async Task CreateClient_ReturnsNull_WhenTokenMissingFromStore()
     {
         var service = CreateService();

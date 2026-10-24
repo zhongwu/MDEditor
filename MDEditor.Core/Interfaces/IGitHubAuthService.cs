@@ -61,4 +61,11 @@ public interface IGitHubAuthService
     /// or null if that account has no stored token.
     /// </summary>
     IGitHubClient? CreateClient(string? login = null);
+
+    /// <summary>
+    /// The stored access token for <paramref name="login"/> (or the active account), or null.
+    /// For requests Octokit doesn't make, such as private-repo images in the preview - never
+    /// log or persist it.
+    /// </summary>
+    string? GetAccessToken(string? login = null);
 }

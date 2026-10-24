@@ -72,8 +72,28 @@ public class GitHubDocument
     /// <summary>Display form, e.g. "octocat/docs:guide/intro.md@main".</summary>
     public string DisplayName => $"{RepoFullName}:{Path}@{Branch}";
 
+    /// <summary>
+    /// raw.githubusercontent.com URL of the repository root at <see cref="BaseCommitSha"/> (the
+    /// branch if unknown), ending with '/'. Pinning the commit keeps images consistent with the
+    /// opened text.
+    /// </summary>
+    public string RawRootUrl =>
+        $"https://raw.githubusercontent.com/{Owner}/{Repo}/{(string.IsNullOrEmpty(BaseCommitSha) ? EscapePath(Branch) : BaseCommitSha)}/";
+
+    /// <summary>raw.githubusercontent.com URL of the folder containing the file, ending with '/'.</summary>
+    public string RawFolderUrl
+    {
+        get
+        {
+            var slash = Path.LastIndexOf('/');
+            return slash < 0 ? RawRootUrl : RawRootUrl + EscapePath(Path[..slash]) + "/";
+        }
+    }
+
+    private static string EscapePath(string path) => string.Join('/', path.Split('/').Select(Uri.EscapeDataString));
+
     public string HtmlUrl =>
-        $"https://github.com/{Owner}/{Repo}/blob/{Uri.EscapeDataString(Branch)}/{string.Join('/', Path.Split('/').Select(Uri.EscapeDataString))}";
+        $"https://github.com/{Owner}/{Repo}/blob/{Uri.EscapeDataString(Branch)}/{EscapePath(Path)}";
 }
 
 /// <summary>

@@ -11,6 +11,11 @@
         mc:Ignorable="d">
 
     <Window.InputBindings>
+        <KeyBinding Key="N" Modifiers="Control" Command="{Binding NewFileCommand}" />
+        <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenFileCommand}" />
+        <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveFileCommand}" />
+        <KeyBinding Key="S" Modifiers="Control+Shift" Command="{Binding SaveAsFileCommand}" />
+        <KeyBinding Key="P" Modifiers="Control+Shift" Command="{Binding TogglePreviewCommand}" />
         <KeyBinding Key="E" Modifiers="Control+Shift" Command="{Binding ToggleOutlineCommand}" />
         <KeyBinding Key="F" Modifiers="Control" Command="{Binding FindCommand}" />
         <KeyBinding Key="H" Modifiers="Control" Command="{Binding ReplaceCommand}" />
@@ -49,15 +54,15 @@
 
         <Menu x:Name="MainMenuBar" Grid.Row="0" Background="{DynamicResource ControlBackgroundBrush}">
             <MenuItem Header="File">
-                <MenuItem Header="New" Command="{Binding NewFileCommand}" />
-                <MenuItem Header="Open..." Command="{Binding OpenFileCommand}" />
+                <MenuItem Header="New" Command="{Binding NewFileCommand}" InputGestureText="Ctrl+N" />
+                <MenuItem Header="Open..." Command="{Binding OpenFileCommand}" InputGestureText="Ctrl+O" />
                 <MenuItem Header="Open from GitHub..." Command="{Binding OpenFromGitHubCommand}" />
                 <MenuItem Header="Recent Files" Name="RecentFilesMenu">
                     <MenuItem Header="(No recent files)" IsEnabled="False" />
                 </MenuItem>
                 <Separator />
-                <MenuItem Header="Save" Command="{Binding SaveFileCommand}" />
-                <MenuItem Header="Save As..." Command="{Binding SaveAsFileCommand}" />
+                <MenuItem Header="Save" Command="{Binding SaveFileCommand}" InputGestureText="Ctrl+S" />
+                <MenuItem Header="Save As..." Command="{Binding SaveAsFileCommand}" InputGestureText="Ctrl+Shift+S" />
                 <Separator />
                 <MenuItem Header="Export HTML" Command="{Binding ExportHtmlCommand}" />
                 <MenuItem Header="Export PDF" Command="{Binding ExportPdfCommand}" />
@@ -82,7 +87,7 @@
                 <MenuItem Header="Select All" Command="{Binding SelectAllCommand}" />
             </MenuItem>
             <MenuItem Header="View">
-                <MenuItem x:Name="PreviewMenuItem" Header="Show Preview" Command="{Binding TogglePreviewCommand}" IsCheckable="True" />
+                <MenuItem x:Name="PreviewMenuItem" Header="Show Preview" Command="{Binding TogglePreviewCommand}" IsCheckable="True" InputGestureText="Ctrl+Shift+P" />
                 <MenuItem x:Name="EditorMenuItem" Header="Show Editor" Command="{Binding ToggleEditorCommand}" IsCheckable="True" />
                 <MenuItem x:Name="OutlineMenuItem" Header="Show Outline" Command="{Binding ToggleOutlineCommand}" IsCheckable="True" InputGestureText="Ctrl+Shift+E" />
                 <MenuItem x:Name="LineNumbersMenuItem" Header="Show Line Numbers" Command="{Binding ToggleLineNumbersCommand}" IsCheckable="True" />
@@ -97,27 +102,27 @@
                 <MenuItem Header="Presentation Mode" Command="{Binding PresentationModeCommand}" InputGestureText="F5" />
             </MenuItem>
             <MenuItem Header="Format">
-                <MenuItem Header="Heading 1" Command="{Binding Heading1Command}" />
-                <MenuItem Header="Heading 2" Command="{Binding Heading2Command}" />
-                <MenuItem Header="Heading 3" Command="{Binding Heading3Command}" />
+                <MenuItem Header="Heading 1" Command="{Binding Heading1Command}" InputGestureText="Ctrl+1" />
+                <MenuItem Header="Heading 2" Command="{Binding Heading2Command}" InputGestureText="Ctrl+2" />
+                <MenuItem Header="Heading 3" Command="{Binding Heading3Command}" InputGestureText="Ctrl+3" />
                 <MenuItem Header="Heading 4" Command="{Binding Heading4Command}" />
                 <MenuItem Header="Heading 5" Command="{Binding Heading5Command}" />
                 <MenuItem Header="Heading 6" Command="{Binding Heading6Command}" />
                 <Separator />
-                <MenuItem Header="Bold" Command="{Binding BoldCommand}" />
-                <MenuItem Header="Italic" Command="{Binding ItalicCommand}" />
-                <MenuItem Header="Strikethrough" Command="{Binding StrikethroughCommand}" />
-                <MenuItem Header="Inline Code" Command="{Binding InlineCodeCommand}" />
+                <MenuItem Header="Bold" Command="{Binding BoldCommand}" InputGestureText="Ctrl+B" />
+                <MenuItem Header="Italic" Command="{Binding ItalicCommand}" InputGestureText="Ctrl+I" />
+                <MenuItem Header="Strikethrough" Command="{Binding StrikethroughCommand}" InputGestureText="Ctrl+Shift+X" />
+                <MenuItem Header="Inline Code" Command="{Binding InlineCodeCommand}" InputGestureText="Ctrl+`" />
                 <Separator />
-                <MenuItem Header="Code Block" Command="{Binding CodeBlockCommand}" />
-                <MenuItem Header="Blockquote" Command="{Binding BlockquoteCommand}" />
+                <MenuItem Header="Code Block" Command="{Binding CodeBlockCommand}" InputGestureText="Ctrl+Shift+C" />
+                <MenuItem Header="Blockquote" Command="{Binding BlockquoteCommand}" InputGestureText="Ctrl+Q" />
                 <Separator />
-                <MenuItem Header="Unordered List" Command="{Binding UnorderedListCommand}" />
-                <MenuItem Header="Ordered List" Command="{Binding OrderedListCommand}" />
-                <MenuItem Header="Task List" Command="{Binding TaskListCommand}" />
+                <MenuItem Header="Unordered List" Command="{Binding UnorderedListCommand}" InputGestureText="Ctrl+Shift+L" />
+                <MenuItem Header="Ordered List" Command="{Binding OrderedListCommand}" InputGestureText="Ctrl+Shift+O" />
+                <MenuItem Header="Task List" Command="{Binding TaskListCommand}" InputGestureText="Ctrl+Shift+T" />
                 <Separator />
-                <MenuItem Header="Link" Command="{Binding InsertLinkCommand}" />
-                <MenuItem Header="Image" Command="{Binding InsertImageCommand}" />
+                <MenuItem Header="Link" Command="{Binding InsertLinkCommand}" InputGestureText="Ctrl+K" />
+                <MenuItem Header="Image" Command="{Binding InsertImageCommand}" InputGestureText="Ctrl+Shift+I" />
                 <MenuItem Header="Table" Command="{Binding InsertTableCommand}" />
                 <MenuItem Header="Horizontal Rule" Command="{Binding InsertHorizontalRuleCommand}" />
                 <MenuItem Header="Math Block" Command="{Binding MathBlockCommand}" />
@@ -246,7 +251,7 @@
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8B9;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding InsertTableCommand}" ToolTip="Insert Table (Ctrl+Shift+T)">
+            <Button Command="{Binding InsertTableCommand}" ToolTip="Insert Table">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8F1;" />
                 </Button.Content>
@@ -476,6 +481,25 @@
                                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                      ScrollViewer.VerticalScrollBarVisibility="Auto"
                                      TextChanged="MarkdownEditor_TextChanged">
+                                <!-- Instance bindings take precedence over RichTextBox's built-in class bindings,
+                                     so Ctrl+B/I/1/2/Shift+L etc. insert Markdown instead of applying invisible
+                                     rich-text formatting. -->
+                                <RichTextBox.InputBindings>
+                                    <KeyBinding Key="B" Modifiers="Control" Command="{Binding BoldCommand}" />
+                                    <KeyBinding Key="I" Modifiers="Control" Command="{Binding ItalicCommand}" />
+                                    <KeyBinding Key="X" Modifiers="Control+Shift" Command="{Binding StrikethroughCommand}" />
+                                    <KeyBinding Key="Oem3" Modifiers="Control" Command="{Binding InlineCodeCommand}" />
+                                    <KeyBinding Key="C" Modifiers="Control+Shift" Command="{Binding CodeBlockCommand}" />
+                                    <KeyBinding Key="Q" Modifiers="Control" Command="{Binding BlockquoteCommand}" />
+                                    <KeyBinding Key="D1" Modifiers="Control" Command="{Binding Heading1Command}" />
+                                    <KeyBinding Key="D2" Modifiers="Control" Command="{Binding Heading2Command}" />
+                                    <KeyBinding Key="D3" Modifiers="Control" Command="{Binding Heading3Command}" />
+                                    <KeyBinding Key="L" Modifiers="Control+Shift" Command="{Binding UnorderedListCommand}" />
+                                    <KeyBinding Key="O" Modifiers="Control+Shift" Command="{Binding OrderedListCommand}" />
+                                    <KeyBinding Key="T" Modifiers="Control+Shift" Command="{Binding TaskListCommand}" />
+                                    <KeyBinding Key="K" Modifiers="Control" Command="{Binding InsertLinkCommand}" />
+                                    <KeyBinding Key="I" Modifiers="Control+Shift" Command="{Binding InsertImageCommand}" />
+                                </RichTextBox.InputBindings>
                                 <RichTextBox.ContextMenu>
                                     <ContextMenu>
                                         <MenuItem Header="Undo" Command="{Binding UndoCommand}" />

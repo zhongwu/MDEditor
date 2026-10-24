@@ -215,12 +215,18 @@ public class GitHubAuthService : IGitHubAuthService
 
     public IGitHubClient? CreateClient(string? login = null)
     {
+        var token = GetAccessToken(login);
+        return token == null ? null : _clientFactory(new Credentials(token));
+    }
+
+    public string? GetAccessToken(string? login = null)
+    {
         var account = FindAccount(login ?? _activeLogin);
         if (account == null)
             return null;
 
         var token = _tokenStore.Get(TokenKey(account.Login));
-        return string.IsNullOrEmpty(token) ? null : _clientFactory(new Credentials(token));
+        return string.IsNullOrEmpty(token) ? null : token;
     }
 
     private GitHubAccount? FindAccount(string? login) =>

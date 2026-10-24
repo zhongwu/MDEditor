@@ -43,6 +43,24 @@ public partial class MainWindow
             : "GitHub: not signed in. Click to connect an account.";
     }
 
+    /// <summary>
+    /// Authorization header for preview image requests into the open document's repository, so
+    /// images in private repos load. The token is only ever sent to that repo's raw URLs.
+    /// </summary>
+    private string? GetGitHubImageAuthorization(string url)
+    {
+        var document = _gitHubDocument;
+        if (document == null)
+            return null;
+
+        var repoPrefix = $"https://raw.githubusercontent.com/{document.Owner}/{document.Repo}/";
+        if (!url.StartsWith(repoPrefix, StringComparison.OrdinalIgnoreCase))
+            return null;
+
+        var token = _gitHubAuthService.GetAccessToken();
+        return token == null ? null : "token " + token;
+    }
+
     private void StatusGitHub_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) => ShowGitHubAccountsWindow();
 
     /// <summary>

@@ -496,7 +496,7 @@ public partial class MainWindow
             return;
         }
 
-        _printPreviewWindow = new PreviewWindow(_markdownParser, GetEditorText(), PreviewWindowMode.Print)
+        _printPreviewWindow = new PreviewWindow(_markdownParser, GetEditorText(), PreviewWindowMode.Print, previewOptions: GetPreviewRenderOptions())
         {
             Owner = this
         };

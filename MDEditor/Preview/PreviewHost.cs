@@ -1,6 +1,7 @@
 using System.IO;
 using MDEditor.Core.Interfaces;
 using MDEditor.Core.Models;
+using MDEditor.Core.Services;
 using Microsoft.Web.WebView2.Core;
 
 namespace MDEditor.Preview;
@@ -12,6 +13,27 @@ namespace MDEditor.Preview;
 internal static class PreviewHost
 {
     private static Task<CoreWebView2Environment>? _environment;
+
+    /// <summary>
+    /// Returns the Authorization header value for an image request URL, or null to send none.
+    /// Set by MainWindow so images from a private GitHub repository load in every preview surface.
+    /// </summary>
+    public static Func<string, string?>? ImageAuthorization { get; set; }
+
+    /// <summary>
+    /// Lets <see cref="ImageAuthorization"/> add credentials to raw.githubusercontent.com image
+    /// requests made by <paramref name="webView"/>. Call once per CoreWebView2.
+    /// </summary>
+    public static void AttachImageAuthorization(CoreWebView2 webView)
+    {
+        webView.AddWebResourceRequestedFilter("https://raw.githubusercontent.com/*", CoreWebView2WebResourceContext.Image);
+        webView.WebResourceRequested += (s, e) =>
+        {
+            var header = ImageAuthorization?.Invoke(e.Request.Uri);
+            if (header != null)
+                e.Request.Headers.SetHeader("Authorization", header);
+        };
+    }
 
     /// <summary>
     /// One WebView2 environment (and user data folder) shared by all preview surfaces.
@@ -62,7 +84,13 @@ internal static class PreviewHost
             return true;
         }
 
-        var bodyHtml = await Task.Run(() => parser.ToHtml(markdown));
+        var bodyHtml = await Task.Run(() =>
+        {
+            var html = parser.ToHtml(markdown);
+            return previewOptions?.ImageBaseUrl is { } imageBase
+                ? ImageUrlRewriter.Rewrite(html, imageBase, previewOptions.Value.ImageRootUrl ?? imageBase)
+                : html;
+        });
         if (string.IsNullOrEmpty(bodyHtml))
             bodyHtml = "<p></p>";
 

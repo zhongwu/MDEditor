@@ -145,6 +145,8 @@ public class MarkdownParser : IMarkdownParser
     private string BuildDocument(string markdown, PreviewRenderOptions? previewOptions)
     {
         var bodyHtml = ToHtml(markdown);
+        if (previewOptions?.ImageBaseUrl is { } imageBase)
+            bodyHtml = ImageUrlRewriter.Rewrite(bodyHtml, imageBase, previewOptions.Value.ImageRootUrl ?? imageBase);
         var isDark = previewOptions?.IsDarkTheme ?? false;
 
         var styleBlock = "    <style>\n" + BaseCss;

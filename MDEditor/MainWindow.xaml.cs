@@ -46,11 +46,17 @@ public partial class MainWindow : Window
     // Line ending used when saving (Settings window changes this live)
     private string _lineEnding = Environment.NewLine == "\n" ? "LF" : "CRLF";
 
-    // Keyboard shortcuts rebindable from the Settings window - only the commands that already
-    // have a real Window.InputBindings entry (per the known-true 10; zoom in/out also have a
-    // fixed, unlisted numpad alias binding that a rebind doesn't touch).
+    // Keyboard shortcuts rebindable from the Settings window - only the commands that have a real
+    // Window.InputBindings entry (zoom in/out also have a fixed, unlisted numpad alias binding that
+    // a rebind doesn't touch). The editor's formatting shortcuts live on MarkdownEditor.InputBindings
+    // and aren't rebindable.
     private static readonly (string Key, string Label, Func<MainWindowViewModel, ICommand> GetCommand)[] RebindableShortcuts =
     {
+        ("newFile", "New File", vm => vm.NewFileCommand),
+        ("openFile", "Open File", vm => vm.OpenFileCommand),
+        ("saveFile", "Save", vm => vm.SaveFileCommand),
+        ("saveAsFile", "Save As", vm => vm.SaveAsFileCommand),
+        ("togglePreview", "Show Preview", vm => vm.TogglePreviewCommand),
         ("toggleOutline", "Show Outline", vm => vm.ToggleOutlineCommand),
         ("find", "Find", vm => vm.FindCommand),
         ("replace", "Replace", vm => vm.ReplaceCommand),
@@ -155,6 +161,7 @@ public partial class MainWindow : Window
         _gitHubAuthService = App.Services.GetRequiredService<IGitHubAuthService>();
         _gitHubRepoService = App.Services.GetRequiredService<IGitHubRepositoryService>();
         _gitHubAuthService.AccountsChanged += (s, e) => UpdateGitHubStatus();
+        MDEditor.Preview.PreviewHost.ImageAuthorization = GetGitHubImageAuthorization;
         UpdateGitHubStatus();
 
         // Phase 6.2: outline panel, find in preview, print preview, presentation mode
@@ -919,6 +926,7 @@ public partial class MainWindow : Window
         await MarkdownPreview.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(
             "window.addEventListener('scroll',function(){var m=document.documentElement.scrollHeight-window.innerHeight;if(m<0)m=0;var p=m>0?window.scrollY/m:0;if(window.chrome&&window.chrome.webview){window.chrome.webview.postMessage(JSON.stringify({type:'scroll',pct:p}));}}, {passive:true});");
         await MarkdownPreview.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(MDEditor.Preview.PreviewHost.FindScript);
+        MDEditor.Preview.PreviewHost.AttachImageAuthorization(MarkdownPreview.CoreWebView2);
     }
 
     private async void InitializePreview()
@@ -938,7 +946,8 @@ public partial class MainWindow : Window
         }
     }
 
-    private PreviewRenderOptions GetPreviewRenderOptions() => new(ThemeService.IsDark, _customCss);
+    private PreviewRenderOptions GetPreviewRenderOptions() =>
+        new(ThemeService.IsDark, _customCss, _gitHubDocument?.RawFolderUrl, _gitHubDocument?.RawRootUrl);
 
     // --- Settings window hooks: these apply a change live; the Settings window itself persists
     // the value via ISettingsService before calling in. ---
@@ -1677,13 +1686,52 @@ public partial class MainWindow : Window
 
     private void AutoSaveDraft()
     {
-        if (!_isDirty) return;
+        // Once the work is saved (or discarded) the draft is stale; leaving it would trigger a
+        // false "Crash Recovery" prompt on the next launch.
+        if (!_isDirty)
+        {
+            DeleteDraft();
+            return;
+        }
+
         try
         {
             var text = GetEditorText();
             System.IO.File.WriteAllText(GetDraftPath(), text);
         }
         catch { }
+    }
+
+    private void DeleteDraft()
+    {
+        try { System.IO.File.Delete(GetDraftPath()); } catch { }
+    }
+
+    protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+    {
+        base.OnClosing(e);
+        if (e.Cancel || !_isDirty)
+            return;
+
+        var name = _gitHubDocument?.FileName
+            ?? (string.IsNullOrEmpty(_currentFilePath) ? "Untitled.md" : System.IO.Path.GetFileName(_currentFilePath));
+        var result = MessageBox.Show(this, $"Save changes to {name} before closing?", "MDEditor",
+            MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+
+        if (result == MessageBoxResult.Yes)
+            SaveFile(); // a GitHub document opens the commit dialog
+
+        // Stay open on Cancel, or if the save/commit was cancelled or failed.
+        if (result == MessageBoxResult.Cancel || (result == MessageBoxResult.Yes && _isDirty))
+            e.Cancel = true;
+    }
+
+    protected override void OnClosed(EventArgs e)
+    {
+        // A normal exit means nothing needs recovering (the user saved or chose not to).
+        _autoSaveTimer?.Stop();
+        DeleteDraft();
+        base.OnClosed(e);
     }
 
     private void CheckCrashRecovery()
@@ -1702,6 +1750,9 @@ public partial class MainWindow : Window
                 {
                     var content = System.IO.File.ReadAllText(draftPath);
                     SetEditorText(content);
+                    // Recovered text exists nowhere else - keep it unsaved so it gets re-drafted
+                    // and closing prompts to save it.
+                    MarkDirty();
                 }
                 catch { }
             }
