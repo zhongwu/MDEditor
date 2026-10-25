@@ -166,6 +166,7 @@ public partial class MainWindow : Window
         ViewModel.OpenGistCallback = OpenGist;
         ViewModel.SaveAsGistCallback = SaveAsGist;
         ViewModel.ViewGistCallback = ViewGistOnGitHub;
+        ViewModel.GistHistoryCallback = ShowGistHistory;
         _gitHubAuthService = App.Services.GetRequiredService<IGitHubAuthService>();
         _gitHubRepoService = App.Services.GetRequiredService<IGitHubRepositoryService>();
         _gistService = App.Services.GetRequiredService<IGitHubGistService>();

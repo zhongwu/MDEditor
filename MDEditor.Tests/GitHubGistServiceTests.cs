@@ -11,12 +11,13 @@ namespace MDEditor.Tests;
 public class GitHubGistServiceTests
 {
     private readonly Mock<IGistsClient> _gists = new();
+    private readonly Mock<IGitHubClient> _client = new();
     private readonly List<string> _rawDownloads = new();
     private readonly GitHubGistService _service;
 
     public GitHubGistServiceTests()
     {
-        var client = new Mock<IGitHubClient>();
+        var client = _client;
         client.Setup(c => c.Gist).Returns(_gists.Object);
 
         var auth = new Mock<IGitHubAuthService>();
@@ -211,5 +212,96 @@ public class GitHubGistServiceTests
     {
         Assert.Equal("notes.md", new GitHubGistInfo { Id = "x", Description = " ", FileNames = new[] { "notes.md" } }.Title);
         Assert.Equal("Desc", new GitHubGistInfo { Id = "x", Description = "Desc", FileNames = new[] { "notes.md" } }.Title);
+    }
+
+    private static GistHistory History(string version, string committedAt, string? login = "alice", int additions = 1, int deletions = 0) =>
+        new(url: $"https://api.github.com/gists/abc123def/{version}",
+            version: version,
+            user: login == null ? null! : new SimpleJsonSerializer().Deserialize<User>($$"""{"login":"{{login}}"}"""),
+            changeStatus: new GistChangeStatus(deletions, additions, deletions + additions),
+            committedAt: DateTimeOffset.Parse(committedAt));
+
+    [Fact]
+    public async Task GetHistory_OrdersNewestFirst_AndLinksPreviousSha()
+    {
+        _gists.Setup(g => g.GetAllCommits("abc123def")).ReturnsAsync(new[]
+        {
+            History("v1", "2026-10-20T10:00:00Z"),
+            History("v2", "2026-10-21T10:00:00Z"),
+            History("v3", "2026-10-22T10:00:00Z"),
+        });
+
+        var history = await _service.GetHistoryAsync(Doc());
+
+        Assert.Equal(new[] { "v3", "v2", "v1" }, history.Select(h => h.Sha));
+        Assert.Equal("v2", history[0].PreviousSha);
+        Assert.Equal("v1", history[1].PreviousSha);
+        Assert.Null(history[2].PreviousSha);
+        Assert.Equal("alice", history[0].AuthorLogin);
+        Assert.Contains("abc123def/v3", history[0].HtmlUrl);
+    }
+
+    [Fact]
+    public async Task GetHistory_Empty_ReturnsEmptyList()
+    {
+        _gists.Setup(g => g.GetAllCommits("abc123def")).ReturnsAsync(Array.Empty<GistHistory>());
+
+        var history = await _service.GetHistoryAsync(Doc());
+
+        Assert.Empty(history);
+    }
+
+    private static IApiResponse<Gist> ApiResponse(Gist gist) =>
+        new ApiResponse<Gist>(Mock.Of<IResponse>(r => r.StatusCode == HttpStatusCode.OK), gist);
+
+    [Fact]
+    public async Task GetFileAtRevision_ReturnsContentAtThatRevision()
+    {
+        var connection = new Mock<IConnection>();
+        connection.Setup(c => c.Get<Gist>(
+                It.Is<Uri>(u => u.ToString() == "gists/abc123def/v1"),
+                It.IsAny<IDictionary<string, string>>()))
+            .ReturnsAsync(ApiResponse(GistJson(content: "old text")));
+        _client.Setup(c => c.Connection).Returns(connection.Object);
+
+        var text = await _service.GetFileAtRevisionAsync(Doc(), "v1");
+
+        Assert.Equal("old text", text);
+    }
+
+    [Fact]
+    public async Task GetFileAtRevision_MissingFile_ReturnsNull()
+    {
+        var connection = new Mock<IConnection>();
+        connection.Setup(c => c.Get<Gist>(It.IsAny<Uri>(), It.IsAny<IDictionary<string, string>>()))
+            .ReturnsAsync(ApiResponse(GistJson())); // GistJson() only has "notes.md" and "other.txt"
+        _client.Setup(c => c.Connection).Returns(connection.Object);
+
+        var missingDoc = new GitHubGistDocument
+        {
+            GistId = "abc123def",
+            FileName = "missing.md",
+            Owner = "alice",
+            UpdatedAt = DateTimeOffset.Parse("2026-10-20T10:00:00Z"),
+            LineEnding = "LF",
+            CanEdit = true,
+        };
+
+        var result = await _service.GetFileAtRevisionAsync(missingDoc, "v1");
+
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public async Task GetFileAtRevision_NotFound_ReturnsNull()
+    {
+        var connection = new Mock<IConnection>();
+        connection.Setup(c => c.Get<Gist>(It.IsAny<Uri>(), It.IsAny<IDictionary<string, string>>()))
+            .ThrowsAsync(new NotFoundException("Not Found", HttpStatusCode.NotFound));
+        _client.Setup(c => c.Connection).Returns(connection.Object);
+
+        var result = await _service.GetFileAtRevisionAsync(Doc(), "deadbeef");
+
+        Assert.Null(result);
     }
 }

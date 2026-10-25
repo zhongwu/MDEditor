@@ -232,4 +232,50 @@ public partial class GitHubGistService : IGitHubGistService
             CanEdit = document.CanEdit,
         };
     }
+
+    public async Task<IReadOnlyList<GitHubGistRevisionInfo>> GetHistoryAsync(GitHubGistDocument document, CancellationToken cancellationToken = default)
+    {
+        var client = Client;
+        var history = await GuardAsync(() => client.Gist.GetAllCommits(document.GistId));
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var ordered = history.OrderByDescending(h => h.CommittedAt).ToList();
+        return ordered.Select((h, i) => new GitHubGistRevisionInfo
+        {
+            Sha = h.Version,
+            AuthorLogin = h.User?.Login,
+            CommittedAt = h.CommittedAt,
+            Additions = h.ChangeStatus?.Additions ?? 0,
+            Deletions = h.ChangeStatus?.Deletions ?? 0,
+            PreviousSha = i + 1 < ordered.Count ? ordered[i + 1].Version : null,
+            HtmlUrl = $"https://gist.github.com/{document.Owner}/{document.GistId}/{h.Version}",
+        }).ToList();
+    }
+
+    public async Task<string?> GetFileAtRevisionAsync(GitHubGistDocument document, string sha, CancellationToken cancellationToken = default)
+    {
+        var client = Client;
+        Gist revision;
+        try
+        {
+            // Octokit's IGistsClient has no Get(id, sha) overload for a specific historical
+            // revision, so this hits GitHub's GET /gists/{gist_id}/{sha} directly.
+            var response = await GuardAsync(() => client.Connection.Get<Gist>(
+                new Uri($"gists/{document.GistId}/{sha}", UriKind.Relative), new Dictionary<string, string>()));
+            revision = response.Body;
+        }
+        catch (NotFoundException)
+        {
+            return null;
+        }
+        cancellationToken.ThrowIfCancellationRequested();
+
+        if (revision.Files == null || !revision.Files.TryGetValue(document.FileName, out var file))
+            return null; // the file didn't exist (or had a different name) at this revision
+
+        var text = file.Content;
+        if (string.IsNullOrEmpty(text) && file.Size > 0 && !string.IsNullOrEmpty(file.RawUrl))
+            text = await _downloadRaw(file.RawUrl);
+        return (text ?? string.Empty).TrimStart('﻿');
+    }
 }

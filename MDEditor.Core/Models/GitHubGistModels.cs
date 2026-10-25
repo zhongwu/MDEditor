@@ -53,3 +53,22 @@ public class GitHubGistFileContent
     public GitHubGistDocument Document { get; init; } = new();
     public string Text { get; init; } = string.Empty;
 }
+
+/// <summary>
+/// One revision in a gist's history. Gists have no commit messages or branches - just a flat,
+/// linear list of snapshots - so this mirrors <see cref="GitHubCommitInfo"/> without those fields.
+/// </summary>
+public class GitHubGistRevisionInfo
+{
+    public string Sha { get; init; } = string.Empty;
+    public string ShortSha => Sha.Length > 7 ? Sha[..7] : Sha;
+    public string? AuthorLogin { get; init; }
+    public DateTimeOffset CommittedAt { get; init; }
+    public int Additions { get; init; }
+    public int Deletions { get; init; }
+
+    /// <summary>The next-older revision, or null for the oldest one (mirrors GitHubCommitInfo.ParentSha).</summary>
+    public string? PreviousSha { get; init; }
+
+    public string HtmlUrl { get; init; } = string.Empty;
+}

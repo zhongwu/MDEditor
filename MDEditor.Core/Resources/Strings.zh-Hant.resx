@@ -1203,6 +1203,42 @@
   <data name="Status_Words" xml:space="preserve">
     <value>字數：{0}</value>
   </data>
+  <data name="Menu_GistHistory" xml:space="preserve">
+    <value>Gist 歷程記錄...</value>
+  </data>
+  <data name="Gist_HistoryTitle" xml:space="preserve">
+    <value>Gist 歷程記錄</value>
+  </data>
+  <data name="Gist_ChangesInRevision" xml:space="preserve">
+    <value>此修訂中的變更</value>
+  </data>
+  <data name="Gist_ViewRevision" xml:space="preserve">
+    <value>在 GitHub 上檢視修訂</value>
+  </data>
+  <data name="Gist_NoRevisions" xml:space="preserve">
+    <value>找不到此 Gist 檔案的修訂。</value>
+  </data>
+  <data name="Gist_RevisionCount" xml:space="preserve">
+    <value>{0} 個修訂</value>
+  </data>
+  <data name="Gist_StatsTipRevision" xml:space="preserve">
+    <value>此修訂新增/移除的行</value>
+  </data>
+  <data name="Gist_FileMissingAtRevision" xml:space="preserve">
+    <value>此修訂中不存在此檔案（可能已被重新命名或移除）。</value>
+  </data>
+  <data name="Gist_RevisionNoChange" xml:space="preserve">
+    <value>此修訂沒有變更檔案的文字。</value>
+  </data>
+  <data name="Gist_RestoreTip" xml:space="preserve">
+    <value>將此版本載入編輯器。在儲存之前，GitHub 上不會有任何變更。</value>
+  </data>
+  <data name="Gist_HistoryOnlyGist" xml:space="preserve">
+    <value>僅 Gist 檔案可檢視歷程記錄（檔案 &gt; 開啟 Gist... 或 檔案 &gt; 另存為 Gist...）。</value>
+  </data>
+  <data name="Gist_UnknownAuthor" xml:space="preserve">
+    <value>未知</value>
+  </data>
   <data name="About_Tagline" xml:space="preserve">
     <value>一款支援即時預覽、GitHub 同步與 Gist 功能的 Markdown 桌面編輯器。</value>
   </data>

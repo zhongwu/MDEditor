@@ -171,6 +171,7 @@ public sealed partial class MainWindowViewModel : ObservableObject
     public Action? OpenGistCallback { get; set; }
     public Action? SaveAsGistCallback { get; set; }
     public Action? ViewGistCallback { get; set; }
+    public Action? GistHistoryCallback { get; set; }
 
     /// <summary>
     /// Callback for new file.
@@ -609,6 +610,13 @@ public sealed partial class MainWindowViewModel : ObservableObject
     {
         _loggingService.LogInformation("View gist requested");
         ViewGistCallback?.Invoke();
+    }
+
+    [RelayCommand]
+    private void GistHistory()
+    {
+        _loggingService.LogInformation("Gist history requested");
+        GistHistoryCallback?.Invoke();
     }
 
     [RelayCommand]

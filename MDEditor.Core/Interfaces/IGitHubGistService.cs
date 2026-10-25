@@ -25,4 +25,10 @@ public interface IGitHubGistService
     /// <param name="overwrite">Save even if the gist changed on GitHub since it was opened.</param>
     /// <exception cref="GitHubConflictException">The gist changed on GitHub and <paramref name="overwrite"/> is false.</exception>
     Task<GitHubGistDocument> UpdateAsync(GitHubGistDocument document, string text, bool overwrite = false, CancellationToken cancellationToken = default);
+
+    /// <summary>The gist's revision history, newest first.</summary>
+    Task<IReadOnlyList<GitHubGistRevisionInfo>> GetHistoryAsync(GitHubGistDocument document, CancellationToken cancellationToken = default);
+
+    /// <summary>The document's file content as it was at a specific historical revision, or null if the file didn't exist there.</summary>
+    Task<string?> GetFileAtRevisionAsync(GitHubGistDocument document, string sha, CancellationToken cancellationToken = default);
 }

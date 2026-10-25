@@ -138,4 +138,36 @@ public partial class MainWindow
         if (_gistDocument != null)
             OpenInBrowser(_gistDocument.HtmlUrl);
     }
+
+    private void ShowGistHistory()
+    {
+        var document = _gistDocument;
+        if (document == null)
+        {
+            MessageBox.Show(this,
+                Loc.Get("Gist_HistoryOnlyGist"),
+                Loc.Get("Gist_HistoryTitle"), MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
+        if (!EnsureGitHubSignedIn())
+            return;
+
+        var history = new GistHistoryWindow(_gistService, document, GetEditorText()) { Owner = this };
+        if (history.ShowDialog() != true || history.RestoredText == null)
+            return;
+
+        if (_isDirty)
+        {
+            var result = MessageBox.Show(this, Loc.Get("GH_ReplaceUnsavedWithVersion"), Loc.Get("GH_RestoreVersionTitle"),
+                MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result != MessageBoxResult.Yes)
+                return;
+        }
+
+        // Restoring only changes the editor; it reaches GitHub with the next save, since gists
+        // have no per-save message to pre-fill (unlike repo commits).
+        SetEditorText(history.RestoredText);
+        MarkDirty();
+    }
 }

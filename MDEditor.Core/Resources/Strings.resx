@@ -1203,6 +1203,42 @@ Cancel – keep editing</value>
   <data name="Status_Words" xml:space="preserve">
     <value>Words: {0}</value>
   </data>
+  <data name="Menu_GistHistory" xml:space="preserve">
+    <value>Gist History...</value>
+  </data>
+  <data name="Gist_HistoryTitle" xml:space="preserve">
+    <value>Gist History</value>
+  </data>
+  <data name="Gist_ChangesInRevision" xml:space="preserve">
+    <value>Changes in this revision</value>
+  </data>
+  <data name="Gist_ViewRevision" xml:space="preserve">
+    <value>View Revision on GitHub</value>
+  </data>
+  <data name="Gist_NoRevisions" xml:space="preserve">
+    <value>No revisions found for this gist file.</value>
+  </data>
+  <data name="Gist_RevisionCount" xml:space="preserve">
+    <value>{0} revisions</value>
+  </data>
+  <data name="Gist_StatsTipRevision" xml:space="preserve">
+    <value>Lines added/removed by this revision</value>
+  </data>
+  <data name="Gist_FileMissingAtRevision" xml:space="preserve">
+    <value>This file doesn't exist at this revision (it may have been renamed or removed).</value>
+  </data>
+  <data name="Gist_RevisionNoChange" xml:space="preserve">
+    <value>This revision didn't change the file's text.</value>
+  </data>
+  <data name="Gist_RestoreTip" xml:space="preserve">
+    <value>Load this version into the editor. Nothing changes on GitHub until you save.</value>
+  </data>
+  <data name="Gist_HistoryOnlyGist" xml:space="preserve">
+    <value>History is available for gist files (File &gt; Open Gist... or File &gt; Save as Gist...).</value>
+  </data>
+  <data name="Gist_UnknownAuthor" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
   <data name="About_Tagline" xml:space="preserve">
     <value>A Markdown desktop editor with live preview, GitHub sync, and Gist support.</value>
   </data>
