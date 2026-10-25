@@ -1068,4 +1068,133 @@ View the pull request on GitHub?</value>
   <data name="Snip_Mermaid" xml:space="preserve">
     <value>Mermaid diagram</value>
   </data>
+  <data name="Menu_OpenGist" xml:space="preserve">
+    <value>Open Gist...</value>
+  </data>
+  <data name="Menu_SaveAsGist" xml:space="preserve">
+    <value>Save as Gist...</value>
+  </data>
+  <data name="Menu_ViewGist" xml:space="preserve">
+    <value>Open Gist in Browser</value>
+  </data>
+  <data name="Gist_OpenTitle" xml:space="preserve">
+    <value>Open Gist</value>
+  </data>
+  <data name="Gist_UrlLabel" xml:space="preserve">
+    <value>Gist link or ID:</value>
+  </data>
+  <data name="Gist_UrlTip" xml:space="preserve">
+    <value>Paste the URL of any gist (yours or someone else's, public or secret) or its ID</value>
+  </data>
+  <data name="Gist_Go" xml:space="preserve">
+    <value>Go</value>
+  </data>
+  <data name="Gist_Reload" xml:space="preserve">
+    <value>Reload gists</value>
+  </data>
+  <data name="Gist_Filter" xml:space="preserve">
+    <value>Filter gists</value>
+  </data>
+  <data name="Gist_Files" xml:space="preserve">
+    <value>Files</value>
+  </data>
+  <data name="Gist_Loading" xml:space="preserve">
+    <value>Loading gists...</value>
+  </data>
+  <data name="Gist_LoadingOne" xml:space="preserve">
+    <value>Loading gist...</value>
+  </data>
+  <data name="Gist_Count" xml:space="preserve">
+    <value>{0} gists</value>
+  </data>
+  <data name="Gist_LoadFailed" xml:space="preserve">
+    <value>Couldn't load gists: {0}</value>
+  </data>
+  <data name="Gist_NoMatches" xml:space="preserve">
+    <value>No gists match the filter.</value>
+  </data>
+  <data name="Gist_None" xml:space="preserve">
+    <value>You don't have any gists yet.</value>
+  </data>
+  <data name="Gist_Public" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="Gist_Secret" xml:space="preserve">
+    <value>Secret</value>
+  </data>
+  <data name="Gist_FileCount" xml:space="preserve">
+    <value>{0} files</value>
+  </data>
+  <data name="Gist_FileCountOne" xml:space="preserve">
+    <value>1 file</value>
+  </data>
+  <data name="Gist_BadLink" xml:space="preserve">
+    <value>That isn't a gist link or ID.</value>
+  </data>
+  <data name="Gist_CreateTitle" xml:space="preserve">
+    <value>Save as Gist</value>
+  </data>
+  <data name="Gist_FileName" xml:space="preserve">
+    <value>File name</value>
+  </data>
+  <data name="Gist_Description" xml:space="preserve">
+    <value>Description (optional)</value>
+  </data>
+  <data name="Gist_SecretNote" xml:space="preserve">
+    <value>Not listed on your profile or in search; anyone with the link can see it.</value>
+  </data>
+  <data name="Gist_PublicNote" xml:space="preserve">
+    <value>Visible on your profile and in search.</value>
+  </data>
+  <data name="Gist_Create" xml:space="preserve">
+    <value>Create Gist</value>
+  </data>
+  <data name="Gist_Creating" xml:space="preserve">
+    <value>Creating gist...</value>
+  </data>
+  <data name="Gist_Created" xml:space="preserve">
+    <value>Gist created, and its link was copied to the clipboard.
+
+Open it in your browser?</value>
+  </data>
+  <data name="Gist_CreatedTitle" xml:space="preserve">
+    <value>Gist Created</value>
+  </data>
+  <data name="Gist_ReadOnly" xml:space="preserve">
+    <value>This gist belongs to {0}, so you can't update it. Use File &gt; Save as Gist... to make your own copy, or File &gt; Save As... to save it locally.</value>
+  </data>
+  <data name="Gist_ReadOnlyTitle" xml:space="preserve">
+    <value>Read-only Gist</value>
+  </data>
+  <data name="Gist_Conflict" xml:space="preserve">
+    <value>This gist changed on GitHub since you opened it.
+
+Yes – overwrite it with your version
+No – discard your changes and load the latest version
+Cancel – keep editing</value>
+  </data>
+  <data name="Gist_ConflictTitle" xml:space="preserve">
+    <value>Gist Changed on GitHub</value>
+  </data>
+  <data name="Gist_SaveFailed" xml:space="preserve">
+    <value>Couldn't save the gist</value>
+  </data>
+  <data name="Err_GistNotFound" xml:space="preserve">
+    <value>Gist {0} wasn't found, or you don't have access to it.</value>
+  </data>
+  <data name="Err_GistFileNotFound" xml:space="preserve">
+    <value>The gist has no file named '{0}'.</value>
+  </data>
+  <data name="Err_GistScope" xml:space="preserve">
+    <value>GitHub refused to save the gist. If you signed in with a personal access token, it needs the gist scope - sign in with the browser or add a token that has it.</value>
+  </data>
+  <data name="Err_GistFileName" xml:space="preserve">
+    <value>Enter a file name without slashes.</value>
+  </data>
+  <data name="Err_GistConflict" xml:space="preserve">
+    <value>The gist containing {0} was changed on GitHub since you opened it.</value>
+  </data>
+  <data name="Err_SignInExpired" xml:space="preserve">
+    <value>GitHub rejected the saved sign-in (Bad credentials). The token was probably revoked or has expired - remove the account and sign in again (Tools &gt; GitHub Accounts...).</value>
+  </data>
 </root>

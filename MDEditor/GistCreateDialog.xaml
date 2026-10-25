@@ -1,0 +1,40 @@
+<Window x:Class="MDEditor.GistCreateDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:MDEditor.Localization"
+        Title="{loc:Tr Gist_CreateTitle}" Width="460" SizeToContent="Height" ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        Background="{DynamicResource WindowBackgroundBrush}"
+        Foreground="{DynamicResource WindowForegroundBrush}">
+    <StackPanel Margin="16">
+        <TextBlock Text="{loc:Tr Gist_FileName}" Margin="0,0,0,4" />
+        <TextBox x:Name="FileNameBox" Margin="0,0,0,10" TextChanged="Input_Changed"
+                 Background="{DynamicResource ControlBackgroundBrush}" Foreground="{DynamicResource ControlForegroundBrush}" />
+
+        <TextBlock Text="{loc:Tr Gist_Description}" Margin="0,0,0,4" />
+        <TextBox x:Name="DescriptionBox" Margin="0,0,0,12"
+                 Background="{DynamicResource ControlBackgroundBrush}" Foreground="{DynamicResource ControlForegroundBrush}" />
+
+        <RadioButton x:Name="SecretRadio" GroupName="Visibility" IsChecked="True" Margin="0,0,0,2">
+            <TextBlock>
+                <Run Text="{loc:Tr Gist_Secret}" FontWeight="SemiBold" />
+                <LineBreak />
+                <Run Text="{loc:Tr Gist_SecretNote}" />
+            </TextBlock>
+        </RadioButton>
+        <RadioButton x:Name="PublicRadio" GroupName="Visibility" Margin="0,8,0,0">
+            <TextBlock>
+                <Run Text="{loc:Tr Gist_Public}" FontWeight="SemiBold" />
+                <LineBreak />
+                <Run Text="{loc:Tr Gist_PublicNote}" />
+            </TextBlock>
+        </RadioButton>
+
+        <TextBlock x:Name="StatusText" TextWrapping="Wrap" Margin="0,12,0,0" Visibility="Collapsed" />
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+            <Button x:Name="CreateButton" Content="{loc:Tr Gist_Create}" IsDefault="True" Padding="16,3" Margin="0,0,8,0" Click="Create_Click" />
+            <Button x:Name="CancelButton" Content="{loc:Tr Common_Cancel}" IsCancel="True" Padding="16,3" />
+        </StackPanel>
+    </StackPanel>
+</Window>

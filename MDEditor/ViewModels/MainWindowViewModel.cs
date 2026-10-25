@@ -35,6 +35,12 @@ public sealed partial class MainWindowViewModel : ObservableObject
     private bool _isGitHubDocument;
 
     /// <summary>
+    /// True while the open document is a gist file; shows the gist-only menu items.
+    /// </summary>
+    [ObservableProperty]
+    private bool _isGistDocument;
+
+    /// <summary>
     /// Automatically saves the preview state to settings whenever it changes.
     /// Also ensures at least one pane (editor or preview) stays visible.
     /// </summary>
@@ -152,6 +158,13 @@ public sealed partial class MainWindowViewModel : ObservableObject
     /// Callback for showing the current GitHub file's version history.
     /// </summary>
     public Action? GitHubHistoryCallback { get; set; }
+
+    /// <summary>
+    /// Callbacks for gist support: open a gist file, save as a new gist, view the gist online.
+    /// </summary>
+    public Action? OpenGistCallback { get; set; }
+    public Action? SaveAsGistCallback { get; set; }
+    public Action? ViewGistCallback { get; set; }
 
     /// <summary>
     /// Callback for new file.
@@ -569,6 +582,27 @@ public sealed partial class MainWindowViewModel : ObservableObject
     {
         _loggingService.LogInformation("GitHub file history requested");
         GitHubHistoryCallback?.Invoke();
+    }
+
+    [RelayCommand]
+    private void OpenGist()
+    {
+        _loggingService.LogInformation("Open gist requested");
+        OpenGistCallback?.Invoke();
+    }
+
+    [RelayCommand]
+    private void SaveAsGist()
+    {
+        _loggingService.LogInformation("Save as gist requested");
+        SaveAsGistCallback?.Invoke();
+    }
+
+    [RelayCommand]
+    private void ViewGist()
+    {
+        _loggingService.LogInformation("View gist requested");
+        ViewGistCallback?.Invoke();
     }
 
     [RelayCommand]

@@ -35,6 +35,9 @@ public static class CoreServiceCollectionExtensions
             sp.GetRequiredService<ITokenStore>(),
             sp.GetRequiredService<ILoggingService>()));
         services.AddSingleton<IGitHubRepositoryService, GitHubRepositoryService>();
+        services.AddSingleton<IGitHubGistService>(sp => new GitHubGistService(
+            sp.GetRequiredService<IGitHubAuthService>(),
+            sp.GetRequiredService<ILoggingService>()));
 
         return services;
     }

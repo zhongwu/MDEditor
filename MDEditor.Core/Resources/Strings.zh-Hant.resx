@@ -1068,4 +1068,133 @@
   <data name="Snip_Mermaid" xml:space="preserve">
     <value>Mermaid 圖表</value>
   </data>
+  <data name="Menu_OpenGist" xml:space="preserve">
+    <value>開啟 Gist...</value>
+  </data>
+  <data name="Menu_SaveAsGist" xml:space="preserve">
+    <value>另存為 Gist...</value>
+  </data>
+  <data name="Menu_ViewGist" xml:space="preserve">
+    <value>在瀏覽器中開啟 Gist</value>
+  </data>
+  <data name="Gist_OpenTitle" xml:space="preserve">
+    <value>開啟 Gist</value>
+  </data>
+  <data name="Gist_UrlLabel" xml:space="preserve">
+    <value>Gist 連結或 ID：</value>
+  </data>
+  <data name="Gist_UrlTip" xml:space="preserve">
+    <value>貼上任何 Gist（您的或他人的，公開或秘密）的網址或其 ID</value>
+  </data>
+  <data name="Gist_Go" xml:space="preserve">
+    <value>前往</value>
+  </data>
+  <data name="Gist_Reload" xml:space="preserve">
+    <value>重新載入 Gist</value>
+  </data>
+  <data name="Gist_Filter" xml:space="preserve">
+    <value>篩選 Gist</value>
+  </data>
+  <data name="Gist_Files" xml:space="preserve">
+    <value>檔案</value>
+  </data>
+  <data name="Gist_Loading" xml:space="preserve">
+    <value>正在載入 Gist…</value>
+  </data>
+  <data name="Gist_LoadingOne" xml:space="preserve">
+    <value>正在載入 Gist…</value>
+  </data>
+  <data name="Gist_Count" xml:space="preserve">
+    <value>{0} 個 Gist</value>
+  </data>
+  <data name="Gist_LoadFailed" xml:space="preserve">
+    <value>無法載入 Gist：{0}</value>
+  </data>
+  <data name="Gist_NoMatches" xml:space="preserve">
+    <value>沒有符合篩選條件的 Gist。</value>
+  </data>
+  <data name="Gist_None" xml:space="preserve">
+    <value>您還沒有任何 Gist。</value>
+  </data>
+  <data name="Gist_Public" xml:space="preserve">
+    <value>公開</value>
+  </data>
+  <data name="Gist_Secret" xml:space="preserve">
+    <value>秘密</value>
+  </data>
+  <data name="Gist_FileCount" xml:space="preserve">
+    <value>{0} 個檔案</value>
+  </data>
+  <data name="Gist_FileCountOne" xml:space="preserve">
+    <value>1 個檔案</value>
+  </data>
+  <data name="Gist_BadLink" xml:space="preserve">
+    <value>這不是有效的 Gist 連結或 ID。</value>
+  </data>
+  <data name="Gist_CreateTitle" xml:space="preserve">
+    <value>另存為 Gist</value>
+  </data>
+  <data name="Gist_FileName" xml:space="preserve">
+    <value>檔案名稱</value>
+  </data>
+  <data name="Gist_Description" xml:space="preserve">
+    <value>描述（選填）</value>
+  </data>
+  <data name="Gist_SecretNote" xml:space="preserve">
+    <value>不會顯示在您的個人檔案或搜尋中；任何擁有連結的人都能檢視。</value>
+  </data>
+  <data name="Gist_PublicNote" xml:space="preserve">
+    <value>會顯示在您的個人檔案和搜尋中。</value>
+  </data>
+  <data name="Gist_Create" xml:space="preserve">
+    <value>建立 Gist</value>
+  </data>
+  <data name="Gist_Creating" xml:space="preserve">
+    <value>正在建立 Gist…</value>
+  </data>
+  <data name="Gist_Created" xml:space="preserve">
+    <value>Gist 已建立，連結已複製到剪貼簿。
+
+要在瀏覽器中開啟嗎？</value>
+  </data>
+  <data name="Gist_CreatedTitle" xml:space="preserve">
+    <value>Gist 已建立</value>
+  </data>
+  <data name="Gist_ReadOnly" xml:space="preserve">
+    <value>此 Gist 屬於 {0}，您無法更新它。請使用「檔案 &gt; 另存為 Gist...」建立自己的複本，或使用「檔案 &gt; 另存新檔...」儲存到本機。</value>
+  </data>
+  <data name="Gist_ReadOnlyTitle" xml:space="preserve">
+    <value>唯讀 Gist</value>
+  </data>
+  <data name="Gist_Conflict" xml:space="preserve">
+    <value>自您開啟後，此 Gist 已在 GitHub 上被變更。
+
+是 – 以您的版本覆寫
+否 – 捨棄您的變更並載入最新版本
+取消 – 繼續編輯</value>
+  </data>
+  <data name="Gist_ConflictTitle" xml:space="preserve">
+    <value>Gist 已在 GitHub 上變更</value>
+  </data>
+  <data name="Gist_SaveFailed" xml:space="preserve">
+    <value>無法儲存 Gist</value>
+  </data>
+  <data name="Err_GistNotFound" xml:space="preserve">
+    <value>找不到 Gist {0}，或您無權存取。</value>
+  </data>
+  <data name="Err_GistFileNotFound" xml:space="preserve">
+    <value>此 Gist 中沒有名為「{0}」的檔案。</value>
+  </data>
+  <data name="Err_GistScope" xml:space="preserve">
+    <value>GitHub 拒絕儲存此 Gist。如果您使用個人存取權杖登入，該權杖需要 gist 範圍，請透過瀏覽器登入或新增具有該範圍的權杖。</value>
+  </data>
+  <data name="Err_GistFileName" xml:space="preserve">
+    <value>請輸入不含斜線的檔案名稱。</value>
+  </data>
+  <data name="Err_GistConflict" xml:space="preserve">
+    <value>自您開啟後，包含 {0} 的 Gist 已在 GitHub 上被變更。</value>
+  </data>
+  <data name="Err_SignInExpired" xml:space="preserve">
+    <value>GitHub 拒絕了已儲存的登入資訊（Bad credentials）。權杖可能已遭撤銷或已過期，請移除該帳戶後重新登入（工具 &gt; GitHub 帳戶...）。</value>
+  </data>
 </root>

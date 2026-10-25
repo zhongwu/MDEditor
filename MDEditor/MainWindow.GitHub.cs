@@ -100,6 +100,7 @@ public partial class MainWindow
     private void LoadGitHubFile(GitHubFileContent file)
     {
         _currentFilePath = null;
+        _gistDocument = null;
         _gitHubDocument = file.Document;
         _pendingCommitMessage = null;
         SetEditorText(file.Text);

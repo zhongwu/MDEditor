@@ -89,6 +89,7 @@ public partial class MainWindow : Window
     private readonly ISettingsService _settingsService;
     private readonly IGitHubAuthService _gitHubAuthService;
     private readonly IGitHubRepositoryService _gitHubRepoService;
+    private readonly IGitHubGistService _gistService;
     private readonly List<string> _recentFiles = new();
 
     public MainWindow()
@@ -158,8 +159,12 @@ public partial class MainWindow : Window
         ViewModel.OpenFromGitHubCallback = OpenFromGitHub;
         ViewModel.GitHubSyncCallback = CommitToGitHub;
         ViewModel.GitHubHistoryCallback = ShowGitHubHistory;
+        ViewModel.OpenGistCallback = OpenGist;
+        ViewModel.SaveAsGistCallback = SaveAsGist;
+        ViewModel.ViewGistCallback = ViewGistOnGitHub;
         _gitHubAuthService = App.Services.GetRequiredService<IGitHubAuthService>();
         _gitHubRepoService = App.Services.GetRequiredService<IGitHubRepositoryService>();
+        _gistService = App.Services.GetRequiredService<IGitHubGistService>();
         _gitHubAuthService.AccountsChanged += (s, e) => UpdateGitHubStatus();
         MDEditor.Preview.PreviewHost.ImageAuthorization = GetGitHubImageAuthorization;
         UpdateGitHubStatus();
@@ -548,6 +553,7 @@ public partial class MainWindow : Window
                     var content = System.IO.File.ReadAllText(file, encoding);
                     _currentFilePath = file;
                     _gitHubDocument = null;
+                    _gistDocument = null;
                     SetEditorText(content);
                     AddRecentFile(file);
                 }
@@ -1275,23 +1281,28 @@ public partial class MainWindow : Window
 
     private static string UntitledFileName => Loc.Get("Doc_UntitledBase") + ".md";
 
+    /// <summary>File name of the open document, whether local, from a repository, or from a gist.</summary>
+    private string CurrentDocumentName =>
+        _gitHubDocument?.FileName
+        ?? _gistDocument?.FileName
+        ?? (string.IsNullOrEmpty(_currentFilePath) ? UntitledFileName : System.IO.Path.GetFileName(_currentFilePath));
+
     private void UpdateTitleBar()
     {
-        var fileName = _gitHubDocument != null
-            ? _gitHubDocument.FileName
-            : string.IsNullOrEmpty(_currentFilePath)
-                ? UntitledFileName
-                : System.IO.Path.GetFileName(_currentFilePath);
-        var location = _gitHubDocument != null ? $" ({_gitHubDocument.RepoFullName}@{_gitHubDocument.Branch})" : "";
+        var fileName = CurrentDocumentName;
+        var location = _gitHubDocument != null ? $" ({_gitHubDocument.RepoFullName}@{_gitHubDocument.Branch})"
+            : _gistDocument != null ? $" (Gist: {_gistDocument.DisplayName})"
+            : "";
         var dirty = _isDirty ? " ●" : "";
         Title = $"MDEditor - {fileName}{location}{dirty}";
         EditorFileName.Text = fileName + location;
-        EditorFileName.ToolTip = _gitHubDocument?.DisplayName ?? _currentFilePath;
+        EditorFileName.ToolTip = _gitHubDocument?.DisplayName ?? _gistDocument?.HtmlUrl ?? _currentFilePath;
         EditorDirtyIndicator.Visibility = _isDirty ? Visibility.Visible : Visibility.Collapsed;
 
         // Every change of document identity (open, Save As, commit) ends here, so this keeps the
-        // GitHub-only menu items in sync.
+        // GitHub/gist-only menu items in sync.
         ViewModel.IsGitHubDocument = _gitHubDocument != null;
+        ViewModel.IsGistDocument = _gistDocument != null;
     }
 
     private void SetEditorText(string text)
@@ -1322,6 +1333,7 @@ public partial class MainWindow : Window
 
         _currentFilePath = null;
         _gitHubDocument = null;
+        _gistDocument = null;
         SetEditorText("");
     }
 
@@ -1349,6 +1361,7 @@ public partial class MainWindow : Window
                 var content = System.IO.File.ReadAllText(dialog.FileName, encoding);
                 _currentFilePath = dialog.FileName;
                 _gitHubDocument = null;
+                _gistDocument = null;
                 SetEditorText(content);
                 AddRecentFile(dialog.FileName);
             }
@@ -1364,6 +1377,12 @@ public partial class MainWindow : Window
         if (_gitHubDocument != null)
         {
             CommitToGitHub();
+            return;
+        }
+
+        if (_gistDocument != null)
+        {
+            SaveGist();
             return;
         }
 
@@ -1395,9 +1414,7 @@ public partial class MainWindow : Window
             Title = Loc.Get("Dialog_SaveMarkdownAs"),
             Filter = Loc.Get("Filter_Save"),
             DefaultExt = ".md",
-            FileName = _gitHubDocument?.FileName ?? (string.IsNullOrEmpty(_currentFilePath)
-                ? UntitledFileName
-                : System.IO.Path.GetFileName(_currentFilePath))
+            FileName = CurrentDocumentName
         };
 
         if (dialog.ShowDialog() == true)
@@ -1408,6 +1425,7 @@ public partial class MainWindow : Window
                 System.IO.File.WriteAllText(dialog.FileName, text);
                 _currentFilePath = dialog.FileName;
                 _gitHubDocument = null;
+                _gistDocument = null;
                 _isDirty = false;
                 AddRecentFile(dialog.FileName);
                 UpdateTitleBar();
@@ -1674,6 +1692,7 @@ public partial class MainWindow : Window
                         var content = System.IO.File.ReadAllText(path, encoding);
                         _currentFilePath = path;
                         _gitHubDocument = null;
+                        _gistDocument = null;
                         SetEditorText(content);
                         AddRecentFile(path);
                     }
@@ -1724,10 +1743,16 @@ public partial class MainWindow : Window
         if (e.Cancel || !_isDirty)
             return;
 
-        var name = _gitHubDocument?.FileName
-            ?? (string.IsNullOrEmpty(_currentFilePath) ? UntitledFileName : System.IO.Path.GetFileName(_currentFilePath));
-        var result = MessageBox.Show(this, Loc.Format("Msg_SaveBeforeClosing", name), "MDEditor",
+        var result = MessageBox.Show(this, Loc.Format("Msg_SaveBeforeClosing", CurrentDocumentName), "MDEditor",
             MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+
+        if (result == MessageBoxResult.Yes && _gistDocument != null)
+        {
+            // Gist saves are asynchronous: stay open, and close once the save has gone through.
+            e.Cancel = true;
+            SaveGistThenClose();
+            return;
+        }
 
         if (result == MessageBoxResult.Yes)
             SaveFile(); // a GitHub document opens the commit dialog

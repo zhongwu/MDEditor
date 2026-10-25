@@ -348,3 +348,44 @@ Snip_MathBlock	Math block	数学公式块	數學公式區塊
 Snip_InlineMath	Inline math	行内公式	行內公式
 Snip_Footnote	Footnote	脚注	註腳
 Snip_Mermaid	Mermaid diagram	Mermaid 图表	Mermaid 圖表
+Menu_OpenGist	Open Gist...	打开 Gist...	開啟 Gist...
+Menu_SaveAsGist	Save as Gist...	另存为 Gist...	另存為 Gist...
+Menu_ViewGist	Open Gist in Browser	在浏览器中打开 Gist	在瀏覽器中開啟 Gist
+Gist_OpenTitle	Open Gist	打开 Gist	開啟 Gist
+Gist_UrlLabel	Gist link or ID:	Gist 链接或 ID：	Gist 連結或 ID：
+Gist_UrlTip	Paste the URL of any gist (yours or someone else's, public or secret) or its ID	粘贴任意 Gist（你的或他人的，公开或秘密）的网址或其 ID	貼上任何 Gist（您的或他人的，公開或秘密）的網址或其 ID
+Gist_Go	Go	前往	前往
+Gist_Reload	Reload gists	重新加载 Gist	重新載入 Gist
+Gist_Filter	Filter gists	筛选 Gist	篩選 Gist
+Gist_Files	Files	文件	檔案
+Gist_Loading	Loading gists...	正在加载 Gist…	正在載入 Gist…
+Gist_LoadingOne	Loading gist...	正在加载 Gist…	正在載入 Gist…
+Gist_Count	{0} gists	{0} 个 Gist	{0} 個 Gist
+Gist_LoadFailed	Couldn't load gists: {0}	无法加载 Gist：{0}	無法載入 Gist：{0}
+Gist_NoMatches	No gists match the filter.	没有匹配筛选条件的 Gist。	沒有符合篩選條件的 Gist。
+Gist_None	You don't have any gists yet.	你还没有任何 Gist。	您還沒有任何 Gist。
+Gist_Public	Public	公开	公開
+Gist_Secret	Secret	秘密	秘密
+Gist_FileCount	{0} files	{0} 个文件	{0} 個檔案
+Gist_FileCountOne	1 file	1 个文件	1 個檔案
+Gist_BadLink	That isn't a gist link or ID.	这不是有效的 Gist 链接或 ID。	這不是有效的 Gist 連結或 ID。
+Gist_CreateTitle	Save as Gist	另存为 Gist	另存為 Gist
+Gist_FileName	File name	文件名	檔案名稱
+Gist_Description	Description (optional)	描述（可选）	描述（選填）
+Gist_SecretNote	Not listed on your profile or in search; anyone with the link can see it.	不会显示在你的个人资料或搜索中；任何拥有链接的人都可以查看。	不會顯示在您的個人檔案或搜尋中；任何擁有連結的人都能檢視。
+Gist_PublicNote	Visible on your profile and in search.	显示在你的个人资料和搜索中。	會顯示在您的個人檔案和搜尋中。
+Gist_Create	Create Gist	创建 Gist	建立 Gist
+Gist_Creating	Creating gist...	正在创建 Gist…	正在建立 Gist…
+Gist_Created	Gist created, and its link was copied to the clipboard.\n\nOpen it in your browser?	Gist 已创建，链接已复制到剪贴板。\n\n要在浏览器中打开吗？	Gist 已建立，連結已複製到剪貼簿。\n\n要在瀏覽器中開啟嗎？
+Gist_CreatedTitle	Gist Created	Gist 已创建	Gist 已建立
+Gist_ReadOnly	This gist belongs to {0}, so you can't update it. Use File > Save as Gist... to make your own copy, or File > Save As... to save it locally.	此 Gist 属于 {0}，你无法更新它。请使用“文件 > 另存为 Gist...”创建自己的副本，或使用“文件 > 另存为...”保存到本地。	此 Gist 屬於 {0}，您無法更新它。請使用「檔案 > 另存為 Gist...」建立自己的複本，或使用「檔案 > 另存新檔...」儲存到本機。
+Gist_ReadOnlyTitle	Read-only Gist	只读 Gist	唯讀 Gist
+Gist_Conflict	This gist changed on GitHub since you opened it.\n\nYes – overwrite it with your version\nNo – discard your changes and load the latest version\nCancel – keep editing	自你打开以来，此 Gist 已在 GitHub 上被更改。\n\n是 – 用你的版本覆盖\n否 – 放弃你的更改并加载最新版本\n取消 – 继续编辑	自您開啟後，此 Gist 已在 GitHub 上被變更。\n\n是 – 以您的版本覆寫\n否 – 捨棄您的變更並載入最新版本\n取消 – 繼續編輯
+Gist_ConflictTitle	Gist Changed on GitHub	Gist 已在 GitHub 上更改	Gist 已在 GitHub 上變更
+Gist_SaveFailed	Couldn't save the gist	无法保存 Gist	無法儲存 Gist
+Err_GistNotFound	Gist {0} wasn't found, or you don't have access to it.	找不到 Gist {0}，或你无权访问。	找不到 Gist {0}，或您無權存取。
+Err_GistFileNotFound	The gist has no file named '{0}'.	此 Gist 中没有名为“{0}”的文件。	此 Gist 中沒有名為「{0}」的檔案。
+Err_GistScope	GitHub refused to save the gist. If you signed in with a personal access token, it needs the gist scope - sign in with the browser or add a token that has it.	GitHub 拒绝保存此 Gist。如果你使用个人访问令牌登录，该令牌需要 gist 权限，请通过浏览器登录或添加具有该权限的令牌。	GitHub 拒絕儲存此 Gist。如果您使用個人存取權杖登入，該權杖需要 gist 範圍，請透過瀏覽器登入或新增具有該範圍的權杖。
+Err_GistFileName	Enter a file name without slashes.	请输入不含斜杠的文件名。	請輸入不含斜線的檔案名稱。
+Err_GistConflict	The gist containing {0} was changed on GitHub since you opened it.	自你打开以来，包含 {0} 的 Gist 已在 GitHub 上被更改。	自您開啟後，包含 {0} 的 Gist 已在 GitHub 上被變更。
+Err_SignInExpired	GitHub rejected the saved sign-in (Bad credentials). The token was probably revoked or has expired - remove the account and sign in again (Tools > GitHub Accounts...).	GitHub 拒绝了已保存的登录信息（Bad credentials）。令牌可能已被撤销或已过期，请移除该账户后重新登录（工具 > GitHub 账户...）。	GitHub 拒絕了已儲存的登入資訊（Bad credentials）。權杖可能已遭撤銷或已過期，請移除該帳戶後重新登入（工具 > GitHub 帳戶...）。

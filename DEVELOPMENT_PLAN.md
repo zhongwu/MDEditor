@@ -181,7 +181,7 @@
 
 ---
 
-### Phase 5: GitHub Integration (Week 5-6)
+### Phase 5: GitHub Integration (Week 5-6) ✅ COMPLETED
 
 #### 5.1 Authentication ✅ COMPLETED
 - [x] GitHub OAuth device flow (Octokit) — one-time code copied to clipboard + browser opened, polls until approved/denied/expired, cancellable; requests `repo gist read:org`. Uses MDEditor's registered OAuth App (`GitHubAuthService.DefaultOAuthClientId`, public client ID, no secret); overridable under Advanced in the GitHub Accounts window
@@ -204,9 +204,9 @@
 - [x] Compare with previous version (diff view) — built-in Myers line diff (`LineDiff`, no extra package): "Changes in this commit" (vs. parent) or "This version vs. my current text"; +/- stats, old/new line numbers, unchanged runs collapsed with 3 lines of context (or "Show whole file"), virtualized list
 - [x] Restore previous version — loads the version into the editor (marked unsaved, confirms before discarding edits); the next save commits it with a pre-filled "Restore <file> to <sha>" message, so history is never rewritten
 
-#### 5.4 Gist Support (Bonus)
-- [ ] Create/Update secret/public gists
-- [ ] Open gist files
+#### 5.4 Gist Support (Bonus) ✅ COMPLETED
+- [x] Create/Update secret/public gists — File > Save as Gist... (file name, optional description, secret by default; link copied to clipboard, offer to open); Save on a gist document updates it in place, preserving line endings. Gists have no per-file SHA, so a newer `updated_at` on GitHub prompts overwrite / load latest / keep editing. Missing `gist` scope on a PAT gets an explanatory error
+- [x] Open gist files — File > Open Gist...: your gists (filterable, public/secret marker, file count, updated date) or any gist by URL/ID (pre-filled from a gist link on the clipboard); pick a file (Markdown first). Other people's gists open read-only (Save explains Save as Gist / Save As); Tools > Open Gist in Browser while a gist is open
 
 ---
 

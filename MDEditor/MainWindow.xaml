@@ -58,12 +58,14 @@
                 <MenuItem Header="{loc:Tr Menu_New}" Command="{Binding NewFileCommand}" InputGestureText="Ctrl+N" />
                 <MenuItem Header="{loc:Tr Menu_Open}" Command="{Binding OpenFileCommand}" InputGestureText="Ctrl+O" />
                 <MenuItem Header="{loc:Tr Menu_OpenFromGitHub}" Command="{Binding OpenFromGitHubCommand}" />
+                <MenuItem Header="{loc:Tr Menu_OpenGist}" Command="{Binding OpenGistCommand}" />
                 <MenuItem Header="{loc:Tr Menu_RecentFiles}" Name="RecentFilesMenu">
                     <MenuItem Header="{loc:Tr Menu_NoRecentFiles}" IsEnabled="False" />
                 </MenuItem>
                 <Separator />
                 <MenuItem Header="{loc:Tr Menu_Save}" Command="{Binding SaveFileCommand}" InputGestureText="Ctrl+S" />
                 <MenuItem Header="{loc:Tr Menu_SaveAs}" Command="{Binding SaveAsFileCommand}" InputGestureText="Ctrl+Shift+S" />
+                <MenuItem Header="{loc:Tr Menu_SaveAsGist}" Command="{Binding SaveAsGistCommand}" />
                 <Separator />
                 <MenuItem Header="{loc:Tr Menu_ExportHtml}" Command="{Binding ExportHtmlCommand}" />
                 <MenuItem Header="{loc:Tr Menu_ExportPdf}" Command="{Binding ExportPdfCommand}" />
@@ -140,6 +142,8 @@
                           Visibility="{Binding IsGitHubDocument, Converter={StaticResource BoolToVisibility}}" />
                 <MenuItem Header="{loc:Tr Menu_FileHistory}" Command="{Binding GitHubHistoryCommand}"
                           Visibility="{Binding IsGitHubDocument, Converter={StaticResource BoolToVisibility}}" />
+                <MenuItem Header="{loc:Tr Menu_ViewGist}" Command="{Binding ViewGistCommand}"
+                          Visibility="{Binding IsGistDocument, Converter={StaticResource BoolToVisibility}}" />
                 <MenuItem Header="{loc:Tr Menu_Settings}" Command="{Binding SettingsCommand}" />
             </MenuItem>
             <MenuItem Header="{loc:Tr Menu_Help}">

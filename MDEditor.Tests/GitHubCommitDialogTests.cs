@@ -42,6 +42,21 @@ public class GitHubCommitDialogTests
     }
 
     [Fact]
+    public void GistWindows_Construct_WithoutThrowing()
+    {
+        RunOnSta(() =>
+        {
+            var browser = new GistBrowserWindow(Mock.Of<IGitHubGistService>());
+            Assert.Null(browser.Result);
+            browser.Close();
+
+            var create = new GistCreateDialog(Mock.Of<IGitHubGistService>(), "text", "notes.md", null);
+            Assert.Null(create.Result);
+            create.Close();
+        });
+    }
+
+    [Fact]
     public void HistoryWindow_Constructs_WithoutThrowing()
     {
         // Same hazard: CommitChangesRadio is IsChecked="True" with a Checked handler.
