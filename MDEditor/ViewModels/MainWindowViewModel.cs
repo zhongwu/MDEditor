@@ -140,6 +140,12 @@ public sealed partial class MainWindowViewModel : ObservableObject
     public Action? SettingsCallback { get; set; }
 
     /// <summary>
+    /// Callbacks for the Help menu.
+    /// </summary>
+    public Action? MarkdownGuideCallback { get; set; }
+    public Action? AboutCallback { get; set; }
+
+    /// <summary>
     /// Callback for opening the GitHub Accounts window.
     /// </summary>
     public Action? GitHubAccountsCallback { get; set; }
@@ -621,24 +627,17 @@ public sealed partial class MainWindowViewModel : ObservableObject
 
     // Help commands
     [RelayCommand]
-    private void KeyboardShortcuts()
-    {
-        _loggingService.LogInformation("Keyboard shortcuts requested");
-        // TODO: Show keyboard shortcuts dialog
-    }
-
-    [RelayCommand]
     private void MarkdownGuide()
     {
         _loggingService.LogInformation("Markdown guide requested");
-        // TODO: Show markdown guide
+        MarkdownGuideCallback?.Invoke();
     }
 
     [RelayCommand]
     private void About()
     {
         _loggingService.LogInformation("About requested");
-        // TODO: Show about dialog
+        AboutCallback?.Invoke();
     }
 
     [RelayCommand]

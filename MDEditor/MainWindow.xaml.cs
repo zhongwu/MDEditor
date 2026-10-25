@@ -154,6 +154,10 @@ public partial class MainWindow : Window
         // Settings
         ViewModel.SettingsCallback = ShowSettingsWindow;
 
+        // Help
+        ViewModel.MarkdownGuideCallback = ShowMarkdownGuideWindow;
+        ViewModel.AboutCallback = ShowAboutWindow;
+
         // GitHub (Phase 5)
         ViewModel.GitHubAccountsCallback = ShowGitHubAccountsWindow;
         ViewModel.OpenFromGitHubCallback = OpenFromGitHub;
@@ -1129,6 +1133,36 @@ public partial class MainWindow : Window
         _settingsWindow = new SettingsWindow(this, _settingsService, _markdownParser) { Owner = this };
         _settingsWindow.Closed += (s, e) => _settingsWindow = null;
         _settingsWindow.Show();
+    }
+
+    private MarkdownGuideWindow? _markdownGuideWindow;
+
+    internal void ShowMarkdownGuideWindow()
+    {
+        if (_markdownGuideWindow != null)
+        {
+            _markdownGuideWindow.Activate();
+            return;
+        }
+
+        _markdownGuideWindow = new MarkdownGuideWindow(_markdownParser) { Owner = this };
+        _markdownGuideWindow.Closed += (s, e) => _markdownGuideWindow = null;
+        _markdownGuideWindow.Show();
+    }
+
+    private AboutWindow? _aboutWindow;
+
+    internal void ShowAboutWindow()
+    {
+        if (_aboutWindow != null)
+        {
+            _aboutWindow.Activate();
+            return;
+        }
+
+        _aboutWindow = new AboutWindow { Owner = this };
+        _aboutWindow.Closed += (s, e) => _aboutWindow = null;
+        _aboutWindow.Show();
     }
 
     private void OnThemeChanged(bool isDark)

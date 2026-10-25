@@ -1203,4 +1203,133 @@
   <data name="Status_Words" xml:space="preserve">
     <value>字數：{0}</value>
   </data>
+  <data name="About_Tagline" xml:space="preserve">
+    <value>一款支援即時預覽、GitHub 同步與 Gist 功能的 Markdown 桌面編輯器。</value>
+  </data>
+  <data name="About_Version" xml:space="preserve">
+    <value>版本 {0}</value>
+  </data>
+  <data name="MarkdownGuide_Content" xml:space="preserve">
+    <value># Markdown 指南
+
+MDEditor 支援的 Markdown 語法快速參考。
+
+## 標題
+
+```
+# 一級標題
+## 二級標題
+### 三級標題
+```
+
+## 強調
+
+```
+*斜體*   或   _斜體_
+**粗體**   或   __粗體__
+~~刪除線~~
+`行內代碼`
+```
+
+*斜體*、**粗體**、~~刪除線~~、`行內代碼`
+
+## 清單
+
+```
+- 無序清單項目
+- 另一項
+  - 巢狀項目
+
+1. 有序清單項目
+2. 另一項
+
+- [ ] 未完成任務
+- [x] 已完成任務
+```
+
+## 連結與圖片
+
+```
+[連結文字](https://example.com)
+![替代文字](image.png)
+```
+
+## 引言區塊
+
+```
+&gt; 一段引言文字。
+&gt; 可跨越多行。
+```
+
+&gt; 一段引言文字。
+
+## 程式碼區塊
+
+````
+```csharp
+var x = 42;
+```
+````
+
+## 表格
+
+```
+| 表頭 1 | 表頭 2 |
+|--------|--------|
+| 儲存格 1 | 儲存格 2 |
+```
+
+| 表頭 1 | 表頭 2 |
+|--------|--------|
+| 儲存格 1 | 儲存格 2 |
+
+## 水平線
+
+```
+---
+```
+
+## 數學公式 (KaTeX)
+
+```
+行內公式：$x^2 + y^2 = z^2$
+
+區塊公式：
+$$
+\int_0^1 x^2\,dx = \frac{1}{3}
+$$
+```
+
+## 流程圖 (Mermaid)
+
+````
+```mermaid
+graph TD
+    A[開始] --&gt; B{判斷}
+    B --&gt;|是| C[執行]
+    B --&gt;|否| D[略過]
+```
+````
+
+## 註腳
+
+```
+這是一個註腳參照。[^1]
+
+[^1]: 這是註腳內容。
+```
+
+## 表情符號
+
+```
+:smile: :thumbsup: :tada:
+```
+
+:smile: :thumbsup: :tada:
+
+---
+
+如果不需要數學公式、流程圖、表情符號、註腳與任務清單，可以在
+**設定 -&gt; Markdown 與預覽** 中個別關閉。</value>
+  </data>
 </root>

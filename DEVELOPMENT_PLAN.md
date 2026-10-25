@@ -129,7 +129,7 @@
 - **View**: Toggle Preview, Toggle Line Numbers, Word Wrap, Zoom, Theme
 - **Format**: Heading 1-6, Bold, Italic, Strikethrough, Code, Quote, List, Link, Image, Table, HR, Math
 - **Tools**: GitHub Sync, Settings, Extensions
-- **Help**: About, Keyboard Shortcuts, Markdown Guide
+- **Help**: About, Markdown Guide (keyboard shortcuts are shown/configured in Settings → Keyboard Shortcuts instead of a separate Help item)
 
 #### 3.2 Format Commands (Apply to Selection) ✅ ALL IMPLEMENTED
 | Command | Markdown | Shortcut |
@@ -245,7 +245,7 @@
 - [x] Auto-save interval — configurable (10s-2min), applied live to the existing auto-save timer
 - [x] Line ending style (LF/CRLF) — applied on Save/Save As via `LineEndingNormalizer`; auto-save draft and HTML export stay unaffected
 
-#### 6.4 Multi-Language Support (UI Localization) 🔄 CORE DONE
+#### 6.4 Multi-Language Support (UI Localization) ✅ MOSTLY COMPLETED
 - [x] String externalization — ~350 user-visible strings (menus, toolbar tooltips, context menu, dialogs, message boxes, file-dialog filters, status bar, Settings, find/go-to bars, print/presentation windows, GitHub windows, GitHub service errors, snippet labels) moved to `MDEditor.Core/Resources/Strings*.resx`. Source of truth is `MDEditor.Core/Resources/strings.tsv` (key / en / zh-Hans / zh-Hant); `tools/Generate-Strings.ps1` regenerates the .resx files. Log messages, default commit/PR messages and inserted Markdown stay English
 - [x] Localization service — static `Loc` (Core: `Get`/`Format`, `Culture`, `SupportedLanguages`, `LanguageChanged`) plus the `{loc:Tr Key}` markup extension (binds to an indexer source, so XAML text updates live); code-built text (title bar, status bar, recent files, accounts list, shortcut rows) refreshes on `LanguageChanged`
 - [x] Language picker in Settings (Appearance tab) — "Match Windows" (default) / English / 简体中文 / 繁體中文 (native names); persisted as `appearance.language`; applied live, no restart
@@ -253,7 +253,7 @@
 - [x] Culture-aware formatting — history dates and device-code expiry time use the UI culture; only the UI culture changes (number/date parsing and file content stay culture-invariant)
 - [ ] Keyboard shortcut display — not needed for Chinese (Windows uses Ctrl/Shift/Alt); revisit for German etc.
 - [ ] Layout robustness — Chinese is shorter than English, so no clipping expected; pseudo-localization check still to do before adding longer languages
-- [ ] Localized bundled content — Markdown Guide / user guide don't exist yet (Help menu items are stubs)
+- [x] Localized bundled content — Help → Markdown Guide (syntax reference rendered through the app's own Markdown pipeline, so it matches the real preview and theme) and Help → About, both fully localized (not just menu chrome) via `MarkdownGuide_Content`/`About_Tagline`/`About_Version` resource keys; re-renders live on a language switch while open. Help → Keyboard Shortcuts was dropped — Settings → Keyboard Shortcuts already covers it with live, rebindable gestures
 - [ ] Right-to-left languages (stretch)
 - [x] Tests — every key present and non-empty in each translation with matching `{n}` placeholders, translations not copies of English, every key used in source exists, no unused keys, culture mapping, live switching of a real XAML dialog
 - Known limitation: CJK font fallback (YaHei vs JhengHei) is chosen at startup, so after a live switch between Simplified and Traditional the glyph style updates on the next launch
@@ -277,8 +277,8 @@
 - [ ] GitHub Releases with changelog
 
 #### 7.3 Documentation
-- [ ] User guide (Markdown, bundled in app)
-- [ ] Keyboard shortcuts reference
+- [x] User guide (Markdown, bundled in app) — Help → Markdown Guide, localized (see 6.4)
+- [ ] Keyboard shortcuts reference (standalone doc) — not planned; Settings → Keyboard Shortcuts already shows/edits every rebindable gesture live
 - [ ] Contributing guide
 - [ ] Architecture decision records
 

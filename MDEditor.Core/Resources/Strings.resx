@@ -1203,4 +1203,133 @@ Cancel – keep editing</value>
   <data name="Status_Words" xml:space="preserve">
     <value>Words: {0}</value>
   </data>
+  <data name="About_Tagline" xml:space="preserve">
+    <value>A Markdown desktop editor with live preview, GitHub sync, and Gist support.</value>
+  </data>
+  <data name="About_Version" xml:space="preserve">
+    <value>Version {0}</value>
+  </data>
+  <data name="MarkdownGuide_Content" xml:space="preserve">
+    <value># Markdown Guide
+
+A quick reference for the Markdown syntax MDEditor understands.
+
+## Headings
+
+```
+# Heading 1
+## Heading 2
+### Heading 3
+```
+
+## Emphasis
+
+```
+*italic*   or   _italic_
+**bold**   or   __bold__
+~~strikethrough~~
+`inline code`
+```
+
+*italic*, **bold**, ~~strikethrough~~, `inline code`
+
+## Lists
+
+```
+- Unordered item
+- Another item
+  - Nested item
+
+1. Ordered item
+2. Another item
+
+- [ ] Unchecked task
+- [x] Checked task
+```
+
+## Links and Images
+
+```
+[link text](https://example.com)
+![alt text](image.png)
+```
+
+## Blockquotes
+
+```
+&gt; A quoted passage.
+&gt; Spans multiple lines.
+```
+
+&gt; A quoted passage.
+
+## Code Blocks
+
+````
+```csharp
+var x = 42;
+```
+````
+
+## Tables
+
+```
+| Header 1 | Header 2 |
+|----------|----------|
+| Cell 1   | Cell 2   |
+```
+
+| Header 1 | Header 2 |
+|----------|----------|
+| Cell 1   | Cell 2   |
+
+## Horizontal Rule
+
+```
+---
+```
+
+## Math (KaTeX)
+
+```
+Inline: $x^2 + y^2 = z^2$
+
+Block:
+$$
+\int_0^1 x^2\,dx = \frac{1}{3}
+$$
+```
+
+## Diagrams (Mermaid)
+
+````
+```mermaid
+graph TD
+    A[Start] --&gt; B{Decision}
+    B --&gt;|Yes| C[Do it]
+    B --&gt;|No| D[Skip it]
+```
+````
+
+## Footnotes
+
+```
+Here's a footnote reference.[^1]
+
+[^1]: Here's the footnote.
+```
+
+## Emoji
+
+```
+:smile: :thumbsup: :tada:
+```
+
+:smile: :thumbsup: :tada:
+
+---
+
+Math, diagrams, emoji, footnotes, and task lists can each be turned off in
+**Settings -&gt; Markdown &amp; Preview** if you don't want them.</value>
+  </data>
 </root>
