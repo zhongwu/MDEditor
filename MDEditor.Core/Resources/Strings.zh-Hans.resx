@@ -1197,4 +1197,10 @@
   <data name="Err_SignInExpired" xml:space="preserve">
     <value>GitHub 拒绝了已保存的登录信息（Bad credentials）。令牌可能已被撤销或已过期，请移除该账户后重新登录（工具 &gt; GitHub 账户...）。</value>
   </data>
+  <data name="Status_Position" xml:space="preserve">
+    <value>第 {0} 行，第 {1} 列</value>
+  </data>
+  <data name="Status_Words" xml:space="preserve">
+    <value>字数：{0}</value>
+  </data>
 </root>

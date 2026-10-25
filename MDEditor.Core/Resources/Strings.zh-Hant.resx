@@ -1197,4 +1197,10 @@
   <data name="Err_SignInExpired" xml:space="preserve">
     <value>GitHub 拒絕了已儲存的登入資訊（Bad credentials）。權杖可能已遭撤銷或已過期，請移除該帳戶後重新登入（工具 &gt; GitHub 帳戶...）。</value>
   </data>
+  <data name="Status_Position" xml:space="preserve">
+    <value>第 {0} 行，第 {1} 欄</value>
+  </data>
+  <data name="Status_Words" xml:space="preserve">
+    <value>字數：{0}</value>
+  </data>
 </root>

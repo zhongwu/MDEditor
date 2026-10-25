@@ -389,3 +389,5 @@ Err_GistScope	GitHub refused to save the gist. If you signed in with a personal 
 Err_GistFileName	Enter a file name without slashes.	请输入不含斜杠的文件名。	請輸入不含斜線的檔案名稱。
 Err_GistConflict	The gist containing {0} was changed on GitHub since you opened it.	自你打开以来，包含 {0} 的 Gist 已在 GitHub 上被更改。	自您開啟後，包含 {0} 的 Gist 已在 GitHub 上被變更。
 Err_SignInExpired	GitHub rejected the saved sign-in (Bad credentials). The token was probably revoked or has expired - remove the account and sign in again (Tools > GitHub Accounts...).	GitHub 拒绝了已保存的登录信息（Bad credentials）。令牌可能已被撤销或已过期，请移除该账户后重新登录（工具 > GitHub 账户...）。	GitHub 拒絕了已儲存的登入資訊（Bad credentials）。權杖可能已遭撤銷或已過期，請移除該帳戶後重新登入（工具 > GitHub 帳戶...）。
+Status_Position	Ln {0}, Col {1}	第 {0} 行，第 {1} 列	第 {0} 行，第 {1} 欄
+Status_Words	Words: {0}	字数：{0}	字數：{0}

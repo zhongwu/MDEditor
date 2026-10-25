@@ -168,6 +168,8 @@ public partial class MainWindow : Window
         _gitHubAuthService.AccountsChanged += (s, e) => UpdateGitHubStatus();
         MDEditor.Preview.PreviewHost.ImageAuthorization = GetGitHubImageAuthorization;
         UpdateGitHubStatus();
+        _statusWordsTimer.Tick += (s, e) => UpdateWordCountStatus();
+        UpdateWordCountStatus();
 
         // Phase 6.4: XAML text follows {loc:Tr} bindings; text this window sets from code is
         // refreshed here.
@@ -176,6 +178,8 @@ public partial class MainWindow : Window
             UpdateTitleBar();
             UpdateGitHubStatus();
             UpdateRecentFilesMenu();
+            UpdateCursorStatus();
+            UpdateWordCountStatus();
         };
 
         // Phase 6.2: outline panel, find in preview, print preview, presentation mode
@@ -279,7 +283,11 @@ public partial class MainWindow : Window
 
         // Phase 6.1: smart typography, completion popup and bracket highlighting
         MarkdownEditor.PreviewTextInput += MarkdownEditor_PreviewTextInput;
-        MarkdownEditor.SelectionChanged += (s, e) => UpdateBracketHighlight();
+        MarkdownEditor.SelectionChanged += (s, e) =>
+        {
+            UpdateBracketHighlight();
+            UpdateCursorStatus();
+        };
         MarkdownEditor.LostKeyboardFocus += (s, e) => HideCompletion();
 
         // The completion popup is sticky so it cannot swallow the first click.
@@ -1185,12 +1193,33 @@ public partial class MainWindow : Window
         SplitterColumn.ReleaseMouseCapture();
     }
 
+    // Word count walks the whole document, so it trails typing by a moment.
+    private readonly System.Windows.Threading.DispatcherTimer _statusWordsTimer = CreateStatusWordsTimer();
+
+    private static System.Windows.Threading.DispatcherTimer CreateStatusWordsTimer() =>
+        new() { Interval = TimeSpan.FromMilliseconds(250) };
+
+    private void UpdateCursorStatus()
+    {
+        var before = new TextRange(MarkdownEditor.Document.ContentStart, MarkdownEditor.CaretPosition).Text;
+        var (line, column) = MDEditor.Core.Services.TextStatistics.GetLineColumn(before);
+        StatusCursorPosition.Text = Loc.Format("Status_Position", line, column);
+    }
+
+    private void UpdateWordCountStatus()
+    {
+        _statusWordsTimer.Stop();
+        StatusWordCount.Text = Loc.Format("Status_Words", MDEditor.Core.Services.TextStatistics.CountWords(GetEditorText()));
+    }
+
     private void MarkdownEditor_TextChanged(object sender, TextChangedEventArgs e)
     {
         MarkDirty();
 
         _cachedEditorText = null;
         UpdateBracketHighlight();
+        _statusWordsTimer.Stop();
+        _statusWordsTimer.Start();
 
         _previewTimer?.Stop();
         _previewTimer?.Start();

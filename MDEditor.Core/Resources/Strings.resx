@@ -1197,4 +1197,10 @@ Cancel – keep editing</value>
   <data name="Err_SignInExpired" xml:space="preserve">
     <value>GitHub rejected the saved sign-in (Bad credentials). The token was probably revoked or has expired - remove the account and sign in again (Tools &gt; GitHub Accounts...).</value>
   </data>
+  <data name="Status_Position" xml:space="preserve">
+    <value>Ln {0}, Col {1}</value>
+  </data>
+  <data name="Status_Words" xml:space="preserve">
+    <value>Words: {0}</value>
+  </data>
 </root>
