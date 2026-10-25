@@ -1,0 +1,1071 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Common_Error" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="Common_Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Common_Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="Common_Open" xml:space="preserve">
+    <value>打开</value>
+  </data>
+  <data name="Common_Remove" xml:space="preserve">
+    <value>移除</value>
+  </data>
+  <data name="Common_Reset" xml:space="preserve">
+    <value>重置</value>
+  </data>
+  <data name="Common_Loading" xml:space="preserve">
+    <value>正在加载…</value>
+  </data>
+  <data name="Common_UnsavedDiscard" xml:space="preserve">
+    <value>有未保存的更改。要放弃吗？</value>
+  </data>
+  <data name="Common_BrowserOpenFailed" xml:space="preserve">
+    <value>无法打开浏览器：{0}</value>
+  </data>
+  <data name="Doc_UntitledBase" xml:space="preserve">
+    <value>未命名</value>
+  </data>
+  <data name="Menu_File" xml:space="preserve">
+    <value>文件</value>
+  </data>
+  <data name="Menu_New" xml:space="preserve">
+    <value>新建</value>
+  </data>
+  <data name="Menu_Open" xml:space="preserve">
+    <value>打开...</value>
+  </data>
+  <data name="Menu_OpenFromGitHub" xml:space="preserve">
+    <value>从 GitHub 打开...</value>
+  </data>
+  <data name="Menu_RecentFiles" xml:space="preserve">
+    <value>最近的文件</value>
+  </data>
+  <data name="Menu_NoRecentFiles" xml:space="preserve">
+    <value>（无最近文件）</value>
+  </data>
+  <data name="Menu_Save" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="Menu_SaveAs" xml:space="preserve">
+    <value>另存为...</value>
+  </data>
+  <data name="Menu_ExportHtml" xml:space="preserve">
+    <value>导出 HTML</value>
+  </data>
+  <data name="Menu_ExportPdf" xml:space="preserve">
+    <value>导出 PDF</value>
+  </data>
+  <data name="Menu_PrintPreview" xml:space="preserve">
+    <value>打印预览...</value>
+  </data>
+  <data name="Menu_Exit" xml:space="preserve">
+    <value>退出</value>
+  </data>
+  <data name="Menu_Edit" xml:space="preserve">
+    <value>编辑</value>
+  </data>
+  <data name="Menu_Undo" xml:space="preserve">
+    <value>撤销</value>
+  </data>
+  <data name="Menu_Redo" xml:space="preserve">
+    <value>重做</value>
+  </data>
+  <data name="Menu_Cut" xml:space="preserve">
+    <value>剪切</value>
+  </data>
+  <data name="Menu_Copy" xml:space="preserve">
+    <value>复制</value>
+  </data>
+  <data name="Menu_Paste" xml:space="preserve">
+    <value>粘贴</value>
+  </data>
+  <data name="Menu_Find" xml:space="preserve">
+    <value>查找</value>
+  </data>
+  <data name="Menu_Replace" xml:space="preserve">
+    <value>替换</value>
+  </data>
+  <data name="Menu_FindInPreview" xml:space="preserve">
+    <value>在预览中查找</value>
+  </data>
+  <data name="Menu_GoToLine" xml:space="preserve">
+    <value>转到行...</value>
+  </data>
+  <data name="Menu_SelectAll" xml:space="preserve">
+    <value>全选</value>
+  </data>
+  <data name="Menu_View" xml:space="preserve">
+    <value>视图</value>
+  </data>
+  <data name="Menu_ShowPreview" xml:space="preserve">
+    <value>显示预览</value>
+  </data>
+  <data name="Menu_ShowEditor" xml:space="preserve">
+    <value>显示编辑器</value>
+  </data>
+  <data name="Menu_ShowOutline" xml:space="preserve">
+    <value>显示大纲</value>
+  </data>
+  <data name="Menu_ShowLineNumbers" xml:space="preserve">
+    <value>显示行号</value>
+  </data>
+  <data name="Menu_ShowMinimap" xml:space="preserve">
+    <value>显示缩略图</value>
+  </data>
+  <data name="Menu_ShowScrollSync" xml:space="preserve">
+    <value>同步滚动</value>
+  </data>
+  <data name="Menu_WordWrap" xml:space="preserve">
+    <value>自动换行</value>
+  </data>
+  <data name="Menu_ZoomIn" xml:space="preserve">
+    <value>放大</value>
+  </data>
+  <data name="Menu_ZoomOut" xml:space="preserve">
+    <value>缩小</value>
+  </data>
+  <data name="Menu_ResetZoom" xml:space="preserve">
+    <value>重置缩放</value>
+  </data>
+  <data name="Menu_PresentationMode" xml:space="preserve">
+    <value>演示模式</value>
+  </data>
+  <data name="Menu_Format" xml:space="preserve">
+    <value>格式</value>
+  </data>
+  <data name="Menu_Heading1" xml:space="preserve">
+    <value>标题 1</value>
+  </data>
+  <data name="Menu_Heading2" xml:space="preserve">
+    <value>标题 2</value>
+  </data>
+  <data name="Menu_Heading3" xml:space="preserve">
+    <value>标题 3</value>
+  </data>
+  <data name="Menu_Heading4" xml:space="preserve">
+    <value>标题 4</value>
+  </data>
+  <data name="Menu_Heading5" xml:space="preserve">
+    <value>标题 5</value>
+  </data>
+  <data name="Menu_Heading6" xml:space="preserve">
+    <value>标题 6</value>
+  </data>
+  <data name="Menu_Bold" xml:space="preserve">
+    <value>粗体</value>
+  </data>
+  <data name="Menu_Italic" xml:space="preserve">
+    <value>斜体</value>
+  </data>
+  <data name="Menu_Strikethrough" xml:space="preserve">
+    <value>删除线</value>
+  </data>
+  <data name="Menu_InlineCode" xml:space="preserve">
+    <value>行内代码</value>
+  </data>
+  <data name="Menu_CodeBlock" xml:space="preserve">
+    <value>代码块</value>
+  </data>
+  <data name="Menu_Blockquote" xml:space="preserve">
+    <value>引用</value>
+  </data>
+  <data name="Menu_UnorderedList" xml:space="preserve">
+    <value>无序列表</value>
+  </data>
+  <data name="Menu_OrderedList" xml:space="preserve">
+    <value>有序列表</value>
+  </data>
+  <data name="Menu_TaskList" xml:space="preserve">
+    <value>任务列表</value>
+  </data>
+  <data name="Menu_Link" xml:space="preserve">
+    <value>链接</value>
+  </data>
+  <data name="Menu_Image" xml:space="preserve">
+    <value>图片</value>
+  </data>
+  <data name="Menu_Table" xml:space="preserve">
+    <value>表格</value>
+  </data>
+  <data name="Menu_HorizontalRule" xml:space="preserve">
+    <value>水平线</value>
+  </data>
+  <data name="Menu_MathBlock" xml:space="preserve">
+    <value>数学公式块</value>
+  </data>
+  <data name="Menu_Tools" xml:space="preserve">
+    <value>工具</value>
+  </data>
+  <data name="Menu_SmartTypography" xml:space="preserve">
+    <value>智能标点</value>
+  </data>
+  <data name="Menu_GitHubAccounts" xml:space="preserve">
+    <value>GitHub 账户...</value>
+  </data>
+  <data name="Menu_CommitToGitHub" xml:space="preserve">
+    <value>提交到 GitHub...</value>
+  </data>
+  <data name="Menu_FileHistory" xml:space="preserve">
+    <value>文件历史 (GitHub)...</value>
+  </data>
+  <data name="Menu_Settings" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="Menu_Help" xml:space="preserve">
+    <value>帮助</value>
+  </data>
+  <data name="Menu_KeyboardShortcuts" xml:space="preserve">
+    <value>键盘快捷键</value>
+  </data>
+  <data name="Menu_MarkdownGuide" xml:space="preserve">
+    <value>Markdown 指南</value>
+  </data>
+  <data name="Menu_About" xml:space="preserve">
+    <value>关于</value>
+  </data>
+  <data name="Menu_InsertLink" xml:space="preserve">
+    <value>插入链接</value>
+  </data>
+  <data name="Menu_InsertImage" xml:space="preserve">
+    <value>插入图片</value>
+  </data>
+  <data name="Menu_InsertTable" xml:space="preserve">
+    <value>插入表格</value>
+  </data>
+  <data name="Menu_InsertHorizontalRule" xml:space="preserve">
+    <value>插入水平线</value>
+  </data>
+  <data name="Menu_CopyAsMarkdown" xml:space="preserve">
+    <value>复制为 Markdown</value>
+  </data>
+  <data name="Menu_CopyAsHtml" xml:space="preserve">
+    <value>复制为 HTML</value>
+  </data>
+  <data name="Tip_New" xml:space="preserve">
+    <value>新建 (Ctrl+N)</value>
+  </data>
+  <data name="Tip_Open" xml:space="preserve">
+    <value>打开 (Ctrl+O)</value>
+  </data>
+  <data name="Tip_Save" xml:space="preserve">
+    <value>保存 (Ctrl+S)</value>
+  </data>
+  <data name="Tip_Undo" xml:space="preserve">
+    <value>撤销 (Ctrl+Z)</value>
+  </data>
+  <data name="Tip_Redo" xml:space="preserve">
+    <value>重做 (Ctrl+Y)</value>
+  </data>
+  <data name="Tip_Bold" xml:space="preserve">
+    <value>粗体 (Ctrl+B)</value>
+  </data>
+  <data name="Tip_Italic" xml:space="preserve">
+    <value>斜体 (Ctrl+I)</value>
+  </data>
+  <data name="Tip_Strikethrough" xml:space="preserve">
+    <value>删除线 (Ctrl+Shift+X)</value>
+  </data>
+  <data name="Tip_InlineCode" xml:space="preserve">
+    <value>行内代码 (Ctrl+`)</value>
+  </data>
+  <data name="Tip_CodeBlock" xml:space="preserve">
+    <value>代码块 (Ctrl+Shift+C)</value>
+  </data>
+  <data name="Tip_Blockquote" xml:space="preserve">
+    <value>引用 (Ctrl+Q)</value>
+  </data>
+  <data name="Tip_Heading1" xml:space="preserve">
+    <value>标题 1 (Ctrl+1)</value>
+  </data>
+  <data name="Tip_Heading2" xml:space="preserve">
+    <value>标题 2 (Ctrl+2)</value>
+  </data>
+  <data name="Tip_Heading3" xml:space="preserve">
+    <value>标题 3 (Ctrl+3)</value>
+  </data>
+  <data name="Tip_UnorderedList" xml:space="preserve">
+    <value>无序列表 (Ctrl+Shift+L)</value>
+  </data>
+  <data name="Tip_OrderedList" xml:space="preserve">
+    <value>有序列表 (Ctrl+Shift+O)</value>
+  </data>
+  <data name="Tip_TaskList" xml:space="preserve">
+    <value>任务列表 (Ctrl+Shift+T)</value>
+  </data>
+  <data name="Tip_InsertLink" xml:space="preserve">
+    <value>插入链接 (Ctrl+K)</value>
+  </data>
+  <data name="Tip_InsertImage" xml:space="preserve">
+    <value>插入图片 (Ctrl+Shift+I)</value>
+  </data>
+  <data name="Tip_TogglePreview" xml:space="preserve">
+    <value>切换预览 (Ctrl+Shift+P)</value>
+  </data>
+  <data name="Tip_ToggleEditor" xml:space="preserve">
+    <value>切换编辑器</value>
+  </data>
+  <data name="Tip_ToggleOutline" xml:space="preserve">
+    <value>切换大纲 (Ctrl+Shift+E)</value>
+  </data>
+  <data name="Tip_FindInPreview" xml:space="preserve">
+    <value>在预览中查找 (Ctrl+Shift+F)</value>
+  </data>
+  <data name="Tip_PrintPreview" xml:space="preserve">
+    <value>打印预览 (Ctrl+P)</value>
+  </data>
+  <data name="Tip_PresentationMode" xml:space="preserve">
+    <value>演示模式 (F5)</value>
+  </data>
+  <data name="Tip_CloseOutline" xml:space="preserve">
+    <value>关闭大纲 (Ctrl+Shift+E)</value>
+  </data>
+  <data name="Tip_CollapseAll" xml:space="preserve">
+    <value>全部折叠</value>
+  </data>
+  <data name="Tip_ExpandAll" xml:space="preserve">
+    <value>全部展开</value>
+  </data>
+  <data name="Tip_ToggleReplace" xml:space="preserve">
+    <value>切换替换 (Ctrl+H)</value>
+  </data>
+  <data name="Tip_MatchCase" xml:space="preserve">
+    <value>区分大小写</value>
+  </data>
+  <data name="Tip_PreviousMatch" xml:space="preserve">
+    <value>上一个匹配项 (Shift+Enter / Shift+F3)</value>
+  </data>
+  <data name="Tip_NextMatch" xml:space="preserve">
+    <value>下一个匹配项 (Enter / F3)</value>
+  </data>
+  <data name="Tip_CloseEsc" xml:space="preserve">
+    <value>关闭 (Esc)</value>
+  </data>
+  <data name="Tip_ReplaceEnter" xml:space="preserve">
+    <value>替换 (Enter)</value>
+  </data>
+  <data name="Tip_ReplaceAll" xml:space="preserve">
+    <value>全部替换 (Ctrl+Enter)</value>
+  </data>
+  <data name="Tip_GoToLineBox" xml:space="preserve">
+    <value>行号，或 行:列</value>
+  </data>
+  <data name="Pane_Outline" xml:space="preserve">
+    <value>大纲</value>
+  </data>
+  <data name="Pane_Editor" xml:space="preserve">
+    <value>编辑器</value>
+  </data>
+  <data name="Pane_Preview" xml:space="preserve">
+    <value>预览</value>
+  </data>
+  <data name="Outline_Empty" xml:space="preserve">
+    <value>此文档中没有标题。</value>
+  </data>
+  <data name="Find_ReplaceAll" xml:space="preserve">
+    <value>全部替换</value>
+  </data>
+  <data name="Find_NoResults" xml:space="preserve">
+    <value>无结果</value>
+  </data>
+  <data name="Find_Count" xml:space="preserve">
+    <value>第 {0} 个，共 {1}{2} 个</value>
+  </data>
+  <data name="Find_Replaced" xml:space="preserve">
+    <value>已替换 {0} 处</value>
+  </data>
+  <data name="GoTo_Label" xml:space="preserve">
+    <value>转到行：</value>
+  </data>
+  <data name="GoTo_Status" xml:space="preserve">
+    <value>第 {0} 行，第 {1} 列 · 输入 1–{2}</value>
+  </data>
+  <data name="GoTo_Range" xml:space="preserve">
+    <value>请输入 1 到 {0} 之间的行号</value>
+  </data>
+  <data name="GoTo_LineColumn" xml:space="preserve">
+    <value>转到第 {0} 行，第 {1} 列</value>
+  </data>
+  <data name="GoTo_LineOf" xml:space="preserve">
+    <value>转到第 {0} 行（共 {1} 行）</value>
+  </data>
+  <data name="Status_InitialPosition" xml:space="preserve">
+    <value>第 1 行，第 1 列</value>
+  </data>
+  <data name="Status_InitialWords" xml:space="preserve">
+    <value>字数：0</value>
+  </data>
+  <data name="Status_SignIn" xml:space="preserve">
+    <value>登录</value>
+  </data>
+  <data name="Status_GitHubSignedIn" xml:space="preserve">
+    <value>GitHub：已登录为 {0}{1}。单击以管理账户。</value>
+  </data>
+  <data name="Status_GitHubAccountCount" xml:space="preserve">
+    <value>（{0} 个账户）</value>
+  </data>
+  <data name="Status_GitHubNotSignedIn" xml:space="preserve">
+    <value>GitHub：未登录。单击以连接账户。</value>
+  </data>
+  <data name="Title_OpenDroppedFile" xml:space="preserve">
+    <value>打开拖放的文件</value>
+  </data>
+  <data name="Title_NewFile" xml:space="preserve">
+    <value>新建文件</value>
+  </data>
+  <data name="Title_OpenFile" xml:space="preserve">
+    <value>打开文件</value>
+  </data>
+  <data name="Title_OpenRecentFile" xml:space="preserve">
+    <value>打开最近的文件</value>
+  </data>
+  <data name="Title_ExportComplete" xml:space="preserve">
+    <value>导出完成</value>
+  </data>
+  <data name="Title_CrashRecovery" xml:space="preserve">
+    <value>崩溃恢复</value>
+  </data>
+  <data name="Title_InvalidShortcut" xml:space="preserve">
+    <value>无效的快捷键</value>
+  </data>
+  <data name="Title_ShortcutConflict" xml:space="preserve">
+    <value>快捷键冲突</value>
+  </data>
+  <data name="Title_Presentation" xml:space="preserve">
+    <value>MDEditor - 演示</value>
+  </data>
+  <data name="Title_PrintPreview" xml:space="preserve">
+    <value>MDEditor - 打印预览</value>
+  </data>
+  <data name="Dialog_OpenMarkdown" xml:space="preserve">
+    <value>打开 Markdown 文件</value>
+  </data>
+  <data name="Dialog_SaveMarkdownAs" xml:space="preserve">
+    <value>Markdown 文件另存为</value>
+  </data>
+  <data name="Dialog_ExportHtml" xml:space="preserve">
+    <value>导出为 HTML</value>
+  </data>
+  <data name="Dialog_ExportPdf" xml:space="preserve">
+    <value>导出为 PDF</value>
+  </data>
+  <data name="Filter_Open" xml:space="preserve">
+    <value>Markdown 文件 (*.md;*.markdown)|*.md;*.markdown|文本文件 (*.txt)|*.txt|所有文件 (*.*)|*.*</value>
+  </data>
+  <data name="Filter_Save" xml:space="preserve">
+    <value>Markdown 文件 (*.md)|*.md|文本文件 (*.txt)|*.txt|所有文件 (*.*)|*.*</value>
+  </data>
+  <data name="Filter_Html" xml:space="preserve">
+    <value>HTML 文件 (*.html)|*.html|所有文件 (*.*)|*.*</value>
+  </data>
+  <data name="Filter_Pdf" xml:space="preserve">
+    <value>PDF 文件 (*.pdf)|*.pdf|所有文件 (*.*)|*.*</value>
+  </data>
+  <data name="Msg_ErrorOpeningFile" xml:space="preserve">
+    <value>打开文件时出错：{0}</value>
+  </data>
+  <data name="Msg_ErrorEmbeddingImage" xml:space="preserve">
+    <value>嵌入图片时出错：{0}</value>
+  </data>
+  <data name="Msg_ErrorSavingFile" xml:space="preserve">
+    <value>保存文件时出错：{0}</value>
+  </data>
+  <data name="Msg_Exported" xml:space="preserve">
+    <value>已导出到 {0}</value>
+  </data>
+  <data name="Msg_ErrorExporting" xml:space="preserve">
+    <value>导出时出错：{0}</value>
+  </data>
+  <data name="Msg_PdfUnsupported" xml:space="preserve">
+    <value>PDF 导出失败。WebView2 引擎可能不支持打印为 PDF。</value>
+  </data>
+  <data name="Msg_PreviewNotReady" xml:space="preserve">
+    <value>预览尚未初始化。</value>
+  </data>
+  <data name="Msg_PdfFailed" xml:space="preserve">
+    <value>PDF 导出失败：{0}</value>
+  </data>
+  <data name="Msg_SaveBeforeClosing" xml:space="preserve">
+    <value>关闭前是否保存对 {0} 的更改？</value>
+  </data>
+  <data name="Msg_RecoverDraft" xml:space="preserve">
+    <value>发现上次会话的草稿。是否恢复？</value>
+  </data>
+  <data name="Msg_ShortcutNeedsModifier" xml:space="preserve">
+    <value>快捷键至少需要一个修饰键 (Ctrl/Shift/Alt)，功能键除外。</value>
+  </data>
+  <data name="Msg_ShortcutConflict" xml:space="preserve">
+    <value>此快捷键已被“{0}”使用。要改为分配给此命令吗？</value>
+  </data>
+  <data name="Msg_PreviewWindowFailed" xml:space="preserve">
+    <value>无法打开预览窗口：{0}</value>
+  </data>
+  <data name="Msg_PrintUnavailable" xml:space="preserve">
+    <value>无法打印：{0}</value>
+  </data>
+  <data name="Shortcut_Unbound" xml:space="preserve">
+    <value>（未绑定）</value>
+  </data>
+  <data name="Shortcut_SaveAs" xml:space="preserve">
+    <value>另存为</value>
+  </data>
+  <data name="Shortcut_GoToLine" xml:space="preserve">
+    <value>转到行</value>
+  </data>
+  <data name="Shortcut_PrintPreview" xml:space="preserve">
+    <value>打印预览</value>
+  </data>
+  <data name="Print_Print" xml:space="preserve">
+    <value>打印...</value>
+  </data>
+  <data name="Print_PrintTip" xml:space="preserve">
+    <value>打开打印预览 (Ctrl+P)</value>
+  </data>
+  <data name="Print_System" xml:space="preserve">
+    <value>系统对话框...</value>
+  </data>
+  <data name="Print_SystemTip" xml:space="preserve">
+    <value>使用 Windows 打印对话框打印</value>
+  </data>
+  <data name="Print_CloseTip" xml:space="preserve">
+    <value>关闭打印预览</value>
+  </data>
+  <data name="Settings_Appearance" xml:space="preserve">
+    <value>外观</value>
+  </data>
+  <data name="Settings_Theme" xml:space="preserve">
+    <value>主题</value>
+  </data>
+  <data name="Settings_Light" xml:space="preserve">
+    <value>浅色</value>
+  </data>
+  <data name="Settings_Dark" xml:space="preserve">
+    <value>深色</value>
+  </data>
+  <data name="Settings_MatchWindows" xml:space="preserve">
+    <value>跟随 Windows</value>
+  </data>
+  <data name="Settings_Language" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="Settings_Editor" xml:space="preserve">
+    <value>编辑器</value>
+  </data>
+  <data name="Settings_FontFamily" xml:space="preserve">
+    <value>字体</value>
+  </data>
+  <data name="Settings_FontSize" xml:space="preserve">
+    <value>字号</value>
+  </data>
+  <data name="Settings_AutoSave" xml:space="preserve">
+    <value>自动保存间隔</value>
+  </data>
+  <data name="Settings_10Seconds" xml:space="preserve">
+    <value>10 秒</value>
+  </data>
+  <data name="Settings_15Seconds" xml:space="preserve">
+    <value>15 秒</value>
+  </data>
+  <data name="Settings_30Seconds" xml:space="preserve">
+    <value>30 秒</value>
+  </data>
+  <data name="Settings_1Minute" xml:space="preserve">
+    <value>1 分钟</value>
+  </data>
+  <data name="Settings_2Minutes" xml:space="preserve">
+    <value>2 分钟</value>
+  </data>
+  <data name="Settings_LineEnding" xml:space="preserve">
+    <value>换行符（保存时）</value>
+  </data>
+  <data name="Settings_MarkdownPreview" xml:space="preserve">
+    <value>Markdown 与预览</value>
+  </data>
+  <data name="Settings_Flavor" xml:space="preserve">
+    <value>Markdown 语法</value>
+  </data>
+  <data name="Settings_Math" xml:space="preserve">
+    <value>数学公式 (KaTeX)</value>
+  </data>
+  <data name="Settings_Diagrams" xml:space="preserve">
+    <value>图表 (Mermaid)</value>
+  </data>
+  <data name="Settings_Emoji" xml:space="preserve">
+    <value>表情符号短代码</value>
+  </data>
+  <data name="Settings_Footnotes" xml:space="preserve">
+    <value>脚注</value>
+  </data>
+  <data name="Settings_TaskLists" xml:space="preserve">
+    <value>任务列表</value>
+  </data>
+  <data name="Settings_CustomCss" xml:space="preserve">
+    <value>自定义预览 CSS</value>
+  </data>
+  <data name="Settings_CustomCssNote" xml:space="preserve">
+    <value>仅应用于实时预览，导出/复制的 HTML 不受影响。</value>
+  </data>
+  <data name="Settings_ShortcutsNote" xml:space="preserve">
+    <value>单击快捷键框并按下新的组合键以重新绑定。</value>
+  </data>
+  <data name="GH_AccountsTitle" xml:space="preserve">
+    <value>GitHub 账户</value>
+  </data>
+  <data name="GH_ConnectedAccounts" xml:space="preserve">
+    <value>已连接的账户</value>
+  </data>
+  <data name="GH_NoAccounts" xml:space="preserve">
+    <value>尚未连接任何账户。</value>
+  </data>
+  <data name="GH_SetActive" xml:space="preserve">
+    <value>设为当前</value>
+  </data>
+  <data name="GH_SignInBrowserHeading" xml:space="preserve">
+    <value>通过浏览器登录</value>
+  </data>
+  <data name="GH_SignInBrowserNote" xml:space="preserve">
+    <value>使用一次性代码在 github.com 上授权 MDEditor。推荐方式，无需复制或管理令牌。</value>
+  </data>
+  <data name="GH_SignInBrowserButton" xml:space="preserve">
+    <value>通过浏览器登录...</value>
+  </data>
+  <data name="GH_EnterCode" xml:space="preserve">
+    <value>在 GitHub 上输入此代码：</value>
+  </data>
+  <data name="GH_CopyAndOpen" xml:space="preserve">
+    <value>复制代码并打开 GitHub</value>
+  </data>
+  <data name="GH_Waiting" xml:space="preserve">
+    <value>等待你在 GitHub 上授权…</value>
+  </data>
+  <data name="GH_WaitingExpires" xml:space="preserve">
+    <value>等待你在 GitHub 上授权…（代码将于 {0} 过期）</value>
+  </data>
+  <data name="GH_PatHeading" xml:space="preserve">
+    <value>个人访问令牌</value>
+  </data>
+  <data name="GH_PatNote" xml:space="preserve">
+    <value>经典令牌需要 repo 权限（使用 Gist 还需 gist）。细粒度令牌需要 Contents: Read and write 权限。</value>
+  </data>
+  <data name="GH_CreateToken" xml:space="preserve">
+    <value>在 GitHub 上创建令牌</value>
+  </data>
+  <data name="GH_AddToken" xml:space="preserve">
+    <value>添加令牌</value>
+  </data>
+  <data name="GH_Advanced" xml:space="preserve">
+    <value>高级</value>
+  </data>
+  <data name="GH_ClientIdLabel" xml:space="preserve">
+    <value>OAuth 应用客户端 ID 覆盖（除非使用自己的 OAuth 应用，否则保持不变）</value>
+  </data>
+  <data name="GH_ClientIdNote" xml:space="preserve">
+    <value>在 GitHub 上注册 OAuth 应用（Settings &gt; Developer settings）并勾选“Enable Device Flow”，然后将其 Client ID 粘贴到此处。令牌保存在 Windows 凭据管理器中。</value>
+  </data>
+  <data name="GH_MethodBrowser" xml:space="preserve">
+    <value>浏览器登录</value>
+  </data>
+  <data name="GH_MethodPat" xml:space="preserve">
+    <value>个人访问令牌</value>
+  </data>
+  <data name="GH_ActiveSuffix" xml:space="preserve">
+    <value>  [当前]</value>
+  </data>
+  <data name="GH_Scopes" xml:space="preserve">
+    <value>权限范围：{0}</value>
+  </data>
+  <data name="GH_ScopesUnknown" xml:space="preserve">
+    <value>权限范围：未报告（细粒度令牌）</value>
+  </data>
+  <data name="GH_NeedClientIdTip" xml:space="preserve">
+    <value>在“高级”中设置 OAuth 应用客户端 ID 以启用浏览器登录。</value>
+  </data>
+  <data name="GH_RemoveConfirm" xml:space="preserve">
+    <value>要从 MDEditor 中移除“{0}”吗？
+
+已存储的令牌将从此电脑中删除。要彻底撤销，请同时在 github.com 上移除（Settings &gt; Applications 或 Developer settings &gt; Personal access tokens）。</value>
+  </data>
+  <data name="GH_RemoveTitle" xml:space="preserve">
+    <value>移除账户</value>
+  </data>
+  <data name="GH_Removed" xml:space="preserve">
+    <value>已移除 {0}。</value>
+  </data>
+  <data name="GH_RemoveFailed" xml:space="preserve">
+    <value>无法移除账户：{0}</value>
+  </data>
+  <data name="GH_NeedClientId" xml:space="preserve">
+    <value>浏览器登录需要 OAuth 应用客户端 ID，请在下方“高级”中设置，或改用个人访问令牌。</value>
+  </data>
+  <data name="GH_SignedInAs" xml:space="preserve">
+    <value>已登录为 {0}。</value>
+  </data>
+  <data name="GH_PasteTokenFirst" xml:space="preserve">
+    <value>请先粘贴个人访问令牌。</value>
+  </data>
+  <data name="GH_CheckingToken" xml:space="preserve">
+    <value>正在向 GitHub 验证令牌…</value>
+  </data>
+  <data name="GH_ConnectedAccount" xml:space="preserve">
+    <value>已连接 {0}。</value>
+  </data>
+  <data name="GH_SignInCancelled" xml:space="preserve">
+    <value>已取消登录。</value>
+  </data>
+  <data name="GH_BrowserOpenFailedGoTo" xml:space="preserve">
+    <value>无法打开浏览器（{0}）。请访问 {1}</value>
+  </data>
+  <data name="GH_OpenFromGitHubTitle" xml:space="preserve">
+    <value>从 GitHub 打开</value>
+  </data>
+  <data name="GH_OpenFromGitHubTitleAccount" xml:space="preserve">
+    <value>从 GitHub 打开 - {0}</value>
+  </data>
+  <data name="GH_ReloadRepos" xml:space="preserve">
+    <value>重新加载仓库</value>
+  </data>
+  <data name="GH_FilterRepos" xml:space="preserve">
+    <value>筛选仓库</value>
+  </data>
+  <data name="GH_Branch" xml:space="preserve">
+    <value>分支：</value>
+  </data>
+  <data name="GH_MarkdownOnly" xml:space="preserve">
+    <value>仅 Markdown 文件</value>
+  </data>
+  <data name="GH_SelectRepo" xml:space="preserve">
+    <value>请选择一个仓库。</value>
+  </data>
+  <data name="GH_LoadingRepos" xml:space="preserve">
+    <value>正在加载仓库…</value>
+  </data>
+  <data name="GH_RepoCount" xml:space="preserve">
+    <value>{0} 个仓库</value>
+  </data>
+  <data name="GH_LoadReposFailed" xml:space="preserve">
+    <value>无法加载仓库：{0}</value>
+  </data>
+  <data name="GH_ReadOnly" xml:space="preserve">
+    <value>  （只读）</value>
+  </data>
+  <data name="GH_LoadingBranches" xml:space="preserve">
+    <value>正在加载分支…</value>
+  </data>
+  <data name="GH_RepoEmpty" xml:space="preserve">
+    <value>此仓库为空。</value>
+  </data>
+  <data name="GH_LoadBranchesFailed" xml:space="preserve">
+    <value>无法加载分支：{0}</value>
+  </data>
+  <data name="GH_LoadingFiles" xml:space="preserve">
+    <value>正在加载文件…</value>
+  </data>
+  <data name="GH_LoadFilesFailed" xml:space="preserve">
+    <value>无法加载文件：{0}</value>
+  </data>
+  <data name="GH_NoMarkdownFiles" xml:space="preserve">
+    <value>此分支上没有 Markdown 文件。</value>
+  </data>
+  <data name="GH_NoFiles" xml:space="preserve">
+    <value>此分支上没有文件。</value>
+  </data>
+  <data name="GH_Truncated" xml:space="preserve">
+    <value>此仓库非常大，GitHub 只返回了部分文件列表。</value>
+  </data>
+  <data name="GH_Downloading" xml:space="preserve">
+    <value>正在下载 {0}…</value>
+  </data>
+  <data name="GH_OpenFileFailed" xml:space="preserve">
+    <value>无法打开 {0}：{1}</value>
+  </data>
+  <data name="GH_CommitTitle" xml:space="preserve">
+    <value>提交到 GitHub</value>
+  </data>
+  <data name="GH_CommitConflictBanner" xml:space="preserve">
+    <value>自你打开此文件以来，它已在 GitHub 上被更改。你的修改将提交到基于你打开时版本的新分支，不会覆盖任何内容。请创建拉取请求进行合并。</value>
+  </data>
+  <data name="GH_CommitMessage" xml:space="preserve">
+    <value>提交信息</value>
+  </data>
+  <data name="GH_CommitDescription" xml:space="preserve">
+    <value>详细描述（可选）</value>
+  </data>
+  <data name="GH_CommitNewBranch" xml:space="preserve">
+    <value>为此提交创建新分支</value>
+  </data>
+  <data name="GH_Commit" xml:space="preserve">
+    <value>提交</value>
+  </data>
+  <data name="GH_CommitDirect" xml:space="preserve">
+    <value>直接提交到 {0} 分支</value>
+  </data>
+  <data name="GH_OpenPrInto" xml:space="preserve">
+    <value>创建合并到 {0} 的拉取请求</value>
+  </data>
+  <data name="GH_CommitAndOpenPr" xml:space="preserve">
+    <value>提交并创建 PR</value>
+  </data>
+  <data name="GH_EnterCommitMessage" xml:space="preserve">
+    <value>请输入提交信息。</value>
+  </data>
+  <data name="GH_InvalidBranchName" xml:space="preserve">
+    <value>分支名称不能包含空格或 ~ ^ : ? * [ \，也不能以“/”或“.”开头或结尾。</value>
+  </data>
+  <data name="GH_BranchSameName" xml:space="preserve">
+    <value>新分支的名称必须与当前分支不同。</value>
+  </data>
+  <data name="GH_CreatingBranch" xml:space="preserve">
+    <value>正在创建分支 {0} 并提交…</value>
+  </data>
+  <data name="GH_Committing" xml:space="preserve">
+    <value>正在提交…</value>
+  </data>
+  <data name="GH_ConflictTitle" xml:space="preserve">
+    <value>文件已在 GitHub 上更改</value>
+  </data>
+  <data name="GH_ConflictHeadline" xml:space="preserve">
+    <value>{0} 已在 {1}@{2} 上更改。</value>
+  </data>
+  <data name="GH_ConflictBody" xml:space="preserve">
+    <value>在你打开此文件后，有人提交了更新的版本。你希望如何保存你的更改？</value>
+  </data>
+  <data name="GH_ConflictNewBranch" xml:space="preserve">
+    <value>提交到新分支（推荐）</value>
+  </data>
+  <data name="GH_ConflictNewBranchNote" xml:space="preserve">
+    <value>保留两个版本；在 GitHub 上创建拉取请求进行合并。</value>
+  </data>
+  <data name="GH_ConflictOverwrite" xml:space="preserve">
+    <value>用我的版本覆盖</value>
+  </data>
+  <data name="GH_ConflictOverwriteNote" xml:space="preserve">
+    <value>用你的文本替换分支上他人的更改。</value>
+  </data>
+  <data name="GH_ConflictLoadTheirs" xml:space="preserve">
+    <value>放弃我的更改并加载他们的版本</value>
+  </data>
+  <data name="GH_ConflictLoadTheirsNote" xml:space="preserve">
+    <value>用 GitHub 上的最新版本替换编辑器中的文本。</value>
+  </data>
+  <data name="GH_SeeLatest" xml:space="preserve">
+    <value>在 GitHub 上查看最新版本</value>
+  </data>
+  <data name="GH_HistoryTitle" xml:space="preserve">
+    <value>文件历史</value>
+  </data>
+  <data name="GH_HistoryTitleFile" xml:space="preserve">
+    <value>历史 - {0}</value>
+  </data>
+  <data name="GH_ChangesInCommit" xml:space="preserve">
+    <value>此提交中的更改</value>
+  </data>
+  <data name="GH_VsCurrent" xml:space="preserve">
+    <value>此版本与我当前的文本对比</value>
+  </data>
+  <data name="GH_ShowWholeFile" xml:space="preserve">
+    <value>显示整个文件</value>
+  </data>
+  <data name="GH_LoadingHistory" xml:space="preserve">
+    <value>正在加载历史…</value>
+  </data>
+  <data name="GH_RestoreVersion" xml:space="preserve">
+    <value>恢复此版本</value>
+  </data>
+  <data name="GH_RestoreTip" xml:space="preserve">
+    <value>将此版本加载到编辑器中。在保存（提交）之前，GitHub 上不会有任何更改。</value>
+  </data>
+  <data name="GH_ViewCommit" xml:space="preserve">
+    <value>在 GitHub 上查看提交</value>
+  </data>
+  <data name="GH_NoCommits" xml:space="preserve">
+    <value>此分支上没有找到此文件的提交。</value>
+  </data>
+  <data name="GH_Showing100" xml:space="preserve">
+    <value>显示最近的 100 个提交。</value>
+  </data>
+  <data name="GH_CommitCount" xml:space="preserve">
+    <value>{0} 个提交</value>
+  </data>
+  <data name="GH_LoadHistoryFailed" xml:space="preserve">
+    <value>无法加载历史：{0}</value>
+  </data>
+  <data name="GH_LoadVersionFailed" xml:space="preserve">
+    <value>无法加载此版本：{0}</value>
+  </data>
+  <data name="GH_StatsTipVsCurrent" xml:space="preserve">
+    <value>从此版本到你当前文本所添加/删除的行</value>
+  </data>
+  <data name="GH_StatsTipCommit" xml:space="preserve">
+    <value>此提交添加/删除的行</value>
+  </data>
+  <data name="GH_FileMissingAtCommit" xml:space="preserve">
+    <value>此提交中不存在此文件（可能已被重命名或删除）。</value>
+  </data>
+  <data name="GH_IdenticalToCurrent" xml:space="preserve">
+    <value>你当前的文本与此版本相同。</value>
+  </data>
+  <data name="GH_CommitNoChange" xml:space="preserve">
+    <value>此提交没有更改文件的文本。</value>
+  </data>
+  <data name="GH_UnchangedLines" xml:space="preserve">
+    <value>··· {0} 行未更改 ···</value>
+  </data>
+  <data name="GH_UnchangedLine" xml:space="preserve">
+    <value>··· 1 行未更改 ···</value>
+  </data>
+  <data name="GH_SignInFirstPrompt" xml:space="preserve">
+    <value>请先登录 GitHub。现在打开 GitHub 账户吗？</value>
+  </data>
+  <data name="GH_HistoryOnlyGitHub" xml:space="preserve">
+    <value>仅从 GitHub 打开的文件可查看历史（文件 &gt; 从 GitHub 打开...）。</value>
+  </data>
+  <data name="GH_ReplaceUnsavedWithVersion" xml:space="preserve">
+    <value>用此版本替换你未保存的更改吗？</value>
+  </data>
+  <data name="GH_RestoreVersionTitle" xml:space="preserve">
+    <value>恢复版本</value>
+  </data>
+  <data name="GH_NotFromGitHub" xml:space="preserve">
+    <value>此文档并非来自 GitHub。请使用“文件 &gt; 从 GitHub 打开...”编辑仓库文件，然后保存以提交。</value>
+  </data>
+  <data name="GH_NoWriteAccess" xml:space="preserve">
+    <value>你的账户 ({0}) 没有 {1} 的写入权限。请使用“文件 &gt; 另存为...”保留本地副本。</value>
+  </data>
+  <data name="GH_PrOpened" xml:space="preserve">
+    <value>已提交到新分支 {0} 并创建了拉取请求。
+
+在 GitHub 上查看该拉取请求吗？</value>
+  </data>
+  <data name="GH_PrOpenedTitle" xml:space="preserve">
+    <value>已创建拉取请求</value>
+  </data>
+  <data name="GH_CommitFailed" xml:space="preserve">
+    <value>无法提交</value>
+  </data>
+  <data name="GH_LoadLatestFailed" xml:space="preserve">
+    <value>无法加载最新版本</value>
+  </data>
+  <data name="GH_ErrorWithPrefix" xml:space="preserve">
+    <value>{0}：{1}</value>
+  </data>
+  <data name="GH_BrowserOpenFailedUrl" xml:space="preserve">
+    <value>无法打开浏览器：{0}
+
+{1}</value>
+  </data>
+  <data name="Err_NoClientId" xml:space="preserve">
+    <value>未配置 OAuth 应用客户端 ID，因此无法使用浏览器登录。请改用个人访问令牌，或设置客户端 ID。</value>
+  </data>
+  <data name="Err_SignInCancelled" xml:space="preserve">
+    <value>已在 GitHub 上取消登录。</value>
+  </data>
+  <data name="Err_CodeExpired" xml:space="preserve">
+    <value>登录代码已过期，请重试。</value>
+  </data>
+  <data name="Err_NoAccessToken" xml:space="preserve">
+    <value>GitHub 未返回访问令牌。</value>
+  </data>
+  <data name="Err_TokenRejected" xml:space="preserve">
+    <value>GitHub 拒绝了该令牌。请检查是否复制正确，以及是否已过期或被撤销。</value>
+  </data>
+  <data name="Err_SignInFirst" xml:space="preserve">
+    <value>请先登录 GitHub（工具 &gt; GitHub 账户...）。</value>
+  </data>
+  <data name="Err_NotAFile" xml:space="preserve">
+    <value>“{0}”不是文件。</value>
+  </data>
+  <data name="Err_BranchExists" xml:space="preserve">
+    <value>名为“{0}”的分支已存在。请选择其他名称。</value>
+  </data>
+  <data name="Err_Conflict" xml:space="preserve">
+    <value>自你打开以来，{0} 已在 GitHub 上被更改。</value>
+  </data>
+  <data name="Err_NoPermission" xml:space="preserve">
+    <value>你没有提交到 {0} 的权限。</value>
+  </data>
+  <data name="Snip_Bold" xml:space="preserve">
+    <value>粗体</value>
+  </data>
+  <data name="Snip_Italic" xml:space="preserve">
+    <value>斜体</value>
+  </data>
+  <data name="Snip_Strikethrough" xml:space="preserve">
+    <value>删除线</value>
+  </data>
+  <data name="Snip_InlineCode" xml:space="preserve">
+    <value>行内代码</value>
+  </data>
+  <data name="Snip_CodeFence" xml:space="preserve">
+    <value>代码块</value>
+  </data>
+  <data name="Snip_Heading1" xml:space="preserve">
+    <value>标题 1</value>
+  </data>
+  <data name="Snip_Heading2" xml:space="preserve">
+    <value>标题 2</value>
+  </data>
+  <data name="Snip_Heading3" xml:space="preserve">
+    <value>标题 3</value>
+  </data>
+  <data name="Snip_Heading4" xml:space="preserve">
+    <value>标题 4</value>
+  </data>
+  <data name="Snip_Heading5" xml:space="preserve">
+    <value>标题 5</value>
+  </data>
+  <data name="Snip_Heading6" xml:space="preserve">
+    <value>标题 6</value>
+  </data>
+  <data name="Snip_BulletedList" xml:space="preserve">
+    <value>无序列表</value>
+  </data>
+  <data name="Snip_NumberedList" xml:space="preserve">
+    <value>有序列表</value>
+  </data>
+  <data name="Snip_TaskList" xml:space="preserve">
+    <value>任务列表</value>
+  </data>
+  <data name="Snip_Blockquote" xml:space="preserve">
+    <value>引用</value>
+  </data>
+  <data name="Snip_Link" xml:space="preserve">
+    <value>链接</value>
+  </data>
+  <data name="Snip_Image" xml:space="preserve">
+    <value>图片</value>
+  </data>
+  <data name="Snip_Table" xml:space="preserve">
+    <value>表格</value>
+  </data>
+  <data name="Snip_HorizontalRule" xml:space="preserve">
+    <value>水平线</value>
+  </data>
+  <data name="Snip_MathBlock" xml:space="preserve">
+    <value>数学公式块</value>
+  </data>
+  <data name="Snip_InlineMath" xml:space="preserve">
+    <value>行内公式</value>
+  </data>
+  <data name="Snip_Footnote" xml:space="preserve">
+    <value>脚注</value>
+  </data>
+  <data name="Snip_Mermaid" xml:space="preserve">
+    <value>Mermaid 图表</value>
+  </data>
+</root>

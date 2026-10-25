@@ -61,29 +61,29 @@ public static partial class MarkdownCompletionProvider
 
     private static readonly CompletionItem[] Snippets =
     {
-        new("Bold", "**text**", "Bold text (Ctrl+B)", 2) { Glyph = "B" },
-        new("Italic", "*text*", "Italic text (Ctrl+I)", 1) { Glyph = "I" },
-        new("Strikethrough", "~~text~~", "Strikethrough text", 2) { Glyph = "S" },
-        new("Inline code", "`code`", "Inline code span", 1) { Glyph = "<>" },
-        new("Code fence", "```\n\n```", "Fenced code block", 4) { Glyph = "{}" },
-        new("Heading 1", "# ", "Level 1 heading", 2) { Glyph = "H1" },
-        new("Heading 2", "## ", "Level 2 heading", 3) { Glyph = "H2" },
-        new("Heading 3", "### ", "Level 3 heading", 4) { Glyph = "H3" },
-        new("Heading 4", "#### ", "Level 4 heading", 5) { Glyph = "H4" },
-        new("Heading 5", "##### ", "Level 5 heading", 6) { Glyph = "H5" },
-        new("Heading 6", "###### ", "Level 6 heading", 7) { Glyph = "H6" },
-        new("Bulleted list", "- ", "Bulleted list item", 2) { Glyph = "•" },
-        new("Numbered list", "1. ", "Numbered list item", 3) { Glyph = "1." },
-        new("Task list", "- [ ] ", "Task list item", 6) { Glyph = "☐" },
-        new("Blockquote", "> ", "Blockquote", 2) { Glyph = ">" },
-        new("Link", "[text](url)", "Inline link", 1) { Glyph = "🔗" },
-        new("Image", "![alt](url)", "Image", 2) { Glyph = "🖼️" },
-        new("Table", "| Column | Column |\n| --- | --- |\n| Cell | Cell |", "Table skeleton", 2) { Glyph = "▦" },
-        new("Horizontal rule", "\n---\n", "Horizontal rule", 5) { Glyph = "—" },
-        new("Math block", "$$\n\n$$", "Display math", 3) { Glyph = "∑" },
-        new("Inline math", "$ $", "Inline math", 1) { Glyph = "∑" },
-        new("Footnote", "[^1]", "Footnote reference", 3) { Glyph = "[^]" },
-        new("Mermaid diagram", "```mermaid\n\n```", "Mermaid diagram", 12) { Glyph = "◇" }
+        new("Bold", "**text**", "Bold text (Ctrl+B)", 2) { Glyph = "B", LabelKey = "Snip_Bold" },
+        new("Italic", "*text*", "Italic text (Ctrl+I)", 1) { Glyph = "I", LabelKey = "Snip_Italic" },
+        new("Strikethrough", "~~text~~", "Strikethrough text", 2) { Glyph = "S", LabelKey = "Snip_Strikethrough" },
+        new("Inline code", "`code`", "Inline code span", 1) { Glyph = "<>", LabelKey = "Snip_InlineCode" },
+        new("Code fence", "```\n\n```", "Fenced code block", 4) { Glyph = "{}", LabelKey = "Snip_CodeFence" },
+        new("Heading 1", "# ", "Level 1 heading", 2) { Glyph = "H1", LabelKey = "Snip_Heading1" },
+        new("Heading 2", "## ", "Level 2 heading", 3) { Glyph = "H2", LabelKey = "Snip_Heading2" },
+        new("Heading 3", "### ", "Level 3 heading", 4) { Glyph = "H3", LabelKey = "Snip_Heading3" },
+        new("Heading 4", "#### ", "Level 4 heading", 5) { Glyph = "H4", LabelKey = "Snip_Heading4" },
+        new("Heading 5", "##### ", "Level 5 heading", 6) { Glyph = "H5", LabelKey = "Snip_Heading5" },
+        new("Heading 6", "###### ", "Level 6 heading", 7) { Glyph = "H6", LabelKey = "Snip_Heading6" },
+        new("Bulleted list", "- ", "Bulleted list item", 2) { Glyph = "•", LabelKey = "Snip_BulletedList" },
+        new("Numbered list", "1. ", "Numbered list item", 3) { Glyph = "1.", LabelKey = "Snip_NumberedList" },
+        new("Task list", "- [ ] ", "Task list item", 6) { Glyph = "☐", LabelKey = "Snip_TaskList" },
+        new("Blockquote", "> ", "Blockquote", 2) { Glyph = ">", LabelKey = "Snip_Blockquote" },
+        new("Link", "[text](url)", "Inline link", 1) { Glyph = "🔗", LabelKey = "Snip_Link" },
+        new("Image", "![alt](url)", "Image", 2) { Glyph = "🖼️", LabelKey = "Snip_Image" },
+        new("Table", "| Column | Column |\n| --- | --- |\n| Cell | Cell |", "Table skeleton", 2) { Glyph = "▦", LabelKey = "Snip_Table" },
+        new("Horizontal rule", "\n---\n", "Horizontal rule", 5) { Glyph = "—", LabelKey = "Snip_HorizontalRule" },
+        new("Math block", "$$\n\n$$", "Display math", 3) { Glyph = "∑", LabelKey = "Snip_MathBlock" },
+        new("Inline math", "$ $", "Inline math", 1) { Glyph = "∑", LabelKey = "Snip_InlineMath" },
+        new("Footnote", "[^1]", "Footnote reference", 3) { Glyph = "[^]", LabelKey = "Snip_Footnote" },
+        new("Mermaid diagram", "```mermaid\n\n```", "Mermaid diagram", 12) { Glyph = "◇", LabelKey = "Snip_Mermaid" }
     };
 
     public static CompletionResult? GetCompletions(
@@ -244,11 +244,15 @@ public static partial class MarkdownCompletionProvider
         string query = text[tokenStart..caretOffset].TrimStart('#');
 
         // Manual completion shows the whole snippet catalogue (the popup scrolls).
+        // Labels are shown in the UI language; queries match the English label as well, so
+        // typing "bold" works whatever the language.
         var items = Snippets
+            .Select(s => (Item: s, Label: s.LabelKey is { } key ? Loc.Get(key) : s.Display))
             .Where(s => query.Length == 0
-                || s.Display.StartsWith(query, StringComparison.OrdinalIgnoreCase)
-                || s.Display.Contains(query, StringComparison.OrdinalIgnoreCase)
-                || s.Description.Contains(query, StringComparison.OrdinalIgnoreCase))
+                || s.Item.Display.Contains(query, StringComparison.OrdinalIgnoreCase)
+                || s.Label.Contains(query, StringComparison.OrdinalIgnoreCase)
+                || s.Item.Description.Contains(query, StringComparison.OrdinalIgnoreCase))
+            .Select(s => s.Item with { Display = s.Label })
             .Take(30)
             .ToList();
 

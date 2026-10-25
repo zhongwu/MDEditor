@@ -50,23 +50,23 @@ public partial class MainWindow : Window
     // Window.InputBindings entry (zoom in/out also have a fixed, unlisted numpad alias binding that
     // a rebind doesn't touch). The editor's formatting shortcuts live on MarkdownEditor.InputBindings
     // and aren't rebindable.
-    private static readonly (string Key, string Label, Func<MainWindowViewModel, ICommand> GetCommand)[] RebindableShortcuts =
+    private static readonly (string Key, string LabelKey, Func<MainWindowViewModel, ICommand> GetCommand)[] RebindableShortcuts =
     {
-        ("newFile", "New File", vm => vm.NewFileCommand),
-        ("openFile", "Open File", vm => vm.OpenFileCommand),
-        ("saveFile", "Save", vm => vm.SaveFileCommand),
-        ("saveAsFile", "Save As", vm => vm.SaveAsFileCommand),
-        ("togglePreview", "Show Preview", vm => vm.TogglePreviewCommand),
-        ("toggleOutline", "Show Outline", vm => vm.ToggleOutlineCommand),
-        ("find", "Find", vm => vm.FindCommand),
-        ("replace", "Replace", vm => vm.ReplaceCommand),
-        ("goToLine", "Go to Line", vm => vm.GoToLineCommand),
-        ("findInPreview", "Find in Preview", vm => vm.FindInPreviewCommand),
-        ("printPreview", "Print Preview", vm => vm.PrintPreviewCommand),
-        ("presentationMode", "Presentation Mode", vm => vm.PresentationModeCommand),
-        ("zoomIn", "Zoom In", vm => vm.ZoomInCommand),
-        ("zoomOut", "Zoom Out", vm => vm.ZoomOutCommand),
-        ("resetZoom", "Reset Zoom", vm => vm.ResetZoomCommand),
+        ("newFile", "Title_NewFile", vm => vm.NewFileCommand),
+        ("openFile", "Title_OpenFile", vm => vm.OpenFileCommand),
+        ("saveFile", "Menu_Save", vm => vm.SaveFileCommand),
+        ("saveAsFile", "Shortcut_SaveAs", vm => vm.SaveAsFileCommand),
+        ("togglePreview", "Menu_ShowPreview", vm => vm.TogglePreviewCommand),
+        ("toggleOutline", "Menu_ShowOutline", vm => vm.ToggleOutlineCommand),
+        ("find", "Menu_Find", vm => vm.FindCommand),
+        ("replace", "Menu_Replace", vm => vm.ReplaceCommand),
+        ("goToLine", "Shortcut_GoToLine", vm => vm.GoToLineCommand),
+        ("findInPreview", "Menu_FindInPreview", vm => vm.FindInPreviewCommand),
+        ("printPreview", "Shortcut_PrintPreview", vm => vm.PrintPreviewCommand),
+        ("presentationMode", "Menu_PresentationMode", vm => vm.PresentationModeCommand),
+        ("zoomIn", "Menu_ZoomIn", vm => vm.ZoomInCommand),
+        ("zoomOut", "Menu_ZoomOut", vm => vm.ZoomOutCommand),
+        ("resetZoom", "Menu_ResetZoom", vm => vm.ResetZoomCommand),
     };
 
     private readonly Dictionary<string, (ModifierKeys Modifiers, Key Key)> _defaultShortcuts = new();
@@ -163,6 +163,15 @@ public partial class MainWindow : Window
         _gitHubAuthService.AccountsChanged += (s, e) => UpdateGitHubStatus();
         MDEditor.Preview.PreviewHost.ImageAuthorization = GetGitHubImageAuthorization;
         UpdateGitHubStatus();
+
+        // Phase 6.4: XAML text follows {loc:Tr} bindings; text this window sets from code is
+        // refreshed here.
+        Loc.LanguageChanged += (s, e) =>
+        {
+            UpdateTitleBar();
+            UpdateGitHubStatus();
+            UpdateRecentFilesMenu();
+        };
 
         // Phase 6.2: outline panel, find in preview, print preview, presentation mode
         ViewModel.ToggleOutlineCallback = ToggleOutline;
@@ -528,7 +537,7 @@ public partial class MainWindow : Window
             {
                 if (_isDirty)
                 {
-                    var result = MessageBox.Show("You have unsaved changes. Discard them?", "Open Dropped File", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    var result = MessageBox.Show(Loc.Get("Common_UnsavedDiscard"), Loc.Get("Title_OpenDroppedFile"), MessageBoxButton.YesNo, MessageBoxImage.Question);
                     if (result != MessageBoxResult.Yes)
                         return;
                 }
@@ -544,7 +553,7 @@ public partial class MainWindow : Window
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error opening file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(Loc.Format("Msg_ErrorOpeningFile", ex.Message), Loc.Get("Common_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             else if (ext == ".png" || ext == ".jpg" || ext == ".jpeg" || ext == ".gif" || ext == ".bmp" || ext == ".svg")
@@ -596,7 +605,7 @@ public partial class MainWindow : Window
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error embedding image: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(Loc.Format("Msg_ErrorEmbeddingImage", ex.Message), Loc.Get("Common_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -1051,20 +1060,20 @@ public partial class MainWindow : Window
             .Select(s =>
             {
                 var binding = FindShortcutBinding(s.Key, s.GetCommand);
-                var gesture = binding != null ? FormatGesture(binding.Modifiers, binding.Key) : "(unbound)";
-                return (s.Key, s.Label, gesture);
+                var gesture = binding != null ? FormatGesture(binding.Modifiers, binding.Key) : Loc.Get("Shortcut_Unbound");
+                return (s.Key, Loc.Get(s.LabelKey), gesture);
             })
             .ToList();
 
     /// <summary>Checks the proposed gesture against the other 9 tracked shortcuts (not all 53 commands).</summary>
     internal string? FindShortcutConflict(string key, ModifierKeys modifiers, Key newKey)
     {
-        foreach (var (otherKey, label, getCommand) in RebindableShortcuts)
+        foreach (var (otherKey, labelKey, getCommand) in RebindableShortcuts)
         {
             if (otherKey == key) continue;
             var binding = FindShortcutBinding(otherKey, getCommand);
             if (binding != null && binding.Modifiers == modifiers && binding.Key == newKey)
-                return label;
+                return Loc.Get(labelKey);
         }
         return null;
     }
@@ -1264,12 +1273,14 @@ public partial class MainWindow : Window
         }
     }
 
+    private static string UntitledFileName => Loc.Get("Doc_UntitledBase") + ".md";
+
     private void UpdateTitleBar()
     {
         var fileName = _gitHubDocument != null
             ? _gitHubDocument.FileName
             : string.IsNullOrEmpty(_currentFilePath)
-                ? "Untitled.md"
+                ? UntitledFileName
                 : System.IO.Path.GetFileName(_currentFilePath);
         var location = _gitHubDocument != null ? $" ({_gitHubDocument.RepoFullName}@{_gitHubDocument.Branch})" : "";
         var dirty = _isDirty ? " ●" : "";
@@ -1304,7 +1315,7 @@ public partial class MainWindow : Window
     {
         if (_isDirty)
         {
-            var result = MessageBox.Show("You have unsaved changes. Discard them?", "New File", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            var result = MessageBox.Show(Loc.Get("Common_UnsavedDiscard"), Loc.Get("Title_NewFile"), MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result != MessageBoxResult.Yes)
                 return;
         }
@@ -1318,15 +1329,15 @@ public partial class MainWindow : Window
     {
         if (_isDirty)
         {
-            var result = MessageBox.Show("You have unsaved changes. Discard them?", "Open File", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            var result = MessageBox.Show(Loc.Get("Common_UnsavedDiscard"), Loc.Get("Title_OpenFile"), MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result != MessageBoxResult.Yes)
                 return;
         }
 
         var dialog = new Microsoft.Win32.OpenFileDialog
         {
-            Title = "Open Markdown File",
-            Filter = "Markdown Files (*.md;*.markdown)|*.md;*.markdown|Text Files (*.txt)|*.txt|All Files (*.*)|*.*",
+            Title = Loc.Get("Dialog_OpenMarkdown"),
+            Filter = Loc.Get("Filter_Open"),
             DefaultExt = ".md"
         };
 
@@ -1343,7 +1354,7 @@ public partial class MainWindow : Window
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error opening file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Loc.Format("Msg_ErrorOpeningFile", ex.Message), Loc.Get("Common_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
@@ -1373,7 +1384,7 @@ public partial class MainWindow : Window
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error saving file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(Loc.Format("Msg_ErrorSavingFile", ex.Message), Loc.Get("Common_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -1381,11 +1392,11 @@ public partial class MainWindow : Window
     {
         var dialog = new Microsoft.Win32.SaveFileDialog
         {
-            Title = "Save Markdown File As",
-            Filter = "Markdown Files (*.md)|*.md|Text Files (*.txt)|*.txt|All Files (*.*)|*.*",
+            Title = Loc.Get("Dialog_SaveMarkdownAs"),
+            Filter = Loc.Get("Filter_Save"),
             DefaultExt = ".md",
             FileName = _gitHubDocument?.FileName ?? (string.IsNullOrEmpty(_currentFilePath)
-                ? "Untitled.md"
+                ? UntitledFileName
                 : System.IO.Path.GetFileName(_currentFilePath))
         };
 
@@ -1403,7 +1414,7 @@ public partial class MainWindow : Window
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error saving file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Loc.Format("Msg_ErrorSavingFile", ex.Message), Loc.Get("Common_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
@@ -1412,11 +1423,11 @@ public partial class MainWindow : Window
     {
         var dialog = new Microsoft.Win32.SaveFileDialog
         {
-            Title = "Export as HTML",
-            Filter = "HTML Files (*.html)|*.html|All Files (*.*)|*.*",
+            Title = Loc.Get("Dialog_ExportHtml"),
+            Filter = Loc.Get("Filter_Html"),
             DefaultExt = ".html",
             FileName = string.IsNullOrEmpty(_currentFilePath)
-                ? "Untitled.html"
+                ? Loc.Get("Doc_UntitledBase") + ".html"
                 : System.IO.Path.ChangeExtension(System.IO.Path.GetFileName(_currentFilePath), ".html")
         };
 
@@ -1427,11 +1438,11 @@ public partial class MainWindow : Window
                 var markdown = GetEditorText();
                 var html = _markdownParser.ToHtmlDocument(markdown);
                 System.IO.File.WriteAllText(dialog.FileName, html);
-                MessageBox.Show($"Exported to {dialog.FileName}", "Export Complete", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(Loc.Format("Msg_Exported", dialog.FileName), Loc.Get("Title_ExportComplete"), MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error exporting: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Loc.Format("Msg_ErrorExporting", ex.Message), Loc.Get("Common_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
@@ -1441,11 +1452,11 @@ public partial class MainWindow : Window
     {
         var dialog = new Microsoft.Win32.SaveFileDialog
         {
-            Title = "Export as PDF",
-            Filter = "PDF Files (*.pdf)|*.pdf|All Files (*.*)|*.*",
+            Title = Loc.Get("Dialog_ExportPdf"),
+            Filter = Loc.Get("Filter_Pdf"),
             DefaultExt = ".pdf",
             FileName = string.IsNullOrEmpty(_currentFilePath)
-                ? "Untitled.pdf"
+                ? Loc.Get("Doc_UntitledBase") + ".pdf"
                 : System.IO.Path.ChangeExtension(System.IO.Path.GetFileName(_currentFilePath), ".pdf")
         };
 
@@ -1458,21 +1469,21 @@ public partial class MainWindow : Window
                     bool success = await MarkdownPreview.CoreWebView2.PrintToPdfAsync(dialog.FileName);
                     if (success)
                     {
-                        MessageBox.Show($"Exported to {dialog.FileName}", "Export Complete", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show(Loc.Format("Msg_Exported", dialog.FileName), Loc.Get("Title_ExportComplete"), MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     else
                     {
-                        MessageBox.Show("PDF export failed. The WebView2 engine may not support printing to PDF.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(Loc.Get("Msg_PdfUnsupported"), Loc.Get("Common_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Preview not initialized yet.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(Loc.Get("Msg_PreviewNotReady"), Loc.Get("Common_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"PDF export failed: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Loc.Format("Msg_PdfFailed", ex.Message), Loc.Get("Common_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
@@ -1636,7 +1647,7 @@ public partial class MainWindow : Window
 
         if (_recentFiles.Count == 0)
         {
-            RecentFilesMenu.Items.Add(new MenuItem { Header = "(No recent files)", IsEnabled = false });
+            RecentFilesMenu.Items.Add(new MenuItem { Header = Loc.Get("Menu_NoRecentFiles"), IsEnabled = false });
             return;
         }
 
@@ -1654,7 +1665,7 @@ public partial class MainWindow : Window
                 {
                     if (_isDirty)
                     {
-                        var result = MessageBox.Show("You have unsaved changes. Discard them?", "Open Recent File", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        var result = MessageBox.Show(Loc.Get("Common_UnsavedDiscard"), Loc.Get("Title_OpenRecentFile"), MessageBoxButton.YesNo, MessageBoxImage.Question);
                         if (result != MessageBoxResult.Yes) return;
                     }
                     try
@@ -1668,7 +1679,7 @@ public partial class MainWindow : Window
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"Error opening file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(Loc.Format("Msg_ErrorOpeningFile", ex.Message), Loc.Get("Common_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
             };
@@ -1714,8 +1725,8 @@ public partial class MainWindow : Window
             return;
 
         var name = _gitHubDocument?.FileName
-            ?? (string.IsNullOrEmpty(_currentFilePath) ? "Untitled.md" : System.IO.Path.GetFileName(_currentFilePath));
-        var result = MessageBox.Show(this, $"Save changes to {name} before closing?", "MDEditor",
+            ?? (string.IsNullOrEmpty(_currentFilePath) ? UntitledFileName : System.IO.Path.GetFileName(_currentFilePath));
+        var result = MessageBox.Show(this, Loc.Format("Msg_SaveBeforeClosing", name), "MDEditor",
             MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
 
         if (result == MessageBoxResult.Yes)
@@ -1740,8 +1751,8 @@ public partial class MainWindow : Window
         if (System.IO.File.Exists(draftPath))
         {
             var result = MessageBox.Show(
-                "A draft from a previous session was found. Would you like to recover it?",
-                "Crash Recovery",
+                Loc.Get("Msg_RecoverDraft"),
+                Loc.Get("Title_CrashRecovery"),
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)

@@ -42,7 +42,7 @@ public partial class GitHubHistoryWindow : Window
         _document = document;
         _currentText = currentText;
 
-        Title = $"History - {document.FileName}";
+        Title = Loc.Format("GH_HistoryTitleFile", document.FileName);
         HeaderText.Text = $"{document.RepoFullName}@{document.Branch}";
         HeaderText.ToolTip = document.DisplayName;
 
@@ -60,7 +60,7 @@ public partial class GitHubHistoryWindow : Window
 
     private async Task LoadHistoryAsync()
     {
-        SetStatus("Loading history...");
+        SetStatus(Loc.Get("GH_LoadingHistory"));
         try
         {
             var commits = await _repoService.GetFileHistoryAsync(_document);
@@ -69,18 +69,18 @@ public partial class GitHubHistoryWindow : Window
 
             if (commits.Count == 0)
             {
-                ShowPlaceholder("No commits found for this file on this branch.");
+                ShowPlaceholder(Loc.Get("GH_NoCommits"));
                 SetStatus(string.Empty);
                 return;
             }
 
-            SetStatus(commits.Count >= 100 ? "Showing the 100 most recent commits." : $"{commits.Count} commits");
+            SetStatus(commits.Count >= 100 ? Loc.Get("GH_Showing100") : Loc.Format("GH_CommitCount", commits.Count));
             CommitList.SelectedIndex = 0;
             CommitList.Focus();
         }
         catch (Exception ex)
         {
-            ShowPlaceholder($"Couldn't load history: {ex.Message}");
+            ShowPlaceholder(Loc.Format("GH_LoadHistoryFailed", ex.Message));
             SetStatus(string.Empty);
         }
     }
@@ -91,7 +91,7 @@ public partial class GitHubHistoryWindow : Window
         panel.Children.Add(new TextBlock { Text = commit.Summary, FontWeight = FontWeights.SemiBold, TextTrimming = TextTrimming.CharacterEllipsis });
         panel.Children.Add(new TextBlock
         {
-            Text = $"{commit.AuthorLogin ?? commit.AuthorName}  ·  {commit.Date.LocalDateTime.ToString("g", CultureInfo.CurrentCulture)}  ·  {commit.ShortSha}",
+            Text = $"{commit.AuthorLogin ?? commit.AuthorName}  ·  {commit.Date.LocalDateTime.ToString("g", Loc.Culture)}  ·  {commit.ShortSha}",
             Opacity = 0.7,
             FontSize = 11,
             TextTrimming = TextTrimming.CharacterEllipsis,
@@ -122,7 +122,7 @@ public partial class GitHubHistoryWindow : Window
             return;
 
         int version = ++_loadVersion;
-        ShowPlaceholder("Loading...");
+        ShowPlaceholder(Loc.Get("Common_Loading"));
         StatsText.Text = string.Empty;
         try
         {
@@ -150,7 +150,7 @@ public partial class GitHubHistoryWindow : Window
         catch (Exception ex)
         {
             if (version == _loadVersion)
-                ShowPlaceholder($"Couldn't load this version: {ex.Message}");
+                ShowPlaceholder(Loc.Format("GH_LoadVersionFailed", ex.Message));
         }
     }
 
@@ -170,20 +170,20 @@ public partial class GitHubHistoryWindow : Window
         var (added, removed) = LineDiff.Stats(lines);
         StatsText.Text = $"+{added}  -{removed}";
         StatsText.ToolTip = vsCurrent
-            ? "Lines added/removed going from this version to your current text"
-            : "Lines added/removed by this commit";
+            ? Loc.Get("GH_StatsTipVsCurrent")
+            : Loc.Get("GH_StatsTipCommit");
 
         if (missingAtCommit)
         {
             DiffList.ItemsSource = null;
-            ShowPlaceholder("This file doesn't exist at this commit (it may have been renamed or deleted).");
+            ShowPlaceholder(Loc.Get("GH_FileMissingAtCommit"));
             return;
         }
 
         if (added == 0 && removed == 0)
         {
             DiffList.ItemsSource = null;
-            ShowPlaceholder(vsCurrent ? "Your current text is identical to this version." : "This commit didn't change the file's text.");
+            ShowPlaceholder(vsCurrent ? Loc.Get("GH_IdenticalToCurrent") : Loc.Get("GH_CommitNoChange"));
             return;
         }
 
@@ -197,7 +197,7 @@ public partial class GitHubHistoryWindow : Window
     {
         DiffPlaceholder.Text = text;
         DiffPlaceholder.Visibility = Visibility.Visible;
-        if (text != "Loading...")
+        if (text != Loc.Get("Common_Loading"))
             DiffList.ItemsSource = null;
     }
 
@@ -225,7 +225,7 @@ public partial class GitHubHistoryWindow : Window
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, $"Couldn't open the browser: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(this, Loc.Format("Common_BrowserOpenFailed", ex.Message), Loc.Get("Common_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -246,7 +246,7 @@ public partial class GitHubHistoryWindow : Window
             DiffLineKind.Removed => new DiffRow { OldNumber = Num(line.OldLineNumber), Marker = "-", Text = line.Text, Background = RemovedBrush },
             DiffLineKind.Skipped => new DiffRow
             {
-                Text = $"··· {line.SkippedCount} unchanged line{(line.SkippedCount == 1 ? "" : "s")} ···",
+                Text = line.SkippedCount == 1 ? Loc.Get("GH_UnchangedLine") : Loc.Format("GH_UnchangedLines", line.SkippedCount),
                 Background = SkippedBrush,
                 Opacity = 0.7,
                 FontStyle = FontStyles.Italic,

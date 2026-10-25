@@ -37,10 +37,10 @@ public partial class MainWindow
     {
         var active = _gitHubAuthService.ActiveAccount;
         int count = _gitHubAuthService.Accounts.Count;
-        StatusGitHubAccount.Text = active?.Login ?? "Sign in";
+        StatusGitHubAccount.Text = active?.Login ?? Loc.Get("Status_SignIn");
         StatusGitHubItem.ToolTip = active != null
-            ? $"GitHub: signed in as {active.Login}{(count > 1 ? $" ({count} accounts)" : string.Empty)}. Click to manage accounts."
-            : "GitHub: not signed in. Click to connect an account.";
+            ? Loc.Format("Status_GitHubSignedIn", active.Login, count > 1 ? Loc.Format("Status_GitHubAccountCount", count) : string.Empty)
+            : Loc.Get("Status_GitHubNotSignedIn");
     }
 
     /// <summary>
@@ -71,7 +71,7 @@ public partial class MainWindow
         if (_gitHubAuthService.ActiveAccount != null)
             return true;
 
-        var result = MessageBox.Show(this, "Sign in to GitHub first. Open GitHub Accounts now?", "GitHub",
+        var result = MessageBox.Show(this, Loc.Get("GH_SignInFirstPrompt"), "GitHub",
             MessageBoxButton.YesNo, MessageBoxImage.Information);
         if (result == MessageBoxResult.Yes)
             ShowGitHubAccountsWindow();
@@ -85,7 +85,7 @@ public partial class MainWindow
 
         if (_isDirty)
         {
-            var result = MessageBox.Show("You have unsaved changes. Discard them?", "Open from GitHub", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            var result = MessageBox.Show(Loc.Get("Common_UnsavedDiscard"), Loc.Get("GH_OpenFromGitHubTitle"), MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result != MessageBoxResult.Yes)
                 return;
         }
@@ -111,8 +111,8 @@ public partial class MainWindow
         if (document == null)
         {
             MessageBox.Show(this,
-                "History is available for files opened from GitHub (File > Open from GitHub...).",
-                "File History", MessageBoxButton.OK, MessageBoxImage.Information);
+                Loc.Get("GH_HistoryOnlyGitHub"),
+                Loc.Get("GH_HistoryTitle"), MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
 
@@ -125,7 +125,7 @@ public partial class MainWindow
 
         if (_isDirty)
         {
-            var result = MessageBox.Show(this, "Replace your unsaved changes with this version?", "Restore Version",
+            var result = MessageBox.Show(this, Loc.Get("GH_ReplaceUnsavedWithVersion"), Loc.Get("GH_RestoreVersionTitle"),
                 MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result != MessageBoxResult.Yes)
                 return;
@@ -149,8 +149,8 @@ public partial class MainWindow
         if (document == null)
         {
             MessageBox.Show(this,
-                "This document isn't from GitHub. Use File > Open from GitHub... to edit a repository file, then save to commit it.",
-                "Commit to GitHub", MessageBoxButton.OK, MessageBoxImage.Information);
+                Loc.Get("GH_NotFromGitHub"),
+                Loc.Get("GH_CommitTitle"), MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
 
@@ -160,8 +160,8 @@ public partial class MainWindow
         if (!document.CanPush)
         {
             MessageBox.Show(this,
-                $"Your account ({_gitHubAuthService.ActiveAccount!.Login}) doesn't have write access to {document.RepoFullName}. Use File > Save As... to keep a local copy.",
-                "Commit to GitHub", MessageBoxButton.OK, MessageBoxImage.Warning);
+                Loc.Format("GH_NoWriteAccess", _gitHubAuthService.ActiveAccount!.Login, document.RepoFullName),
+                Loc.Get("GH_CommitTitle"), MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
 
@@ -190,8 +190,8 @@ public partial class MainWindow
         if (result.PullRequestUrl != null)
         {
             var open = MessageBox.Show(this,
-                $"Committed to the new branch {result.Document.Branch} and opened a pull request.\n\nView the pull request on GitHub?",
-                "Pull Request Opened", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                Loc.Format("GH_PrOpened", result.Document.Branch),
+                Loc.Get("GH_PrOpenedTitle"), MessageBoxButton.YesNo, MessageBoxImage.Information);
             if (open == MessageBoxResult.Yes)
                 OpenInBrowser(result.PullRequestUrl);
         }
@@ -213,14 +213,14 @@ public partial class MainWindow
                 {
                     var result = await _gitHubRepoService.CommitFileAsync(document, GetEditorText(), commitMessage, overwrite: true);
                     ApplyCommitResult(result);
-                }, "Couldn't commit");
+                }, Loc.Get("GH_CommitFailed"));
                 break;
 
             case GitHubConflictChoice.LoadTheirs:
                 await RunGitHubOperationAsync(async () =>
                 {
                     LoadGitHubFile(await _gitHubRepoService.GetLatestAsync(document));
-                }, "Couldn't load the latest version");
+                }, Loc.Get("GH_LoadLatestFailed"));
                 break;
         }
     }
@@ -235,7 +235,7 @@ public partial class MainWindow
         catch (Exception ex)
         {
             Mouse.OverrideCursor = null;
-            MessageBox.Show(this, $"{errorPrefix}: {ex.Message}", "GitHub", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(this, Loc.Format("GH_ErrorWithPrefix", errorPrefix, ex.Message), "GitHub", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         finally
         {
@@ -251,7 +251,7 @@ public partial class MainWindow
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, $"Couldn't open the browser: {ex.Message}\n\n{url}", "GitHub", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(this, Loc.Format("GH_BrowserOpenFailedUrl", ex.Message, url), "GitHub", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

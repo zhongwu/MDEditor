@@ -85,7 +85,7 @@ public partial class MainWindow
         int lineStart = caret > 0 ? text.LastIndexOf('\n', caret - 1) + 1 : 0;
         int column = caret - lineStart + 1;
 
-        GoToLineStatus.Text = $"Ln {line}, Col {column} · type 1–{CountLines(text)}";
+        GoToLineStatus.Text = Loc.Format("GoTo_Status", line, column, CountLines(text));
         GoToLineStatus.Foreground = Brushes.Gray;
     }
 
@@ -109,7 +109,7 @@ public partial class MainWindow
         if (!match.Success ||
             !int.TryParse(match.Groups[1].Value, out line) || line < 1 || line > total)
         {
-            GoToLineStatus.Text = $"Enter a line from 1 to {total}";
+            GoToLineStatus.Text = Loc.Format("GoTo_Range", total);
             GoToLineStatus.Foreground = Brushes.IndianRed;
             return null;
         }
@@ -126,7 +126,7 @@ public partial class MainWindow
         int lineEnd = text.IndexOf('\n', lineStart);
         if (lineEnd < 0) lineEnd = text.Length;
 
-        GoToLineStatus.Text = match.Groups[2].Success ? $"Go to line {line}, column {column}" : $"Go to line {line} of {total}";
+        GoToLineStatus.Text = match.Groups[2].Success ? Loc.Format("GoTo_LineColumn", line, column) : Loc.Format("GoTo_LineOf", line, total);
         GoToLineStatus.Foreground = Brushes.Gray;
         return lineStart + Math.Min(column - 1, lineEnd - lineStart);
     }

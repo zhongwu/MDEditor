@@ -1,0 +1,350 @@
+Common_Error	Error	错误	錯誤
+Common_Cancel	Cancel	取消	取消
+Common_Close	Close	关闭	關閉
+Common_Open	Open	打开	開啟
+Common_Remove	Remove	移除	移除
+Common_Reset	Reset	重置	重設
+Common_Loading	Loading...	正在加载…	正在載入…
+Common_UnsavedDiscard	You have unsaved changes. Discard them?	有未保存的更改。要放弃吗？	有尚未儲存的變更。要捨棄嗎？
+Common_BrowserOpenFailed	Couldn't open the browser: {0}	无法打开浏览器：{0}	無法開啟瀏覽器：{0}
+Doc_UntitledBase	Untitled	未命名	未命名
+Menu_File	File	文件	檔案
+Menu_New	New	新建	新增
+Menu_Open	Open...	打开...	開啟...
+Menu_OpenFromGitHub	Open from GitHub...	从 GitHub 打开...	從 GitHub 開啟...
+Menu_RecentFiles	Recent Files	最近的文件	最近使用的檔案
+Menu_NoRecentFiles	(No recent files)	（无最近文件）	（沒有最近使用的檔案）
+Menu_Save	Save	保存	儲存
+Menu_SaveAs	Save As...	另存为...	另存新檔...
+Menu_ExportHtml	Export HTML	导出 HTML	匯出 HTML
+Menu_ExportPdf	Export PDF	导出 PDF	匯出 PDF
+Menu_PrintPreview	Print Preview...	打印预览...	預覽列印...
+Menu_Exit	Exit	退出	結束
+Menu_Edit	Edit	编辑	編輯
+Menu_Undo	Undo	撤销	復原
+Menu_Redo	Redo	重做	取消復原
+Menu_Cut	Cut	剪切	剪下
+Menu_Copy	Copy	复制	複製
+Menu_Paste	Paste	粘贴	貼上
+Menu_Find	Find	查找	尋找
+Menu_Replace	Replace	替换	取代
+Menu_FindInPreview	Find in Preview	在预览中查找	在預覽中尋找
+Menu_GoToLine	Go to Line...	转到行...	移至行...
+Menu_SelectAll	Select All	全选	全選
+Menu_View	View	视图	檢視
+Menu_ShowPreview	Show Preview	显示预览	顯示預覽
+Menu_ShowEditor	Show Editor	显示编辑器	顯示編輯器
+Menu_ShowOutline	Show Outline	显示大纲	顯示大綱
+Menu_ShowLineNumbers	Show Line Numbers	显示行号	顯示行號
+Menu_ShowMinimap	Show Minimap	显示缩略图	顯示縮圖
+Menu_ShowScrollSync	Show Scroll Sync	同步滚动	同步捲動
+Menu_WordWrap	Word Wrap	自动换行	自動換行
+Menu_ZoomIn	Zoom In	放大	放大
+Menu_ZoomOut	Zoom Out	缩小	縮小
+Menu_ResetZoom	Reset Zoom	重置缩放	重設縮放
+Menu_PresentationMode	Presentation Mode	演示模式	簡報模式
+Menu_Format	Format	格式	格式
+Menu_Heading1	Heading 1	标题 1	標題 1
+Menu_Heading2	Heading 2	标题 2	標題 2
+Menu_Heading3	Heading 3	标题 3	標題 3
+Menu_Heading4	Heading 4	标题 4	標題 4
+Menu_Heading5	Heading 5	标题 5	標題 5
+Menu_Heading6	Heading 6	标题 6	標題 6
+Menu_Bold	Bold	粗体	粗體
+Menu_Italic	Italic	斜体	斜體
+Menu_Strikethrough	Strikethrough	删除线	刪除線
+Menu_InlineCode	Inline Code	行内代码	行內程式碼
+Menu_CodeBlock	Code Block	代码块	程式碼區塊
+Menu_Blockquote	Blockquote	引用	引用
+Menu_UnorderedList	Unordered List	无序列表	項目符號清單
+Menu_OrderedList	Ordered List	有序列表	編號清單
+Menu_TaskList	Task List	任务列表	工作清單
+Menu_Link	Link	链接	連結
+Menu_Image	Image	图片	圖片
+Menu_Table	Table	表格	表格
+Menu_HorizontalRule	Horizontal Rule	水平线	水平線
+Menu_MathBlock	Math Block	数学公式块	數學公式區塊
+Menu_Tools	Tools	工具	工具
+Menu_SmartTypography	Smart Typography	智能标点	智慧標點
+Menu_GitHubAccounts	GitHub Accounts...	GitHub 账户...	GitHub 帳戶...
+Menu_CommitToGitHub	Commit to GitHub...	提交到 GitHub...	提交至 GitHub...
+Menu_FileHistory	File History (GitHub)...	文件历史 (GitHub)...	檔案歷程記錄 (GitHub)...
+Menu_Settings	Settings	设置	設定
+Menu_Help	Help	帮助	說明
+Menu_KeyboardShortcuts	Keyboard Shortcuts	键盘快捷键	鍵盤快速鍵
+Menu_MarkdownGuide	Markdown Guide	Markdown 指南	Markdown 指南
+Menu_About	About	关于	關於
+Menu_InsertLink	Insert Link	插入链接	插入連結
+Menu_InsertImage	Insert Image	插入图片	插入圖片
+Menu_InsertTable	Insert Table	插入表格	插入表格
+Menu_InsertHorizontalRule	Insert Horizontal Rule	插入水平线	插入水平線
+Menu_CopyAsMarkdown	Copy as Markdown	复制为 Markdown	複製為 Markdown
+Menu_CopyAsHtml	Copy as HTML	复制为 HTML	複製為 HTML
+Tip_New	New (Ctrl+N)	新建 (Ctrl+N)	新增 (Ctrl+N)
+Tip_Open	Open (Ctrl+O)	打开 (Ctrl+O)	開啟 (Ctrl+O)
+Tip_Save	Save (Ctrl+S)	保存 (Ctrl+S)	儲存 (Ctrl+S)
+Tip_Undo	Undo (Ctrl+Z)	撤销 (Ctrl+Z)	復原 (Ctrl+Z)
+Tip_Redo	Redo (Ctrl+Y)	重做 (Ctrl+Y)	取消復原 (Ctrl+Y)
+Tip_Bold	Bold (Ctrl+B)	粗体 (Ctrl+B)	粗體 (Ctrl+B)
+Tip_Italic	Italic (Ctrl+I)	斜体 (Ctrl+I)	斜體 (Ctrl+I)
+Tip_Strikethrough	Strikethrough (Ctrl+Shift+X)	删除线 (Ctrl+Shift+X)	刪除線 (Ctrl+Shift+X)
+Tip_InlineCode	Inline Code (Ctrl+`)	行内代码 (Ctrl+`)	行內程式碼 (Ctrl+`)
+Tip_CodeBlock	Code Block (Ctrl+Shift+C)	代码块 (Ctrl+Shift+C)	程式碼區塊 (Ctrl+Shift+C)
+Tip_Blockquote	Blockquote (Ctrl+Q)	引用 (Ctrl+Q)	引用 (Ctrl+Q)
+Tip_Heading1	Heading 1 (Ctrl+1)	标题 1 (Ctrl+1)	標題 1 (Ctrl+1)
+Tip_Heading2	Heading 2 (Ctrl+2)	标题 2 (Ctrl+2)	標題 2 (Ctrl+2)
+Tip_Heading3	Heading 3 (Ctrl+3)	标题 3 (Ctrl+3)	標題 3 (Ctrl+3)
+Tip_UnorderedList	Unordered List (Ctrl+Shift+L)	无序列表 (Ctrl+Shift+L)	項目符號清單 (Ctrl+Shift+L)
+Tip_OrderedList	Ordered List (Ctrl+Shift+O)	有序列表 (Ctrl+Shift+O)	編號清單 (Ctrl+Shift+O)
+Tip_TaskList	Task List (Ctrl+Shift+T)	任务列表 (Ctrl+Shift+T)	工作清單 (Ctrl+Shift+T)
+Tip_InsertLink	Insert Link (Ctrl+K)	插入链接 (Ctrl+K)	插入連結 (Ctrl+K)
+Tip_InsertImage	Insert Image (Ctrl+Shift+I)	插入图片 (Ctrl+Shift+I)	插入圖片 (Ctrl+Shift+I)
+Tip_TogglePreview	Toggle Preview (Ctrl+Shift+P)	切换预览 (Ctrl+Shift+P)	切換預覽 (Ctrl+Shift+P)
+Tip_ToggleEditor	Toggle Editor	切换编辑器	切換編輯器
+Tip_ToggleOutline	Toggle Outline (Ctrl+Shift+E)	切换大纲 (Ctrl+Shift+E)	切換大綱 (Ctrl+Shift+E)
+Tip_FindInPreview	Find in Preview (Ctrl+Shift+F)	在预览中查找 (Ctrl+Shift+F)	在預覽中尋找 (Ctrl+Shift+F)
+Tip_PrintPreview	Print Preview (Ctrl+P)	打印预览 (Ctrl+P)	預覽列印 (Ctrl+P)
+Tip_PresentationMode	Presentation Mode (F5)	演示模式 (F5)	簡報模式 (F5)
+Tip_CloseOutline	Close Outline (Ctrl+Shift+E)	关闭大纲 (Ctrl+Shift+E)	關閉大綱 (Ctrl+Shift+E)
+Tip_CollapseAll	Collapse All	全部折叠	全部摺疊
+Tip_ExpandAll	Expand All	全部展开	全部展開
+Tip_ToggleReplace	Toggle Replace (Ctrl+H)	切换替换 (Ctrl+H)	切換取代 (Ctrl+H)
+Tip_MatchCase	Match Case	区分大小写	大小寫須相符
+Tip_PreviousMatch	Previous Match (Shift+Enter / Shift+F3)	上一个匹配项 (Shift+Enter / Shift+F3)	上一個相符項目 (Shift+Enter / Shift+F3)
+Tip_NextMatch	Next Match (Enter / F3)	下一个匹配项 (Enter / F3)	下一個相符項目 (Enter / F3)
+Tip_CloseEsc	Close (Esc)	关闭 (Esc)	關閉 (Esc)
+Tip_ReplaceEnter	Replace (Enter)	替换 (Enter)	取代 (Enter)
+Tip_ReplaceAll	Replace All (Ctrl+Enter)	全部替换 (Ctrl+Enter)	全部取代 (Ctrl+Enter)
+Tip_GoToLineBox	Line number, or line:column	行号，或 行:列	行號，或 行:欄
+Pane_Outline	OUTLINE	大纲	大綱
+Pane_Editor	EDITOR	编辑器	編輯器
+Pane_Preview	PREVIEW	预览	預覽
+Outline_Empty	No headings in this document.	此文档中没有标题。	此文件中沒有標題。
+Find_ReplaceAll	Replace All	全部替换	全部取代
+Find_NoResults	No results	无结果	沒有結果
+Find_Count	{0} of {1}{2}	第 {0} 个，共 {1}{2} 个	第 {0} 個，共 {1}{2} 個
+Find_Replaced	Replaced {0}	已替换 {0} 处	已取代 {0} 處
+GoTo_Label	Go to line:	转到行：	移至行：
+GoTo_Status	Ln {0}, Col {1} · type 1–{2}	第 {0} 行，第 {1} 列 · 输入 1–{2}	第 {0} 行，第 {1} 欄 · 輸入 1–{2}
+GoTo_Range	Enter a line from 1 to {0}	请输入 1 到 {0} 之间的行号	請輸入 1 到 {0} 之間的行號
+GoTo_LineColumn	Go to line {0}, column {1}	转到第 {0} 行，第 {1} 列	移至第 {0} 行，第 {1} 欄
+GoTo_LineOf	Go to line {0} of {1}	转到第 {0} 行（共 {1} 行）	移至第 {0} 行（共 {1} 行）
+Status_InitialPosition	Ln 1, Col 1	第 1 行，第 1 列	第 1 行，第 1 欄
+Status_InitialWords	Words: 0	字数：0	字數：0
+Status_SignIn	Sign in	登录	登入
+Status_GitHubSignedIn	GitHub: signed in as {0}{1}. Click to manage accounts.	GitHub：已登录为 {0}{1}。单击以管理账户。	GitHub：已登入為 {0}{1}。按一下以管理帳戶。
+Status_GitHubAccountCount	 ({0} accounts)	（{0} 个账户）	（{0} 個帳戶）
+Status_GitHubNotSignedIn	GitHub: not signed in. Click to connect an account.	GitHub：未登录。单击以连接账户。	GitHub：未登入。按一下以連結帳戶。
+Title_OpenDroppedFile	Open Dropped File	打开拖放的文件	開啟拖放的檔案
+Title_NewFile	New File	新建文件	新增檔案
+Title_OpenFile	Open File	打开文件	開啟檔案
+Title_OpenRecentFile	Open Recent File	打开最近的文件	開啟最近使用的檔案
+Title_ExportComplete	Export Complete	导出完成	匯出完成
+Title_CrashRecovery	Crash Recovery	崩溃恢复	當機復原
+Title_InvalidShortcut	Invalid Shortcut	无效的快捷键	無效的快速鍵
+Title_ShortcutConflict	Shortcut Conflict	快捷键冲突	快速鍵衝突
+Title_Presentation	MDEditor - Presentation	MDEditor - 演示	MDEditor - 簡報
+Title_PrintPreview	MDEditor - Print Preview	MDEditor - 打印预览	MDEditor - 預覽列印
+Dialog_OpenMarkdown	Open Markdown File	打开 Markdown 文件	開啟 Markdown 檔案
+Dialog_SaveMarkdownAs	Save Markdown File As	Markdown 文件另存为	另存 Markdown 檔案
+Dialog_ExportHtml	Export as HTML	导出为 HTML	匯出為 HTML
+Dialog_ExportPdf	Export as PDF	导出为 PDF	匯出為 PDF
+Filter_Open	Markdown Files (*.md;*.markdown)|*.md;*.markdown|Text Files (*.txt)|*.txt|All Files (*.*)|*.*	Markdown 文件 (*.md;*.markdown)|*.md;*.markdown|文本文件 (*.txt)|*.txt|所有文件 (*.*)|*.*	Markdown 檔案 (*.md;*.markdown)|*.md;*.markdown|文字檔 (*.txt)|*.txt|所有檔案 (*.*)|*.*
+Filter_Save	Markdown Files (*.md)|*.md|Text Files (*.txt)|*.txt|All Files (*.*)|*.*	Markdown 文件 (*.md)|*.md|文本文件 (*.txt)|*.txt|所有文件 (*.*)|*.*	Markdown 檔案 (*.md)|*.md|文字檔 (*.txt)|*.txt|所有檔案 (*.*)|*.*
+Filter_Html	HTML Files (*.html)|*.html|All Files (*.*)|*.*	HTML 文件 (*.html)|*.html|所有文件 (*.*)|*.*	HTML 檔案 (*.html)|*.html|所有檔案 (*.*)|*.*
+Filter_Pdf	PDF Files (*.pdf)|*.pdf|All Files (*.*)|*.*	PDF 文件 (*.pdf)|*.pdf|所有文件 (*.*)|*.*	PDF 檔案 (*.pdf)|*.pdf|所有檔案 (*.*)|*.*
+Msg_ErrorOpeningFile	Error opening file: {0}	打开文件时出错：{0}	開啟檔案時發生錯誤：{0}
+Msg_ErrorEmbeddingImage	Error embedding image: {0}	嵌入图片时出错：{0}	嵌入圖片時發生錯誤：{0}
+Msg_ErrorSavingFile	Error saving file: {0}	保存文件时出错：{0}	儲存檔案時發生錯誤：{0}
+Msg_Exported	Exported to {0}	已导出到 {0}	已匯出至 {0}
+Msg_ErrorExporting	Error exporting: {0}	导出时出错：{0}	匯出時發生錯誤：{0}
+Msg_PdfUnsupported	PDF export failed. The WebView2 engine may not support printing to PDF.	PDF 导出失败。WebView2 引擎可能不支持打印为 PDF。	PDF 匯出失敗。WebView2 引擎可能不支援列印為 PDF。
+Msg_PreviewNotReady	Preview not initialized yet.	预览尚未初始化。	預覽尚未初始化。
+Msg_PdfFailed	PDF export failed: {0}	PDF 导出失败：{0}	PDF 匯出失敗：{0}
+Msg_SaveBeforeClosing	Save changes to {0} before closing?	关闭前是否保存对 {0} 的更改？	關閉前是否儲存 {0} 的變更？
+Msg_RecoverDraft	A draft from a previous session was found. Would you like to recover it?	发现上次会话的草稿。是否恢复？	找到上一個工作階段的草稿。要復原嗎？
+Msg_ShortcutNeedsModifier	Shortcuts need at least one modifier key (Ctrl/Shift/Alt), except function keys.	快捷键至少需要一个修饰键 (Ctrl/Shift/Alt)，功能键除外。	快速鍵至少需要一個輔助鍵 (Ctrl/Shift/Alt)，功能鍵除外。
+Msg_ShortcutConflict	This shortcut is already used by "{0}". Reassign it to this command instead?	此快捷键已被“{0}”使用。要改为分配给此命令吗？	此快速鍵已由「{0}」使用。要改為指派給此命令嗎？
+Msg_PreviewWindowFailed	Unable to open the preview window: {0}	无法打开预览窗口：{0}	無法開啟預覽視窗：{0}
+Msg_PrintUnavailable	Printing is not available: {0}	无法打印：{0}	無法列印：{0}
+Shortcut_Unbound	(unbound)	（未绑定）	（未指派）
+Shortcut_SaveAs	Save As	另存为	另存新檔
+Shortcut_GoToLine	Go to Line	转到行	移至行
+Shortcut_PrintPreview	Print Preview	打印预览	預覽列印
+Print_Print	Print...	打印...	列印...
+Print_PrintTip	Open print preview (Ctrl+P)	打开打印预览 (Ctrl+P)	開啟預覽列印 (Ctrl+P)
+Print_System	System Dialog...	系统对话框...	系統對話方塊...
+Print_SystemTip	Print with the Windows print dialog	使用 Windows 打印对话框打印	使用 Windows 列印對話方塊列印
+Print_CloseTip	Close print preview	关闭打印预览	關閉預覽列印
+Settings_Appearance	Appearance	外观	外觀
+Settings_Theme	Theme	主题	佈景主題
+Settings_Light	Light	浅色	淺色
+Settings_Dark	Dark	深色	深色
+Settings_MatchWindows	Match Windows	跟随 Windows	跟隨 Windows
+Settings_Language	Language	语言	語言
+Settings_Editor	Editor	编辑器	編輯器
+Settings_FontFamily	Font Family	字体	字型
+Settings_FontSize	Font Size	字号	字型大小
+Settings_AutoSave	Auto-save Interval	自动保存间隔	自動儲存間隔
+Settings_10Seconds	10 seconds	10 秒	10 秒
+Settings_15Seconds	15 seconds	15 秒	15 秒
+Settings_30Seconds	30 seconds	30 秒	30 秒
+Settings_1Minute	1 minute	1 分钟	1 分鐘
+Settings_2Minutes	2 minutes	2 分钟	2 分鐘
+Settings_LineEnding	Line Ending (on Save)	换行符（保存时）	行尾符號（儲存時）
+Settings_MarkdownPreview	Markdown & Preview	Markdown 与预览	Markdown 與預覽
+Settings_Flavor	Markdown Flavor	Markdown 语法	Markdown 語法
+Settings_Math	Math (KaTeX)	数学公式 (KaTeX)	數學公式 (KaTeX)
+Settings_Diagrams	Diagrams (Mermaid)	图表 (Mermaid)	圖表 (Mermaid)
+Settings_Emoji	Emoji shortcodes	表情符号短代码	表情符號短代碼
+Settings_Footnotes	Footnotes	脚注	註腳
+Settings_TaskLists	Task Lists	任务列表	工作清單
+Settings_CustomCss	Custom Preview CSS	自定义预览 CSS	自訂預覽 CSS
+Settings_CustomCssNote	Applies only to the live preview - exported/copied HTML is unaffected.	仅应用于实时预览，导出/复制的 HTML 不受影响。	僅套用於即時預覽，匯出/複製的 HTML 不受影響。
+Settings_ShortcutsNote	Click a shortcut box and press a new key combination to rebind it.	单击快捷键框并按下新的组合键以重新绑定。	按一下快速鍵方塊，然後按下新的按鍵組合以重新指派。
+GH_AccountsTitle	GitHub Accounts	GitHub 账户	GitHub 帳戶
+GH_ConnectedAccounts	Connected Accounts	已连接的账户	已連結的帳戶
+GH_NoAccounts	No accounts connected yet.	尚未连接任何账户。	尚未連結任何帳戶。
+GH_SetActive	Set Active	设为当前	設為使用中
+GH_SignInBrowserHeading	Sign in with Browser	通过浏览器登录	透過瀏覽器登入
+GH_SignInBrowserNote	Approve MDEditor on github.com with a one-time code. Recommended - no token to copy or manage.	使用一次性代码在 github.com 上授权 MDEditor。推荐方式，无需复制或管理令牌。	使用一次性代碼在 github.com 上授權 MDEditor。建議使用，無需複製或管理權杖。
+GH_SignInBrowserButton	Sign in with Browser...	通过浏览器登录...	透過瀏覽器登入...
+GH_EnterCode	Enter this code on GitHub:	在 GitHub 上输入此代码：	在 GitHub 上輸入此代碼：
+GH_CopyAndOpen	Copy Code & Open GitHub	复制代码并打开 GitHub	複製代碼並開啟 GitHub
+GH_Waiting	Waiting for you to approve on GitHub...	等待你在 GitHub 上授权…	等待您在 GitHub 上授權…
+GH_WaitingExpires	Waiting for you to approve on GitHub... (code expires at {0})	等待你在 GitHub 上授权…（代码将于 {0} 过期）	等待您在 GitHub 上授權…（代碼將於 {0} 到期）
+GH_PatHeading	Personal Access Token	个人访问令牌	個人存取權杖
+GH_PatNote	Classic tokens need the repo scope (plus gist for gists). Fine-grained tokens need Contents: Read and write.	经典令牌需要 repo 权限（使用 Gist 还需 gist）。细粒度令牌需要 Contents: Read and write 权限。	傳統權杖需要 repo 範圍（使用 Gist 還需 gist）。細微權杖需要 Contents: Read and write 權限。
+GH_CreateToken	Create a token on GitHub	在 GitHub 上创建令牌	在 GitHub 上建立權杖
+GH_AddToken	Add Token	添加令牌	新增權杖
+GH_Advanced	Advanced	高级	進階
+GH_ClientIdLabel	OAuth App Client ID override (leave as-is unless you use your own OAuth App)	OAuth 应用客户端 ID 覆盖（除非使用自己的 OAuth 应用，否则保持不变）	OAuth 應用程式用戶端識別碼覆寫（除非使用自己的 OAuth 應用程式，否則保持不變）
+GH_ClientIdNote	Register an OAuth App on GitHub (Settings > Developer settings) with "Enable Device Flow" checked, then paste its Client ID here. Tokens are stored in Windows Credential Manager.	在 GitHub 上注册 OAuth 应用（Settings > Developer settings）并勾选“Enable Device Flow”，然后将其 Client ID 粘贴到此处。令牌保存在 Windows 凭据管理器中。	在 GitHub 上註冊 OAuth 應用程式（Settings > Developer settings）並勾選「Enable Device Flow」，然後將其 Client ID 貼到此處。權杖儲存在 Windows 認證管理員中。
+GH_MethodBrowser	Browser sign-in	浏览器登录	瀏覽器登入
+GH_MethodPat	Personal access token	个人访问令牌	個人存取權杖
+GH_ActiveSuffix	  [Active]	  [当前]	  [使用中]
+GH_Scopes	Scopes: {0}	权限范围：{0}	範圍：{0}
+GH_ScopesUnknown	Scopes: not reported (fine-grained token)	权限范围：未报告（细粒度令牌）	範圍：未回報（細微權杖）
+GH_NeedClientIdTip	Set an OAuth App Client ID under Advanced to enable browser sign-in.	在“高级”中设置 OAuth 应用客户端 ID 以启用浏览器登录。	在「進階」中設定 OAuth 應用程式用戶端識別碼以啟用瀏覽器登入。
+GH_RemoveConfirm	Remove "{0}" from MDEditor?\n\nThe stored token is deleted from this computer. To revoke it completely, also remove it on github.com (Settings > Applications, or Developer settings > Personal access tokens).	要从 MDEditor 中移除“{0}”吗？\n\n已存储的令牌将从此电脑中删除。要彻底撤销，请同时在 github.com 上移除（Settings > Applications 或 Developer settings > Personal access tokens）。	要從 MDEditor 中移除「{0}」嗎？\n\n已儲存的權杖將從這台電腦中刪除。若要完全撤銷，請同時在 github.com 上移除（Settings > Applications 或 Developer settings > Personal access tokens）。
+GH_RemoveTitle	Remove Account	移除账户	移除帳戶
+GH_Removed	Removed {0}.	已移除 {0}。	已移除 {0}。
+GH_RemoveFailed	Couldn't remove the account: {0}	无法移除账户：{0}	無法移除帳戶：{0}
+GH_NeedClientId	Browser sign-in needs an OAuth App Client ID - set one under Advanced below, or use a Personal Access Token.	浏览器登录需要 OAuth 应用客户端 ID，请在下方“高级”中设置，或改用个人访问令牌。	瀏覽器登入需要 OAuth 應用程式用戶端識別碼，請在下方「進階」中設定，或改用個人存取權杖。
+GH_SignedInAs	Signed in as {0}.	已登录为 {0}。	已登入為 {0}。
+GH_PasteTokenFirst	Paste a Personal Access Token first.	请先粘贴个人访问令牌。	請先貼上個人存取權杖。
+GH_CheckingToken	Checking token with GitHub...	正在向 GitHub 验证令牌…	正在向 GitHub 驗證權杖…
+GH_ConnectedAccount	Connected {0}.	已连接 {0}。	已連結 {0}。
+GH_SignInCancelled	Sign-in cancelled.	已取消登录。	已取消登入。
+GH_BrowserOpenFailedGoTo	Couldn't open the browser ({0}). Go to {1}	无法打开浏览器（{0}）。请访问 {1}	無法開啟瀏覽器（{0}）。請前往 {1}
+GH_OpenFromGitHubTitle	Open from GitHub	从 GitHub 打开	從 GitHub 開啟
+GH_OpenFromGitHubTitleAccount	Open from GitHub - {0}	从 GitHub 打开 - {0}	從 GitHub 開啟 - {0}
+GH_ReloadRepos	Reload repositories	重新加载仓库	重新載入存放庫
+GH_FilterRepos	Filter repositories	筛选仓库	篩選存放庫
+GH_Branch	Branch:	分支：	分支：
+GH_MarkdownOnly	Markdown files only	仅 Markdown 文件	僅 Markdown 檔案
+GH_SelectRepo	Select a repository.	请选择一个仓库。	請選擇一個存放庫。
+GH_LoadingRepos	Loading repositories...	正在加载仓库…	正在載入存放庫…
+GH_RepoCount	{0} repositories	{0} 个仓库	{0} 個存放庫
+GH_LoadReposFailed	Couldn't load repositories: {0}	无法加载仓库：{0}	無法載入存放庫：{0}
+GH_ReadOnly	  (read-only)	  （只读）	  （唯讀）
+GH_LoadingBranches	Loading branches...	正在加载分支…	正在載入分支…
+GH_RepoEmpty	This repository is empty.	此仓库为空。	此存放庫是空的。
+GH_LoadBranchesFailed	Couldn't load branches: {0}	无法加载分支：{0}	無法載入分支：{0}
+GH_LoadingFiles	Loading files...	正在加载文件…	正在載入檔案…
+GH_LoadFilesFailed	Couldn't load files: {0}	无法加载文件：{0}	無法載入檔案：{0}
+GH_NoMarkdownFiles	No Markdown files on this branch.	此分支上没有 Markdown 文件。	此分支上沒有 Markdown 檔案。
+GH_NoFiles	This branch has no files.	此分支上没有文件。	此分支上沒有檔案。
+GH_Truncated	This repository is very large; GitHub returned only part of its file list.	此仓库非常大，GitHub 只返回了部分文件列表。	此存放庫非常大，GitHub 只傳回了部分檔案清單。
+GH_Downloading	Downloading {0}...	正在下载 {0}…	正在下載 {0}…
+GH_OpenFileFailed	Couldn't open {0}: {1}	无法打开 {0}：{1}	無法開啟 {0}：{1}
+GH_CommitTitle	Commit to GitHub	提交到 GitHub	提交至 GitHub
+GH_CommitConflictBanner	This file changed on GitHub since you opened it. Your edit will go to a new branch based on the version you opened, so nothing is overwritten. Open a pull request to merge it.	自你打开此文件以来，它已在 GitHub 上被更改。你的修改将提交到基于你打开时版本的新分支，不会覆盖任何内容。请创建拉取请求进行合并。	自您開啟此檔案後，它已在 GitHub 上被變更。您的編輯將提交至以您開啟時版本為基礎的新分支，不會覆寫任何內容。請建立提取要求進行合併。
+GH_CommitMessage	Commit message	提交信息	提交訊息
+GH_CommitDescription	Extended description (optional)	详细描述（可选）	詳細描述（選填）
+GH_CommitNewBranch	Create a new branch for this commit	为此提交创建新分支	為此提交建立新分支
+GH_Commit	Commit	提交	提交
+GH_CommitDirect	Commit directly to the {0} branch	直接提交到 {0} 分支	直接提交至 {0} 分支
+GH_OpenPrInto	Open a pull request into {0}	创建合并到 {0} 的拉取请求	建立合併至 {0} 的提取要求
+GH_CommitAndOpenPr	Commit & Open PR	提交并创建 PR	提交並建立 PR
+GH_EnterCommitMessage	Enter a commit message.	请输入提交信息。	請輸入提交訊息。
+GH_InvalidBranchName	Branch names can't contain spaces or ~ ^ : ? * [ \, or start/end with '/' or '.'.	分支名称不能包含空格或 ~ ^ : ? * [ \，也不能以“/”或“.”开头或结尾。	分支名稱不能包含空格或 ~ ^ : ? * [ \，也不能以「/」或「.」開頭或結尾。
+GH_BranchSameName	The new branch needs a different name from the current one.	新分支的名称必须与当前分支不同。	新分支的名稱必須與目前分支不同。
+GH_CreatingBranch	Creating branch {0} and committing...	正在创建分支 {0} 并提交…	正在建立分支 {0} 並提交…
+GH_Committing	Committing...	正在提交…	正在提交…
+GH_ConflictTitle	File Changed on GitHub	文件已在 GitHub 上更改	檔案已在 GitHub 上變更
+GH_ConflictHeadline	{0} changed on {1}@{2}.	{0} 已在 {1}@{2} 上更改。	{0} 已在 {1}@{2} 上變更。
+GH_ConflictBody	Someone committed a newer version of this file after you opened it. How do you want to save your changes?	在你打开此文件后，有人提交了更新的版本。你希望如何保存你的更改？	在您開啟此檔案後，有人提交了較新的版本。您要如何儲存變更？
+GH_ConflictNewBranch	Commit to a new branch (recommended)	提交到新分支（推荐）	提交至新分支（建議）
+GH_ConflictNewBranchNote	Keeps both versions; open a pull request to merge them on GitHub.	保留两个版本；在 GitHub 上创建拉取请求进行合并。	保留兩個版本；在 GitHub 上建立提取要求進行合併。
+GH_ConflictOverwrite	Overwrite with my version	用我的版本覆盖	以我的版本覆寫
+GH_ConflictOverwriteNote	Replaces their changes on the branch with your text.	用你的文本替换分支上他人的更改。	以您的文字取代分支上他人的變更。
+GH_ConflictLoadTheirs	Discard my changes and load theirs	放弃我的更改并加载他们的版本	捨棄我的變更並載入他們的版本
+GH_ConflictLoadTheirsNote	Replaces the editor's text with the latest version from GitHub.	用 GitHub 上的最新版本替换编辑器中的文本。	以 GitHub 上的最新版本取代編輯器中的文字。
+GH_SeeLatest	See the latest version on GitHub	在 GitHub 上查看最新版本	在 GitHub 上檢視最新版本
+GH_HistoryTitle	File History	文件历史	檔案歷程記錄
+GH_HistoryTitleFile	History - {0}	历史 - {0}	歷程記錄 - {0}
+GH_ChangesInCommit	Changes in this commit	此提交中的更改	此提交中的變更
+GH_VsCurrent	This version vs. my current text	此版本与我当前的文本对比	此版本與我目前的文字比較
+GH_ShowWholeFile	Show whole file	显示整个文件	顯示整個檔案
+GH_LoadingHistory	Loading history...	正在加载历史…	正在載入歷程記錄…
+GH_RestoreVersion	Restore This Version	恢复此版本	還原此版本
+GH_RestoreTip	Load this version into the editor. Nothing changes on GitHub until you save (commit).	将此版本加载到编辑器中。在保存（提交）之前，GitHub 上不会有任何更改。	將此版本載入編輯器。在儲存（提交）之前，GitHub 上不會有任何變更。
+GH_ViewCommit	View Commit on GitHub	在 GitHub 上查看提交	在 GitHub 上檢視提交
+GH_NoCommits	No commits found for this file on this branch.	此分支上没有找到此文件的提交。	此分支上找不到此檔案的提交。
+GH_Showing100	Showing the 100 most recent commits.	显示最近的 100 个提交。	顯示最近的 100 個提交。
+GH_CommitCount	{0} commits	{0} 个提交	{0} 個提交
+GH_LoadHistoryFailed	Couldn't load history: {0}	无法加载历史：{0}	無法載入歷程記錄：{0}
+GH_LoadVersionFailed	Couldn't load this version: {0}	无法加载此版本：{0}	無法載入此版本：{0}
+GH_StatsTipVsCurrent	Lines added/removed going from this version to your current text	从此版本到你当前文本所添加/删除的行	從此版本到您目前文字所新增/移除的行
+GH_StatsTipCommit	Lines added/removed by this commit	此提交添加/删除的行	此提交新增/移除的行
+GH_FileMissingAtCommit	This file doesn't exist at this commit (it may have been renamed or deleted).	此提交中不存在此文件（可能已被重命名或删除）。	此提交中不存在此檔案（可能已被重新命名或刪除）。
+GH_IdenticalToCurrent	Your current text is identical to this version.	你当前的文本与此版本相同。	您目前的文字與此版本相同。
+GH_CommitNoChange	This commit didn't change the file's text.	此提交没有更改文件的文本。	此提交沒有變更檔案的文字。
+GH_UnchangedLines	··· {0} unchanged lines ···	··· {0} 行未更改 ···	··· {0} 行未變更 ···
+GH_UnchangedLine	··· 1 unchanged line ···	··· 1 行未更改 ···	··· 1 行未變更 ···
+GH_SignInFirstPrompt	Sign in to GitHub first. Open GitHub Accounts now?	请先登录 GitHub。现在打开 GitHub 账户吗？	請先登入 GitHub。現在開啟 GitHub 帳戶嗎？
+GH_HistoryOnlyGitHub	History is available for files opened from GitHub (File > Open from GitHub...).	仅从 GitHub 打开的文件可查看历史（文件 > 从 GitHub 打开...）。	僅從 GitHub 開啟的檔案可檢視歷程記錄（檔案 > 從 GitHub 開啟...）。
+GH_ReplaceUnsavedWithVersion	Replace your unsaved changes with this version?	用此版本替换你未保存的更改吗？	要以此版本取代您尚未儲存的變更嗎？
+GH_RestoreVersionTitle	Restore Version	恢复版本	還原版本
+GH_NotFromGitHub	This document isn't from GitHub. Use File > Open from GitHub... to edit a repository file, then save to commit it.	此文档并非来自 GitHub。请使用“文件 > 从 GitHub 打开...”编辑仓库文件，然后保存以提交。	此文件並非來自 GitHub。請使用「檔案 > 從 GitHub 開啟...」編輯存放庫檔案，然後儲存以提交。
+GH_NoWriteAccess	Your account ({0}) doesn't have write access to {1}. Use File > Save As... to keep a local copy.	你的账户 ({0}) 没有 {1} 的写入权限。请使用“文件 > 另存为...”保留本地副本。	您的帳戶 ({0}) 沒有 {1} 的寫入權限。請使用「檔案 > 另存新檔...」保留本機複本。
+GH_PrOpened	Committed to the new branch {0} and opened a pull request.\n\nView the pull request on GitHub?	已提交到新分支 {0} 并创建了拉取请求。\n\n在 GitHub 上查看该拉取请求吗？	已提交至新分支 {0} 並建立了提取要求。\n\n要在 GitHub 上檢視該提取要求嗎？
+GH_PrOpenedTitle	Pull Request Opened	已创建拉取请求	已建立提取要求
+GH_CommitFailed	Couldn't commit	无法提交	無法提交
+GH_LoadLatestFailed	Couldn't load the latest version	无法加载最新版本	無法載入最新版本
+GH_ErrorWithPrefix	{0}: {1}	{0}：{1}	{0}：{1}
+GH_BrowserOpenFailedUrl	Couldn't open the browser: {0}\n\n{1}	无法打开浏览器：{0}\n\n{1}	無法開啟瀏覽器：{0}\n\n{1}
+Err_NoClientId	No OAuth App client ID is configured, so browser sign-in is unavailable. Use a Personal Access Token instead, or set a client ID.	未配置 OAuth 应用客户端 ID，因此无法使用浏览器登录。请改用个人访问令牌，或设置客户端 ID。	未設定 OAuth 應用程式用戶端識別碼，因此無法使用瀏覽器登入。請改用個人存取權杖，或設定用戶端識別碼。
+Err_SignInCancelled	Sign-in was cancelled on GitHub.	已在 GitHub 上取消登录。	已在 GitHub 上取消登入。
+Err_CodeExpired	The sign-in code expired. Please try again.	登录代码已过期，请重试。	登入代碼已過期，請再試一次。
+Err_NoAccessToken	GitHub did not return an access token.	GitHub 未返回访问令牌。	GitHub 未傳回存取權杖。
+Err_TokenRejected	GitHub rejected the token. Check that it was copied correctly and hasn't expired or been revoked.	GitHub 拒绝了该令牌。请检查是否复制正确，以及是否已过期或被撤销。	GitHub 拒絕了此權杖。請檢查是否正確複製，以及是否已過期或遭撤銷。
+Err_SignInFirst	Sign in to GitHub first (Tools > GitHub Accounts...).	请先登录 GitHub（工具 > GitHub 账户...）。	請先登入 GitHub（工具 > GitHub 帳戶...）。
+Err_NotAFile	'{0}' is not a file.	“{0}”不是文件。	「{0}」不是檔案。
+Err_BranchExists	A branch named '{0}' already exists. Choose another name.	名为“{0}”的分支已存在。请选择其他名称。	名為「{0}」的分支已存在。請選擇其他名稱。
+Err_Conflict	{0} was changed on GitHub since you opened it.	自你打开以来，{0} 已在 GitHub 上被更改。	自您開啟後，{0} 已在 GitHub 上被變更。
+Err_NoPermission	You don't have permission to commit to {0}.	你没有提交到 {0} 的权限。	您沒有提交至 {0} 的權限。
+Snip_Bold	Bold	粗体	粗體
+Snip_Italic	Italic	斜体	斜體
+Snip_Strikethrough	Strikethrough	删除线	刪除線
+Snip_InlineCode	Inline code	行内代码	行內程式碼
+Snip_CodeFence	Code fence	代码块	程式碼區塊
+Snip_Heading1	Heading 1	标题 1	標題 1
+Snip_Heading2	Heading 2	标题 2	標題 2
+Snip_Heading3	Heading 3	标题 3	標題 3
+Snip_Heading4	Heading 4	标题 4	標題 4
+Snip_Heading5	Heading 5	标题 5	標題 5
+Snip_Heading6	Heading 6	标题 6	標題 6
+Snip_BulletedList	Bulleted list	无序列表	項目符號清單
+Snip_NumberedList	Numbered list	有序列表	編號清單
+Snip_TaskList	Task list	任务列表	工作清單
+Snip_Blockquote	Blockquote	引用	引用
+Snip_Link	Link	链接	連結
+Snip_Image	Image	图片	圖片
+Snip_Table	Table	表格	表格
+Snip_HorizontalRule	Horizontal rule	水平线	水平線
+Snip_MathBlock	Math block	数学公式块	數學公式區塊
+Snip_InlineMath	Inline math	行内公式	行內公式
+Snip_Footnote	Footnote	脚注	註腳
+Snip_Mermaid	Mermaid diagram	Mermaid 图表	Mermaid 圖表

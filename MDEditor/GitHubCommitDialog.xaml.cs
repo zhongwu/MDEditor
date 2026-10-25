@@ -47,8 +47,8 @@ public partial class GitHubCommitDialog : Window
         SourceInitialized += (s, e) => ThemeService.ApplyTitleBar(this, ThemeService.IsDark);
 
         TargetText.Text = $"{document.RepoFullName}  -  {document.Path}";
-        DirectRadio.Content = $"Commit directly to the {document.Branch} branch";
-        PullRequestCheck.Content = $"Open a pull request into {document.Branch}";
+        DirectRadio.Content = Loc.Format("GH_CommitDirect", document.Branch);
+        PullRequestCheck.Content = Loc.Format("GH_OpenPrInto", document.Branch);
         BranchNameBox.Text = $"{accountLogin.ToLowerInvariant()}-patch-{DateTime.Now:yyyyMMdd-HHmm}";
 
         var (summary, description) = SplitMessage(initialMessage ?? $"Update {document.FileName}");
@@ -95,15 +95,15 @@ public partial class GitHubCommitDialog : Window
             return;
 
         NewBranchPanel.IsEnabled = UseNewBranch && !_busy;
-        CommitButton.Content = UseNewBranch && PullRequestCheck.IsChecked == true ? "Commit & Open PR" : "Commit";
+        CommitButton.Content = UseNewBranch && PullRequestCheck.IsChecked == true ? Loc.Get("GH_CommitAndOpenPr") : Loc.Get("GH_Commit");
 
         string? problem = null;
         if (string.IsNullOrWhiteSpace(CommitMessageBox.Text))
-            problem = "Enter a commit message.";
+            problem = Loc.Get("GH_EnterCommitMessage");
         else if (UseNewBranch && !GitHubRepositoryService.IsValidBranchName(BranchNameBox.Text.Trim()))
-            problem = "Branch names can't contain spaces or ~ ^ : ? * [ \\, or start/end with '/' or '.'.";
+            problem = Loc.Get("GH_InvalidBranchName");
         else if (UseNewBranch && BranchNameBox.Text.Trim() == _document.Branch)
-            problem = "The new branch needs a different name from the current one.";
+            problem = Loc.Get("GH_BranchSameName");
 
         CommitButton.IsEnabled = problem == null && !_busy;
         if (problem != null && (BranchNameBox.IsKeyboardFocused || StatusText.Visibility == Visibility.Visible))
@@ -122,7 +122,7 @@ public partial class GitHubCommitDialog : Window
         var prTitle = UseNewBranch && PullRequestCheck.IsChecked == true ? summary : null;
 
         SetBusy(true);
-        ShowStatus(newBranch != null ? $"Creating branch {newBranch} and committing..." : "Committing...", isError: false);
+        ShowStatus(newBranch != null ? Loc.Format("GH_CreatingBranch", newBranch) : Loc.Get("GH_Committing"), isError: false);
         try
         {
             Result = await _repoService.CommitFileAsync(_document, _text, CommitMessage, newBranch, prTitle);

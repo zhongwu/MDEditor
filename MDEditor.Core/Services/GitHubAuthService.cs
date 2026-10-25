@@ -1,4 +1,5 @@
 using MDEditor.Core.Interfaces;
+using MDEditor.Core.Localization;
 using MDEditor.Core.Models;
 using Octokit;
 
@@ -96,7 +97,7 @@ public class GitHubAuthService : IGitHubAuthService
     {
         var clientId = OAuthClientId;
         if (string.IsNullOrWhiteSpace(clientId))
-            throw new InvalidOperationException("No OAuth App client ID is configured, so browser sign-in is unavailable. Use a Personal Access Token instead, or set a client ID.");
+            throw new InvalidOperationException(Loc.Get("Err_NoClientId"));
 
         var request = new OauthDeviceFlowRequest(clientId);
         foreach (var scope in RequestedScopes)
@@ -136,9 +137,9 @@ public class GitHubAuthService : IGitHubAuthService
 
     private static string DeviceFlowErrorMessage(string? error, string? description) => error switch
     {
-        "access_denied" => "Sign-in was cancelled on GitHub.",
-        "expired_token" => "The sign-in code expired. Please try again.",
-        _ => description ?? error ?? "GitHub did not return an access token.",
+        "access_denied" => Loc.Get("Err_SignInCancelled"),
+        "expired_token" => Loc.Get("Err_CodeExpired"),
+        _ => description ?? error ?? Loc.Get("Err_NoAccessToken"),
     };
 
     private async Task<GitHubAccount> ConnectAsync(string token, GitHubAuthMethod method, CancellationToken cancellationToken)
@@ -152,7 +153,7 @@ public class GitHubAuthService : IGitHubAuthService
         }
         catch (AuthorizationException ex)
         {
-            throw new InvalidOperationException("GitHub rejected the token. Check that it was copied correctly and hasn't expired or been revoked.", ex);
+            throw new InvalidOperationException(Loc.Get("Err_TokenRejected"), ex);
         }
         cancellationToken.ThrowIfCancellationRequested();
 

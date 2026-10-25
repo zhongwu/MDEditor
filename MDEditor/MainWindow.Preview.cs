@@ -433,12 +433,12 @@ public partial class MainWindow
 
         if (count == 0)
         {
-            PreviewFindStatus.Text = "No results";
+            PreviewFindStatus.Text = Loc.Get("Find_NoResults");
             PreviewFindStatus.Foreground = Brushes.IndianRed;
         }
         else
         {
-            PreviewFindStatus.Text = $"{index + 1} of {count}{(capped ? "+" : "")}";
+            PreviewFindStatus.Text = Loc.Format("Find_Count", index + 1, count, capped ? "+" : "");
             PreviewFindStatus.Foreground = Brushes.Gray;
         }
     }

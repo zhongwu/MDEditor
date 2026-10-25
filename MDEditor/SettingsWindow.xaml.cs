@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MDEditor.Core.Interfaces;
+using MDEditor.Core.Localization;
 using MDEditor.Core.Models;
 using MDEditor.Themes;
 
@@ -32,6 +33,47 @@ public partial class SettingsWindow : Window
 
         Loaded += (s, e) => LoadFromSettings();
         BuildShortcutsTab();
+
+        // XAML text follows the language through {loc:Tr} bindings; the code-built shortcut rows
+        // and the "Match Windows" picker entry are rebuilt here.
+        EventHandler onLanguageChanged = (s, e) =>
+        {
+            BuildShortcutsTab();
+            PopulateLanguageCombo();
+        };
+        Loc.LanguageChanged += onLanguageChanged;
+        Closed += (s, e) => Loc.LanguageChanged -= onLanguageChanged;
+    }
+
+    private void PopulateLanguageCombo()
+    {
+        bool wasLoading = _loading;
+        _loading = true;
+        try
+        {
+            var selected = _settingsService.Get("appearance.language", Loc.SystemLanguage);
+            LanguageCombo.Items.Clear();
+            LanguageCombo.Items.Add(new ComboBoxItem { Content = Loc.Get("Settings_MatchWindows"), Tag = Loc.SystemLanguage });
+            foreach (var (code, nativeName) in Loc.SupportedLanguages)
+                LanguageCombo.Items.Add(new ComboBoxItem { Content = nativeName, Tag = code });
+            SelectComboByTag(LanguageCombo, selected);
+            if (LanguageCombo.SelectedItem == null)
+                LanguageCombo.SelectedIndex = 0;
+        }
+        finally
+        {
+            _loading = wasLoading;
+        }
+    }
+
+    private void LanguageCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (_loading || LanguageCombo.SelectedItem is not ComboBoxItem item)
+            return;
+
+        var language = (string)item.Tag;
+        _settingsService.Set("appearance.language", language);
+        Loc.SetLanguage(language); // raises LanguageChanged -> bound text and code-built UI refresh
     }
 
     private void BuildShortcutsTab()
@@ -60,7 +102,7 @@ public partial class SettingsWindow : Window
             gestureBox.PreviewKeyDown += ShortcutBox_PreviewKeyDown;
             Grid.SetColumn(gestureBox, 1);
 
-            var resetButton = new Button { Content = "Reset", Tag = key, Padding = new Thickness(8, 2, 8, 2) };
+            var resetButton = new Button { Content = Loc.Get("Common_Reset"), Tag = key, Padding = new Thickness(8, 2, 8, 2) };
             resetButton.Click += ResetShortcut_Click;
             Grid.SetColumn(resetButton, 2);
 
@@ -87,8 +129,8 @@ public partial class SettingsWindow : Window
         bool isFunctionKey = actualKey >= Key.F1 && actualKey <= Key.F24;
         if (modifiers == ModifierKeys.None && !isFunctionKey)
         {
-            MessageBox.Show(this, "Shortcuts need at least one modifier key (Ctrl/Shift/Alt), except function keys.",
-                "Invalid Shortcut", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(this, Loc.Get("Msg_ShortcutNeedsModifier"),
+                Loc.Get("Title_InvalidShortcut"), MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
 
@@ -96,8 +138,8 @@ public partial class SettingsWindow : Window
         if (conflictLabel != null)
         {
             var result = MessageBox.Show(this,
-                $"This shortcut is already used by \"{conflictLabel}\". Reassign it to this command instead?",
-                "Shortcut Conflict", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                Loc.Format("Msg_ShortcutConflict", conflictLabel),
+                Loc.Get("Title_ShortcutConflict"), MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (result != MessageBoxResult.Yes)
                 return;
         }
@@ -139,6 +181,8 @@ public partial class SettingsWindow : Window
         _loading = true;
         try
         {
+            PopulateLanguageCombo();
+
             var theme = _settingsService.Get("appearance.theme", "System");
             var themeRadio = theme switch
             {

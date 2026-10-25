@@ -39,7 +39,7 @@ public partial class GitHubBrowserWindow : Window
         InitializeComponent();
         _repoService = repoService;
         _settingsService = settingsService;
-        Title = $"Open from GitHub - {accountLogin}";
+        Title = Loc.Format("GH_OpenFromGitHubTitleAccount", accountLogin);
 
         SourceInitialized += (s, e) => ThemeService.ApplyTitleBar(this, ThemeService.IsDark);
         Loaded += async (s, e) =>
@@ -55,13 +55,13 @@ public partial class GitHubBrowserWindow : Window
 
     private async Task LoadRepositoriesAsync()
     {
-        SetStatus("Loading repositories...");
+        SetStatus(Loc.Get("GH_LoadingRepos"));
         RefreshButton.IsEnabled = false;
         try
         {
             _repos = await _repoService.GetRepositoriesAsync();
             PopulateRepoList();
-            SetStatus($"{_repos.Count} repositories");
+            SetStatus(Loc.Format("GH_RepoCount", _repos.Count));
 
             // Reselect the repository used last time, which is usually where the next file is.
             var last = _settingsService.Get<string?>(LastRepoKey, null);
@@ -75,7 +75,7 @@ public partial class GitHubBrowserWindow : Window
         }
         catch (Exception ex)
         {
-            SetStatus($"Couldn't load repositories: {ex.Message}", isError: true);
+            SetStatus(Loc.Format("GH_LoadReposFailed", ex.Message), isError: true);
         }
         finally
         {
@@ -120,7 +120,7 @@ public partial class GitHubBrowserWindow : Window
         panel.Children.Add(new TextBlock { Text = repo.Owner + "/", Opacity = 0.7 });
         panel.Children.Add(new TextBlock { Text = repo.Name });
         if (!repo.CanPush)
-            panel.Children.Add(new TextBlock { Text = "  (read-only)", Opacity = 0.6 });
+            panel.Children.Add(new TextBlock { Text = Loc.Get("GH_ReadOnly"), Opacity = 0.6 });
         return panel;
     }
 
@@ -139,7 +139,7 @@ public partial class GitHubBrowserWindow : Window
             return;
 
         int version = ++_loadVersion;
-        ClearTree("Loading branches...");
+        ClearTree(Loc.Get("GH_LoadingBranches"));
         _suppressBranchChange = true;
         BranchCombo.Items.Clear();
         _suppressBranchChange = false;
@@ -156,7 +156,7 @@ public partial class GitHubBrowserWindow : Window
 
             if (BranchCombo.Items.Count == 0)
             {
-                ClearTree("This repository is empty.");
+                ClearTree(Loc.Get("GH_RepoEmpty"));
                 return;
             }
 
@@ -166,7 +166,7 @@ public partial class GitHubBrowserWindow : Window
         catch (Exception ex)
         {
             if (version == _loadVersion)
-                ClearTree($"Couldn't load branches: {ex.Message}");
+                ClearTree(Loc.Format("GH_LoadBranchesFailed", ex.Message));
         }
     }
 
@@ -187,7 +187,7 @@ public partial class GitHubBrowserWindow : Window
             return;
 
         int version = _loadVersion;
-        ClearTree("Loading files...");
+        ClearTree(Loc.Get("GH_LoadingFiles"));
         try
         {
             var tree = await _repoService.GetTreeAsync(repo.Owner, repo.Name, branch);
@@ -199,7 +199,7 @@ public partial class GitHubBrowserWindow : Window
         catch (Exception ex)
         {
             if (version == _loadVersion)
-                ClearTree($"Couldn't load files: {ex.Message}");
+                ClearTree(Loc.Format("GH_LoadFilesFailed", ex.Message));
         }
     }
 
@@ -223,12 +223,12 @@ public partial class GitHubBrowserWindow : Window
                 ExpandAll(item);
 
         if (FileTree.Items.Count == 0)
-            ShowTreePlaceholder(MarkdownOnlyCheck.IsChecked == true ? "No Markdown files on this branch." : "This branch has no files.");
+            ShowTreePlaceholder(MarkdownOnlyCheck.IsChecked == true ? Loc.Get("GH_NoMarkdownFiles") : Loc.Get("GH_NoFiles"));
         else
             TreePlaceholder.Visibility = Visibility.Collapsed;
 
         SetStatus(_tree.Truncated
-            ? "This repository is very large; GitHub returned only part of its file list."
+            ? Loc.Get("GH_Truncated")
             : string.Empty, isError: _tree.Truncated);
         UpdateOpenButton();
     }
@@ -309,7 +309,7 @@ public partial class GitHubBrowserWindow : Window
             return;
 
         OpenButton.IsEnabled = false;
-        SetStatus($"Downloading {path}...");
+        SetStatus(Loc.Format("GH_Downloading", path));
         try
         {
             Result = await _repoService.GetFileAsync(repo, branch, path);
@@ -318,7 +318,7 @@ public partial class GitHubBrowserWindow : Window
         }
         catch (Exception ex)
         {
-            SetStatus($"Couldn't open {path}: {ex.Message}", isError: true);
+            SetStatus(Loc.Format("GH_OpenFileFailed", path, ex.Message), isError: true);
             UpdateOpenButton();
         }
     }

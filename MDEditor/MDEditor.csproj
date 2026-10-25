@@ -20,4 +20,9 @@
     <ProjectReference Include="..\MDEditor.Core\MDEditor.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Loc.Get / Loc.Format are used for UI text throughout the app. -->
+    <Using Include="MDEditor.Core.Localization" />
+  </ItemGroup>
+
 </Project>

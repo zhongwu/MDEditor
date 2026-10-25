@@ -1,9 +1,11 @@
 ﻿using System.Windows;
+using System.Windows.Markup;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MDEditor.Core;
 using MDEditor.Core.Interfaces;
+using MDEditor.Core.Localization;
 using MDEditor.Themes;
 using MDEditor.ViewModels;
 
@@ -41,6 +43,13 @@ public partial class App : Application
         // values from the first paint.
         var settingsService = Services.GetRequiredService<ISettingsService>();
         ThemeService.Apply(settingsService.Get("appearance.theme", "System"));
+
+        // Same for the UI language. FrameworkElement.Language picks the font fallback for CJK
+        // text (Microsoft YaHei for zh-Hans, JhengHei for zh-Hant); it can only be set once per
+        // process, so after a live language switch the glyph style updates on the next launch.
+        Loc.SetLanguage(settingsService.Get("appearance.language", Loc.SystemLanguage));
+        FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement),
+            new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(Loc.Culture.IetfLanguageTag)));
     }
 
     protected override void OnExit(ExitEventArgs e)

@@ -1,6 +1,7 @@
 <Window x:Class="MDEditor.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:MDEditor.Localization"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
@@ -53,237 +54,237 @@
         </Grid.RowDefinitions>
 
         <Menu x:Name="MainMenuBar" Grid.Row="0" Background="{DynamicResource ControlBackgroundBrush}">
-            <MenuItem Header="File">
-                <MenuItem Header="New" Command="{Binding NewFileCommand}" InputGestureText="Ctrl+N" />
-                <MenuItem Header="Open..." Command="{Binding OpenFileCommand}" InputGestureText="Ctrl+O" />
-                <MenuItem Header="Open from GitHub..." Command="{Binding OpenFromGitHubCommand}" />
-                <MenuItem Header="Recent Files" Name="RecentFilesMenu">
-                    <MenuItem Header="(No recent files)" IsEnabled="False" />
+            <MenuItem Header="{loc:Tr Menu_File}">
+                <MenuItem Header="{loc:Tr Menu_New}" Command="{Binding NewFileCommand}" InputGestureText="Ctrl+N" />
+                <MenuItem Header="{loc:Tr Menu_Open}" Command="{Binding OpenFileCommand}" InputGestureText="Ctrl+O" />
+                <MenuItem Header="{loc:Tr Menu_OpenFromGitHub}" Command="{Binding OpenFromGitHubCommand}" />
+                <MenuItem Header="{loc:Tr Menu_RecentFiles}" Name="RecentFilesMenu">
+                    <MenuItem Header="{loc:Tr Menu_NoRecentFiles}" IsEnabled="False" />
                 </MenuItem>
                 <Separator />
-                <MenuItem Header="Save" Command="{Binding SaveFileCommand}" InputGestureText="Ctrl+S" />
-                <MenuItem Header="Save As..." Command="{Binding SaveAsFileCommand}" InputGestureText="Ctrl+Shift+S" />
+                <MenuItem Header="{loc:Tr Menu_Save}" Command="{Binding SaveFileCommand}" InputGestureText="Ctrl+S" />
+                <MenuItem Header="{loc:Tr Menu_SaveAs}" Command="{Binding SaveAsFileCommand}" InputGestureText="Ctrl+Shift+S" />
                 <Separator />
-                <MenuItem Header="Export HTML" Command="{Binding ExportHtmlCommand}" />
-                <MenuItem Header="Export PDF" Command="{Binding ExportPdfCommand}" />
+                <MenuItem Header="{loc:Tr Menu_ExportHtml}" Command="{Binding ExportHtmlCommand}" />
+                <MenuItem Header="{loc:Tr Menu_ExportPdf}" Command="{Binding ExportPdfCommand}" />
                 <Separator />
-                <MenuItem Header="Print Preview..." Command="{Binding PrintPreviewCommand}" InputGestureText="Ctrl+P" />
+                <MenuItem Header="{loc:Tr Menu_PrintPreview}" Command="{Binding PrintPreviewCommand}" InputGestureText="Ctrl+P" />
                 <Separator />
-                <MenuItem Header="Exit" Command="{Binding ExitCommand}" />
+                <MenuItem Header="{loc:Tr Menu_Exit}" Command="{Binding ExitCommand}" />
             </MenuItem>
-            <MenuItem Header="Edit">
-                <MenuItem Header="Undo" Command="{Binding UndoCommand}" />
-                <MenuItem Header="Redo" Command="{Binding RedoCommand}" />
+            <MenuItem Header="{loc:Tr Menu_Edit}">
+                <MenuItem Header="{loc:Tr Menu_Undo}" Command="{Binding UndoCommand}" />
+                <MenuItem Header="{loc:Tr Menu_Redo}" Command="{Binding RedoCommand}" />
                 <Separator />
-                <MenuItem Header="Cut" Command="{Binding CutCommand}" />
-                <MenuItem Header="Copy" Command="{Binding CopyCommand}" />
-                <MenuItem Header="Paste" Command="{Binding PasteCommand}" />
+                <MenuItem Header="{loc:Tr Menu_Cut}" Command="{Binding CutCommand}" />
+                <MenuItem Header="{loc:Tr Menu_Copy}" Command="{Binding CopyCommand}" />
+                <MenuItem Header="{loc:Tr Menu_Paste}" Command="{Binding PasteCommand}" />
                 <Separator />
-                <MenuItem Header="Find" Command="{Binding FindCommand}" InputGestureText="Ctrl+F" />
-                <MenuItem Header="Replace" Command="{Binding ReplaceCommand}" InputGestureText="Ctrl+H" />
-                <MenuItem Header="Find in Preview" Command="{Binding FindInPreviewCommand}" InputGestureText="Ctrl+Shift+F" />
-                <MenuItem Header="Go to Line..." Command="{Binding GoToLineCommand}" InputGestureText="Ctrl+G" />
+                <MenuItem Header="{loc:Tr Menu_Find}" Command="{Binding FindCommand}" InputGestureText="Ctrl+F" />
+                <MenuItem Header="{loc:Tr Menu_Replace}" Command="{Binding ReplaceCommand}" InputGestureText="Ctrl+H" />
+                <MenuItem Header="{loc:Tr Menu_FindInPreview}" Command="{Binding FindInPreviewCommand}" InputGestureText="Ctrl+Shift+F" />
+                <MenuItem Header="{loc:Tr Menu_GoToLine}" Command="{Binding GoToLineCommand}" InputGestureText="Ctrl+G" />
                 <Separator />
-                <MenuItem Header="Select All" Command="{Binding SelectAllCommand}" />
+                <MenuItem Header="{loc:Tr Menu_SelectAll}" Command="{Binding SelectAllCommand}" />
             </MenuItem>
-            <MenuItem Header="View">
-                <MenuItem x:Name="PreviewMenuItem" Header="Show Preview" Command="{Binding TogglePreviewCommand}" IsCheckable="True" InputGestureText="Ctrl+Shift+P" />
-                <MenuItem x:Name="EditorMenuItem" Header="Show Editor" Command="{Binding ToggleEditorCommand}" IsCheckable="True" />
-                <MenuItem x:Name="OutlineMenuItem" Header="Show Outline" Command="{Binding ToggleOutlineCommand}" IsCheckable="True" InputGestureText="Ctrl+Shift+E" />
-                <MenuItem x:Name="LineNumbersMenuItem" Header="Show Line Numbers" Command="{Binding ToggleLineNumbersCommand}" IsCheckable="True" />
-                <MenuItem x:Name="MinimapMenuItem" Header="Show Minimap" Click="ToggleMinimap_Click" IsCheckable="True" />
-                <MenuItem x:Name="ScrollSyncMenuItem" Header="Show Scroll Sync" Click="ToggleScrollSync_Click" IsCheckable="True" />
-                <MenuItem Header="Word Wrap" Command="{Binding ToggleWordWrapCommand}" />
+            <MenuItem Header="{loc:Tr Menu_View}">
+                <MenuItem x:Name="PreviewMenuItem" Header="{loc:Tr Menu_ShowPreview}" Command="{Binding TogglePreviewCommand}" IsCheckable="True" InputGestureText="Ctrl+Shift+P" />
+                <MenuItem x:Name="EditorMenuItem" Header="{loc:Tr Menu_ShowEditor}" Command="{Binding ToggleEditorCommand}" IsCheckable="True" />
+                <MenuItem x:Name="OutlineMenuItem" Header="{loc:Tr Menu_ShowOutline}" Command="{Binding ToggleOutlineCommand}" IsCheckable="True" InputGestureText="Ctrl+Shift+E" />
+                <MenuItem x:Name="LineNumbersMenuItem" Header="{loc:Tr Menu_ShowLineNumbers}" Command="{Binding ToggleLineNumbersCommand}" IsCheckable="True" />
+                <MenuItem x:Name="MinimapMenuItem" Header="{loc:Tr Menu_ShowMinimap}" Click="ToggleMinimap_Click" IsCheckable="True" />
+                <MenuItem x:Name="ScrollSyncMenuItem" Header="{loc:Tr Menu_ShowScrollSync}" Click="ToggleScrollSync_Click" IsCheckable="True" />
+                <MenuItem Header="{loc:Tr Menu_WordWrap}" Command="{Binding ToggleWordWrapCommand}" />
                 <Separator />
-                <MenuItem Header="Zoom In" Command="{Binding ZoomInCommand}" InputGestureText="Ctrl++" />
-                <MenuItem Header="Zoom Out" Command="{Binding ZoomOutCommand}" InputGestureText="Ctrl+-" />
-                <MenuItem Header="Reset Zoom" Command="{Binding ResetZoomCommand}" InputGestureText="Ctrl+0" />
+                <MenuItem Header="{loc:Tr Menu_ZoomIn}" Command="{Binding ZoomInCommand}" InputGestureText="Ctrl++" />
+                <MenuItem Header="{loc:Tr Menu_ZoomOut}" Command="{Binding ZoomOutCommand}" InputGestureText="Ctrl+-" />
+                <MenuItem Header="{loc:Tr Menu_ResetZoom}" Command="{Binding ResetZoomCommand}" InputGestureText="Ctrl+0" />
                 <Separator />
-                <MenuItem Header="Presentation Mode" Command="{Binding PresentationModeCommand}" InputGestureText="F5" />
+                <MenuItem Header="{loc:Tr Menu_PresentationMode}" Command="{Binding PresentationModeCommand}" InputGestureText="F5" />
             </MenuItem>
-            <MenuItem Header="Format">
-                <MenuItem Header="Heading 1" Command="{Binding Heading1Command}" InputGestureText="Ctrl+1" />
-                <MenuItem Header="Heading 2" Command="{Binding Heading2Command}" InputGestureText="Ctrl+2" />
-                <MenuItem Header="Heading 3" Command="{Binding Heading3Command}" InputGestureText="Ctrl+3" />
-                <MenuItem Header="Heading 4" Command="{Binding Heading4Command}" />
-                <MenuItem Header="Heading 5" Command="{Binding Heading5Command}" />
-                <MenuItem Header="Heading 6" Command="{Binding Heading6Command}" />
+            <MenuItem Header="{loc:Tr Menu_Format}">
+                <MenuItem Header="{loc:Tr Menu_Heading1}" Command="{Binding Heading1Command}" InputGestureText="Ctrl+1" />
+                <MenuItem Header="{loc:Tr Menu_Heading2}" Command="{Binding Heading2Command}" InputGestureText="Ctrl+2" />
+                <MenuItem Header="{loc:Tr Menu_Heading3}" Command="{Binding Heading3Command}" InputGestureText="Ctrl+3" />
+                <MenuItem Header="{loc:Tr Menu_Heading4}" Command="{Binding Heading4Command}" />
+                <MenuItem Header="{loc:Tr Menu_Heading5}" Command="{Binding Heading5Command}" />
+                <MenuItem Header="{loc:Tr Menu_Heading6}" Command="{Binding Heading6Command}" />
                 <Separator />
-                <MenuItem Header="Bold" Command="{Binding BoldCommand}" InputGestureText="Ctrl+B" />
-                <MenuItem Header="Italic" Command="{Binding ItalicCommand}" InputGestureText="Ctrl+I" />
-                <MenuItem Header="Strikethrough" Command="{Binding StrikethroughCommand}" InputGestureText="Ctrl+Shift+X" />
-                <MenuItem Header="Inline Code" Command="{Binding InlineCodeCommand}" InputGestureText="Ctrl+`" />
+                <MenuItem Header="{loc:Tr Menu_Bold}" Command="{Binding BoldCommand}" InputGestureText="Ctrl+B" />
+                <MenuItem Header="{loc:Tr Menu_Italic}" Command="{Binding ItalicCommand}" InputGestureText="Ctrl+I" />
+                <MenuItem Header="{loc:Tr Menu_Strikethrough}" Command="{Binding StrikethroughCommand}" InputGestureText="Ctrl+Shift+X" />
+                <MenuItem Header="{loc:Tr Menu_InlineCode}" Command="{Binding InlineCodeCommand}" InputGestureText="Ctrl+`" />
                 <Separator />
-                <MenuItem Header="Code Block" Command="{Binding CodeBlockCommand}" InputGestureText="Ctrl+Shift+C" />
-                <MenuItem Header="Blockquote" Command="{Binding BlockquoteCommand}" InputGestureText="Ctrl+Q" />
+                <MenuItem Header="{loc:Tr Menu_CodeBlock}" Command="{Binding CodeBlockCommand}" InputGestureText="Ctrl+Shift+C" />
+                <MenuItem Header="{loc:Tr Menu_Blockquote}" Command="{Binding BlockquoteCommand}" InputGestureText="Ctrl+Q" />
                 <Separator />
-                <MenuItem Header="Unordered List" Command="{Binding UnorderedListCommand}" InputGestureText="Ctrl+Shift+L" />
-                <MenuItem Header="Ordered List" Command="{Binding OrderedListCommand}" InputGestureText="Ctrl+Shift+O" />
-                <MenuItem Header="Task List" Command="{Binding TaskListCommand}" InputGestureText="Ctrl+Shift+T" />
+                <MenuItem Header="{loc:Tr Menu_UnorderedList}" Command="{Binding UnorderedListCommand}" InputGestureText="Ctrl+Shift+L" />
+                <MenuItem Header="{loc:Tr Menu_OrderedList}" Command="{Binding OrderedListCommand}" InputGestureText="Ctrl+Shift+O" />
+                <MenuItem Header="{loc:Tr Menu_TaskList}" Command="{Binding TaskListCommand}" InputGestureText="Ctrl+Shift+T" />
                 <Separator />
-                <MenuItem Header="Link" Command="{Binding InsertLinkCommand}" InputGestureText="Ctrl+K" />
-                <MenuItem Header="Image" Command="{Binding InsertImageCommand}" InputGestureText="Ctrl+Shift+I" />
-                <MenuItem Header="Table" Command="{Binding InsertTableCommand}" />
-                <MenuItem Header="Horizontal Rule" Command="{Binding InsertHorizontalRuleCommand}" />
-                <MenuItem Header="Math Block" Command="{Binding MathBlockCommand}" />
+                <MenuItem Header="{loc:Tr Menu_Link}" Command="{Binding InsertLinkCommand}" InputGestureText="Ctrl+K" />
+                <MenuItem Header="{loc:Tr Menu_Image}" Command="{Binding InsertImageCommand}" InputGestureText="Ctrl+Shift+I" />
+                <MenuItem Header="{loc:Tr Menu_Table}" Command="{Binding InsertTableCommand}" />
+                <MenuItem Header="{loc:Tr Menu_HorizontalRule}" Command="{Binding InsertHorizontalRuleCommand}" />
+                <MenuItem Header="{loc:Tr Menu_MathBlock}" Command="{Binding MathBlockCommand}" />
             </MenuItem>
-            <MenuItem Header="Tools">
+            <MenuItem Header="{loc:Tr Menu_Tools}">
                 <MenuItem x:Name="SmartTypographyMenuItem"
-                          Header="Smart Typography"
+                          Header="{loc:Tr Menu_SmartTypography}"
                           IsCheckable="True"
                           IsChecked="True"
                           Click="SmartTypography_Click" />
                 <Separator />
-                <MenuItem Header="GitHub Accounts..." Command="{Binding GitHubAccountsCommand}" />
-                <MenuItem Header="Commit to GitHub..." Command="{Binding GitHubSyncCommand}"
+                <MenuItem Header="{loc:Tr Menu_GitHubAccounts}" Command="{Binding GitHubAccountsCommand}" />
+                <MenuItem Header="{loc:Tr Menu_CommitToGitHub}" Command="{Binding GitHubSyncCommand}"
                           Visibility="{Binding IsGitHubDocument, Converter={StaticResource BoolToVisibility}}" />
-                <MenuItem Header="File History (GitHub)..." Command="{Binding GitHubHistoryCommand}"
+                <MenuItem Header="{loc:Tr Menu_FileHistory}" Command="{Binding GitHubHistoryCommand}"
                           Visibility="{Binding IsGitHubDocument, Converter={StaticResource BoolToVisibility}}" />
-                <MenuItem Header="Settings" Command="{Binding SettingsCommand}" />
+                <MenuItem Header="{loc:Tr Menu_Settings}" Command="{Binding SettingsCommand}" />
             </MenuItem>
-            <MenuItem Header="Help">
-                <MenuItem Header="Keyboard Shortcuts" Command="{Binding KeyboardShortcutsCommand}" />
-                <MenuItem Header="Markdown Guide" Command="{Binding MarkdownGuideCommand}" />
+            <MenuItem Header="{loc:Tr Menu_Help}">
+                <MenuItem Header="{loc:Tr Menu_KeyboardShortcuts}" Command="{Binding KeyboardShortcutsCommand}" />
+                <MenuItem Header="{loc:Tr Menu_MarkdownGuide}" Command="{Binding MarkdownGuideCommand}" />
                 <Separator />
-                <MenuItem Header="About" Command="{Binding AboutCommand}" />
+                <MenuItem Header="{loc:Tr Menu_About}" Command="{Binding AboutCommand}" />
             </MenuItem>
         </Menu>
 
         <ToolBar x:Name="MainCommandBar" Grid.Row="1" Background="{DynamicResource ControlBackgroundBrush}">
-            <Button Command="{Binding NewFileCommand}" ToolTip="New (Ctrl+N)">
+            <Button Command="{Binding NewFileCommand}" ToolTip="{loc:Tr Tip_New}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8A5;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding OpenFileCommand}" ToolTip="Open (Ctrl+O)">
+            <Button Command="{Binding OpenFileCommand}" ToolTip="{loc:Tr Tip_Open}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8E5;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding SaveFileCommand}" ToolTip="Save (Ctrl+S)">
+            <Button Command="{Binding SaveFileCommand}" ToolTip="{loc:Tr Tip_Save}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE74E;" />
                 </Button.Content>
             </Button>
             <Separator />
-            <Button Command="{Binding UndoCommand}" ToolTip="Undo (Ctrl+Z)">
+            <Button Command="{Binding UndoCommand}" ToolTip="{loc:Tr Tip_Undo}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE7A7;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding RedoCommand}" ToolTip="Redo (Ctrl+Y)">
+            <Button Command="{Binding RedoCommand}" ToolTip="{loc:Tr Tip_Redo}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE7A6;" />
                 </Button.Content>
             </Button>
             <Separator />
-            <Button Command="{Binding BoldCommand}" ToolTip="Bold (Ctrl+B)">
+            <Button Command="{Binding BoldCommand}" ToolTip="{loc:Tr Tip_Bold}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8DD;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding ItalicCommand}" ToolTip="Italic (Ctrl+I)">
+            <Button Command="{Binding ItalicCommand}" ToolTip="{loc:Tr Tip_Italic}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8DB;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding StrikethroughCommand}" ToolTip="Strikethrough (Ctrl+Shift+X)">
+            <Button Command="{Binding StrikethroughCommand}" ToolTip="{loc:Tr Tip_Strikethrough}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xEDE0;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding InlineCodeCommand}" ToolTip="Inline Code (Ctrl+`)">
+            <Button Command="{Binding InlineCodeCommand}" ToolTip="{loc:Tr Tip_InlineCode}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE943;" />
                 </Button.Content>
             </Button>
             <Separator />
-            <Button Command="{Binding CodeBlockCommand}" ToolTip="Code Block (Ctrl+Shift+C)">
+            <Button Command="{Binding CodeBlockCommand}" ToolTip="{loc:Tr Tip_CodeBlock}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE943;" VerticalAlignment="Bottom" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding BlockquoteCommand}" ToolTip="Blockquote (Ctrl+Q)">
+            <Button Command="{Binding BlockquoteCommand}" ToolTip="{loc:Tr Tip_Blockquote}">
                 <Button.Content>
                     <TextBlock Text="&gt;" />
                 </Button.Content>
             </Button>
             <Separator />
-            <Button Command="{Binding Heading1Command}" ToolTip="Heading 1 (Ctrl+1)">
+            <Button Command="{Binding Heading1Command}" ToolTip="{loc:Tr Tip_Heading1}">
                 <Button.Content>
                     <TextBlock Text="H1" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding Heading2Command}" ToolTip="Heading 2 (Ctrl+2)">
+            <Button Command="{Binding Heading2Command}" ToolTip="{loc:Tr Tip_Heading2}">
                 <Button.Content>
                     <TextBlock Text="H2" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding Heading3Command}" ToolTip="Heading 3 (Ctrl+3)">
+            <Button Command="{Binding Heading3Command}" ToolTip="{loc:Tr Tip_Heading3}">
                 <Button.Content>
                     <TextBlock Text="H3" />
                 </Button.Content>
             </Button>
             <Separator />
-            <Button Command="{Binding UnorderedListCommand}" ToolTip="Unordered List (Ctrl+Shift+L)">
+            <Button Command="{Binding UnorderedListCommand}" ToolTip="{loc:Tr Tip_UnorderedList}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8FD;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding OrderedListCommand}" ToolTip="Ordered List (Ctrl+Shift+O)">
+            <Button Command="{Binding OrderedListCommand}" ToolTip="{loc:Tr Tip_OrderedList}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8FD;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding TaskListCommand}" ToolTip="Task List (Ctrl+Shift+T)">
+            <Button Command="{Binding TaskListCommand}" ToolTip="{loc:Tr Tip_TaskList}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE73E;" />
                 </Button.Content>
             </Button>
             <Separator />
-            <Button Command="{Binding InsertLinkCommand}" ToolTip="Insert Link (Ctrl+K)">
+            <Button Command="{Binding InsertLinkCommand}" ToolTip="{loc:Tr Tip_InsertLink}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE71B;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding InsertImageCommand}" ToolTip="Insert Image (Ctrl+Shift+I)">
+            <Button Command="{Binding InsertImageCommand}" ToolTip="{loc:Tr Tip_InsertImage}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8B9;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding InsertTableCommand}" ToolTip="Insert Table">
+            <Button Command="{Binding InsertTableCommand}" ToolTip="{loc:Tr Menu_InsertTable}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8F1;" />
                 </Button.Content>
             </Button>
             <Separator />
-            <Button Command="{Binding TogglePreviewCommand}" ToolTip="Toggle Preview (Ctrl+Shift+P)">
+            <Button Command="{Binding TogglePreviewCommand}" ToolTip="{loc:Tr Tip_TogglePreview}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8A1;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding ToggleEditorCommand}" ToolTip="Toggle Editor">
+            <Button Command="{Binding ToggleEditorCommand}" ToolTip="{loc:Tr Tip_ToggleEditor}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE70F;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding ToggleOutlineCommand}" ToolTip="Toggle Outline (Ctrl+Shift+E)">
+            <Button Command="{Binding ToggleOutlineCommand}" ToolTip="{loc:Tr Tip_ToggleOutline}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE700;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding FindInPreviewCommand}" ToolTip="Find in Preview (Ctrl+Shift+F)">
+            <Button Command="{Binding FindInPreviewCommand}" ToolTip="{loc:Tr Tip_FindInPreview}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE721;" />
                 </Button.Content>
             </Button>
             <Separator />
-            <Button Command="{Binding PrintPreviewCommand}" ToolTip="Print Preview (Ctrl+P)">
+            <Button Command="{Binding PrintPreviewCommand}" ToolTip="{loc:Tr Tip_PrintPreview}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE749;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding PresentationModeCommand}" ToolTip="Presentation Mode (F5)">
+            <Button Command="{Binding PresentationModeCommand}" ToolTip="{loc:Tr Tip_PresentationMode}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE740;" />
                 </Button.Content>
@@ -314,10 +315,10 @@
 
                 <Border Grid.Row="0" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0,0,0,1" Padding="8,4">
                     <DockPanel LastChildFill="False">
-                        <TextBlock DockPanel.Dock="Left" Text="OUTLINE" FontSize="12" Foreground="Gray" VerticalAlignment="Center" />
-                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE711;" ToolTip="Close Outline (Ctrl+Shift+E)" Command="{Binding ToggleOutlineCommand}" />
-                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE70E;" ToolTip="Collapse All" Click="OutlineCollapseAll_Click" />
-                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE70D;" ToolTip="Expand All" Click="OutlineExpandAll_Click" />
+                        <TextBlock DockPanel.Dock="Left" Text="{loc:Tr Pane_Outline}" FontSize="12" Foreground="Gray" VerticalAlignment="Center" />
+                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE711;" ToolTip="{loc:Tr Tip_CloseOutline}" Command="{Binding ToggleOutlineCommand}" />
+                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE70E;" ToolTip="{loc:Tr Tip_CollapseAll}" Click="OutlineCollapseAll_Click" />
+                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE70D;" ToolTip="{loc:Tr Tip_ExpandAll}" Click="OutlineExpandAll_Click" />
                     </DockPanel>
                 </Border>
 
@@ -353,7 +354,7 @@
                             </TreeView.ItemTemplate>
                         </TreeView>
                         <TextBlock x:Name="OutlineEmptyText"
-                                   Text="No headings in this document."
+                                   Text="{loc:Tr Outline_Empty}"
                                    Foreground="Gray"
                                    TextWrapping="Wrap"
                                    TextAlignment="Center"
@@ -412,7 +413,7 @@
 
                 <Border Grid.Row="0" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0,0,0,1" Padding="8,4">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="EDITOR" FontSize="12" Foreground="Gray" VerticalAlignment="Center" />
+                        <TextBlock Text="{loc:Tr Pane_Editor}" FontSize="12" Foreground="Gray" VerticalAlignment="Center" />
                         <TextBlock x:Name="EditorFileName" Text="Untitled.md" VerticalAlignment="Center" Margin="8,0,0,0" />
                         <TextBlock x:Name="EditorDirtyIndicator" Text="●" FontSize="12" Foreground="Red" VerticalAlignment="Center" Margin="4,0,0,0" Visibility="Collapsed" />
                     </StackPanel>
@@ -431,20 +432,20 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <Button x:Name="EditorFindToggleReplace" Grid.Row="0" Grid.Column="0" Style="{StaticResource PaneHeaderButton}" Margin="0,0,4,0" Content="&#xE76C;" ToolTip="Toggle Replace (Ctrl+H)" Click="EditorFindToggleReplace_Click" />
-                        <TextBox x:Name="EditorFindBox" Grid.Row="0" Grid.Column="1" Background="{DynamicResource ControlBackgroundBrush}" VerticalContentAlignment="Center" Padding="2,1" ToolTip="Find" TextChanged="EditorFindBox_TextChanged" PreviewKeyDown="EditorFindBox_PreviewKeyDown" />
+                        <Button x:Name="EditorFindToggleReplace" Grid.Row="0" Grid.Column="0" Style="{StaticResource PaneHeaderButton}" Margin="0,0,4,0" Content="&#xE76C;" ToolTip="{loc:Tr Tip_ToggleReplace}" Click="EditorFindToggleReplace_Click" />
+                        <TextBox x:Name="EditorFindBox" Grid.Row="0" Grid.Column="1" Background="{DynamicResource ControlBackgroundBrush}" VerticalContentAlignment="Center" Padding="2,1" ToolTip="{loc:Tr Menu_Find}" TextChanged="EditorFindBox_TextChanged" PreviewKeyDown="EditorFindBox_PreviewKeyDown" />
                         <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
-                            <CheckBox x:Name="EditorFindMatchCase" Content="Aa" ToolTip="Match Case" Margin="8,0,0,0" VerticalAlignment="Center" Click="EditorFindMatchCase_Click" />
+                            <CheckBox x:Name="EditorFindMatchCase" Content="Aa" ToolTip="{loc:Tr Tip_MatchCase}" Margin="8,0,0,0" VerticalAlignment="Center" Click="EditorFindMatchCase_Click" />
                             <TextBlock x:Name="EditorFindStatus" MinWidth="72" Margin="8,0,4,0" TextAlignment="Right" VerticalAlignment="Center" Foreground="Gray" />
-                            <Button Style="{StaticResource PaneHeaderButton}" Content="&#xE70E;" ToolTip="Previous Match (Shift+Enter / Shift+F3)" Click="EditorFindPrevious_Click" />
-                            <Button Style="{StaticResource PaneHeaderButton}" Content="&#xE70D;" ToolTip="Next Match (Enter / F3)" Click="EditorFindNext_Click" />
-                            <Button Style="{StaticResource PaneHeaderButton}" Content="&#xE711;" ToolTip="Close (Esc)" Click="EditorFindClose_Click" />
+                            <Button Style="{StaticResource PaneHeaderButton}" Content="&#xE70E;" ToolTip="{loc:Tr Tip_PreviousMatch}" Click="EditorFindPrevious_Click" />
+                            <Button Style="{StaticResource PaneHeaderButton}" Content="&#xE70D;" ToolTip="{loc:Tr Tip_NextMatch}" Click="EditorFindNext_Click" />
+                            <Button Style="{StaticResource PaneHeaderButton}" Content="&#xE711;" ToolTip="{loc:Tr Tip_CloseEsc}" Click="EditorFindClose_Click" />
                         </StackPanel>
 
-                        <TextBox x:Name="EditorReplaceBox" Grid.Row="1" Grid.Column="1" Background="{DynamicResource ControlBackgroundBrush}" Margin="0,4,0,0" Visibility="Collapsed" VerticalContentAlignment="Center" Padding="2,1" ToolTip="Replace" PreviewKeyDown="EditorReplaceBox_PreviewKeyDown" />
+                        <TextBox x:Name="EditorReplaceBox" Grid.Row="1" Grid.Column="1" Background="{DynamicResource ControlBackgroundBrush}" Margin="0,4,0,0" Visibility="Collapsed" VerticalContentAlignment="Center" Padding="2,1" ToolTip="{loc:Tr Menu_Replace}" PreviewKeyDown="EditorReplaceBox_PreviewKeyDown" />
                         <StackPanel x:Name="EditorReplaceActions" Grid.Row="1" Grid.Column="2" Orientation="Horizontal" Margin="8,4,0,0" Visibility="Collapsed">
-                            <Button Content="Replace" Padding="8,0" Margin="0,0,4,0" ToolTip="Replace (Enter)" Click="EditorReplace_Click" />
-                            <Button Content="Replace All" Padding="8,0" ToolTip="Replace All (Ctrl+Enter)" Click="EditorReplaceAll_Click" />
+                            <Button Content="{loc:Tr Menu_Replace}" Padding="8,0" Margin="0,0,4,0" ToolTip="{loc:Tr Tip_ReplaceEnter}" Click="EditorReplace_Click" />
+                            <Button Content="{loc:Tr Find_ReplaceAll}" Padding="8,0" ToolTip="{loc:Tr Tip_ReplaceAll}" Click="EditorReplaceAll_Click" />
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -452,10 +453,10 @@
                 <!-- Go to line bar (same slot as the find bar; only one is shown at a time) -->
                 <Border x:Name="GoToLineBar" Grid.Row="1" Visibility="Collapsed" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0,0,0,1" Padding="8,4">
                     <DockPanel LastChildFill="True">
-                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE711;" ToolTip="Close (Esc)" Click="GoToLineClose_Click" />
+                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE711;" ToolTip="{loc:Tr Tip_CloseEsc}" Click="GoToLineClose_Click" />
                         <TextBlock x:Name="GoToLineStatus" DockPanel.Dock="Right" MinWidth="72" Margin="8,0,4,0" TextAlignment="Right" VerticalAlignment="Center" Foreground="Gray" />
-                        <TextBlock DockPanel.Dock="Left" Text="Go to line:" VerticalAlignment="Center" Margin="0,0,6,0" />
-                        <TextBox x:Name="GoToLineBox" Background="{DynamicResource ControlBackgroundBrush}" VerticalContentAlignment="Center" Padding="2,1" ToolTip="Line number, or line:column" TextChanged="GoToLineBox_TextChanged" PreviewKeyDown="GoToLineBox_PreviewKeyDown" LostKeyboardFocus="GoToLineBox_LostKeyboardFocus" />
+                        <TextBlock DockPanel.Dock="Left" Text="{loc:Tr GoTo_Label}" VerticalAlignment="Center" Margin="0,0,6,0" />
+                        <TextBox x:Name="GoToLineBox" Background="{DynamicResource ControlBackgroundBrush}" VerticalContentAlignment="Center" Padding="2,1" ToolTip="{loc:Tr Tip_GoToLineBox}" TextChanged="GoToLineBox_TextChanged" PreviewKeyDown="GoToLineBox_PreviewKeyDown" LostKeyboardFocus="GoToLineBox_LostKeyboardFocus" />
                     </DockPanel>
                 </Border>
 
@@ -502,38 +503,38 @@
                                 </RichTextBox.InputBindings>
                                 <RichTextBox.ContextMenu>
                                     <ContextMenu>
-                                        <MenuItem Header="Undo" Command="{Binding UndoCommand}" />
-                                        <MenuItem Header="Redo" Command="{Binding RedoCommand}" />
+                                        <MenuItem Header="{loc:Tr Menu_Undo}" Command="{Binding UndoCommand}" />
+                                        <MenuItem Header="{loc:Tr Menu_Redo}" Command="{Binding RedoCommand}" />
                                         <Separator />
-                                        <MenuItem Header="Cut" Command="{Binding CutCommand}" />
-                                        <MenuItem Header="Copy" Command="{Binding CopyCommand}" />
-                                        <MenuItem Header="Paste" Command="{Binding PasteCommand}" />
+                                        <MenuItem Header="{loc:Tr Menu_Cut}" Command="{Binding CutCommand}" />
+                                        <MenuItem Header="{loc:Tr Menu_Copy}" Command="{Binding CopyCommand}" />
+                                        <MenuItem Header="{loc:Tr Menu_Paste}" Command="{Binding PasteCommand}" />
                                         <Separator />
-                                        <MenuItem Header="Bold" Command="{Binding BoldCommand}" />
-                                        <MenuItem Header="Italic" Command="{Binding ItalicCommand}" />
-                                        <MenuItem Header="Strikethrough" Command="{Binding StrikethroughCommand}" />
-                                        <MenuItem Header="Inline Code" Command="{Binding InlineCodeCommand}" />
+                                        <MenuItem Header="{loc:Tr Menu_Bold}" Command="{Binding BoldCommand}" />
+                                        <MenuItem Header="{loc:Tr Menu_Italic}" Command="{Binding ItalicCommand}" />
+                                        <MenuItem Header="{loc:Tr Menu_Strikethrough}" Command="{Binding StrikethroughCommand}" />
+                                        <MenuItem Header="{loc:Tr Menu_InlineCode}" Command="{Binding InlineCodeCommand}" />
                                         <Separator />
-                                        <MenuItem Header="Heading 1" Command="{Binding Heading1Command}" />
-                                        <MenuItem Header="Heading 2" Command="{Binding Heading2Command}" />
-                                        <MenuItem Header="Heading 3" Command="{Binding Heading3Command}" />
+                                        <MenuItem Header="{loc:Tr Menu_Heading1}" Command="{Binding Heading1Command}" />
+                                        <MenuItem Header="{loc:Tr Menu_Heading2}" Command="{Binding Heading2Command}" />
+                                        <MenuItem Header="{loc:Tr Menu_Heading3}" Command="{Binding Heading3Command}" />
                                         <Separator />
-                                        <MenuItem Header="Code Block" Command="{Binding CodeBlockCommand}" />
-                                        <MenuItem Header="Blockquote" Command="{Binding BlockquoteCommand}" />
+                                        <MenuItem Header="{loc:Tr Menu_CodeBlock}" Command="{Binding CodeBlockCommand}" />
+                                        <MenuItem Header="{loc:Tr Menu_Blockquote}" Command="{Binding BlockquoteCommand}" />
                                         <Separator />
-                                        <MenuItem Header="Unordered List" Command="{Binding UnorderedListCommand}" />
-                                        <MenuItem Header="Ordered List" Command="{Binding OrderedListCommand}" />
-                                        <MenuItem Header="Task List" Command="{Binding TaskListCommand}" />
+                                        <MenuItem Header="{loc:Tr Menu_UnorderedList}" Command="{Binding UnorderedListCommand}" />
+                                        <MenuItem Header="{loc:Tr Menu_OrderedList}" Command="{Binding OrderedListCommand}" />
+                                        <MenuItem Header="{loc:Tr Menu_TaskList}" Command="{Binding TaskListCommand}" />
                                         <Separator />
-                                        <MenuItem Header="Insert Link" Command="{Binding InsertLinkCommand}" />
-                                        <MenuItem Header="Insert Image" Command="{Binding InsertImageCommand}" />
-                                        <MenuItem Header="Insert Table" Command="{Binding InsertTableCommand}" />
-                                        <MenuItem Header="Insert Horizontal Rule" Command="{Binding InsertHorizontalRuleCommand}" />
+                                        <MenuItem Header="{loc:Tr Menu_InsertLink}" Command="{Binding InsertLinkCommand}" />
+                                        <MenuItem Header="{loc:Tr Menu_InsertImage}" Command="{Binding InsertImageCommand}" />
+                                        <MenuItem Header="{loc:Tr Menu_InsertTable}" Command="{Binding InsertTableCommand}" />
+                                        <MenuItem Header="{loc:Tr Menu_InsertHorizontalRule}" Command="{Binding InsertHorizontalRuleCommand}" />
                                         <Separator />
-                                        <MenuItem Header="Select All" Command="{Binding SelectAllCommand}" />
+                                        <MenuItem Header="{loc:Tr Menu_SelectAll}" Command="{Binding SelectAllCommand}" />
                                         <Separator />
-                                        <MenuItem Header="Copy as Markdown" Click="CopyAsMarkdown_Click" />
-                                        <MenuItem Header="Copy as HTML" Click="CopyAsHtml_Click" />
+                                        <MenuItem Header="{loc:Tr Menu_CopyAsMarkdown}" Click="CopyAsMarkdown_Click" />
+                                        <MenuItem Header="{loc:Tr Menu_CopyAsHtml}" Click="CopyAsHtml_Click" />
                                     </ContextMenu>
                                 </RichTextBox.ContextMenu>
                             </RichTextBox>
@@ -596,17 +597,17 @@
                 </Grid.RowDefinitions>
 
                 <Border Grid.Row="0" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0,0,0,1" Padding="8,4">
-                    <TextBlock Text="PREVIEW" FontSize="12" Foreground="Gray" VerticalAlignment="Center" />
+                    <TextBlock Text="{loc:Tr Pane_Preview}" FontSize="12" Foreground="Gray" VerticalAlignment="Center" />
                 </Border>
 
                 <!-- Find in preview bar (its own row: WPF content cannot overlay the WebView2 HWND) -->
                 <Border x:Name="PreviewFindBar" Grid.Row="1" Visibility="Collapsed" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0,0,0,1" Padding="8,4">
                     <DockPanel LastChildFill="True">
-                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE711;" ToolTip="Close (Esc)" Click="PreviewFindClose_Click" />
-                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE70D;" ToolTip="Next Match (Enter / F3)" Click="PreviewFindNext_Click" />
-                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE70E;" ToolTip="Previous Match (Shift+Enter / Shift+F3)" Click="PreviewFindPrevious_Click" />
+                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE711;" ToolTip="{loc:Tr Tip_CloseEsc}" Click="PreviewFindClose_Click" />
+                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE70D;" ToolTip="{loc:Tr Tip_NextMatch}" Click="PreviewFindNext_Click" />
+                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE70E;" ToolTip="{loc:Tr Tip_PreviousMatch}" Click="PreviewFindPrevious_Click" />
                         <TextBlock x:Name="PreviewFindStatus" DockPanel.Dock="Right" MinWidth="72" Margin="8,0,4,0" TextAlignment="Right" VerticalAlignment="Center" Foreground="Gray" />
-                        <CheckBox x:Name="PreviewFindMatchCase" DockPanel.Dock="Right" Content="Aa" ToolTip="Match Case" Margin="8,0,0,0" VerticalAlignment="Center" Click="PreviewFindMatchCase_Click" />
+                        <CheckBox x:Name="PreviewFindMatchCase" DockPanel.Dock="Right" Content="Aa" ToolTip="{loc:Tr Tip_MatchCase}" Margin="8,0,0,0" VerticalAlignment="Center" Click="PreviewFindMatchCase_Click" />
                         <TextBox x:Name="PreviewFindBox" Background="{DynamicResource ControlBackgroundBrush}" VerticalContentAlignment="Center" Padding="2,1" TextChanged="PreviewFindBox_TextChanged" PreviewKeyDown="PreviewFindBox_PreviewKeyDown" />
                     </DockPanel>
                 </Border>
@@ -620,7 +621,7 @@
 
         <StatusBar Grid.Row="3" Height="28" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0,1,0,0">
             <StatusBarItem>
-                <TextBlock x:Name="StatusCursorPosition" Text="Ln 1, Col 1" VerticalAlignment="Center" Margin="12,0" />
+                <TextBlock x:Name="StatusCursorPosition" Text="{loc:Tr Status_InitialPosition}" VerticalAlignment="Center" Margin="12,0" />
             </StatusBarItem>
             <Separator />
             <StatusBarItem>
@@ -628,7 +629,7 @@
             </StatusBarItem>
             <Separator />
             <StatusBarItem>
-                <TextBlock x:Name="StatusWordCount" Text="Words: 0" VerticalAlignment="Center" Margin="0,0,12,0" />
+                <TextBlock x:Name="StatusWordCount" Text="{loc:Tr Status_InitialWords}" VerticalAlignment="Center" Margin="0,0,12,0" />
             </StatusBarItem>
             <Separator />
             <StatusBarItem>
@@ -638,7 +639,7 @@
             <StatusBarItem x:Name="StatusGitHubItem" Cursor="Hand" MouseLeftButtonUp="StatusGitHub_MouseLeftButtonUp">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,12,0">
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE77B;" VerticalAlignment="Center" Margin="0,0,6,0" />
-                    <TextBlock x:Name="StatusGitHubAccount" Text="Sign in" VerticalAlignment="Center" />
+                    <TextBlock x:Name="StatusGitHubAccount" Text="{loc:Tr Status_SignIn}" VerticalAlignment="Center" />
                 </StackPanel>
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right">

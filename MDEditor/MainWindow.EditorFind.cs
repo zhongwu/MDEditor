@@ -319,12 +319,12 @@ public partial class MainWindow
         }
         else if (_editorFindMatches.Count == 0)
         {
-            EditorFindStatus.Text = "No results";
+            EditorFindStatus.Text = Loc.Get("Find_NoResults");
             EditorFindStatus.Foreground = Brushes.IndianRed;
         }
         else
         {
-            EditorFindStatus.Text = $"{_editorFindIndex + 1} of {_editorFindMatches.Count}{(_editorFindCapped ? "+" : "")}";
+            EditorFindStatus.Text = Loc.Format("Find_Count", _editorFindIndex + 1, _editorFindMatches.Count, _editorFindCapped ? "+" : "");
             EditorFindStatus.Foreground = Brushes.Gray;
         }
     }
@@ -399,7 +399,7 @@ public partial class MainWindow
         }
 
         RunEditorFind(0, select: false);
-        EditorFindStatus.Text = $"Replaced {matches.Count}";
+        EditorFindStatus.Text = Loc.Format("Find_Replaced", matches.Count);
         EditorFindStatus.Foreground = Brushes.Gray;
     }
 

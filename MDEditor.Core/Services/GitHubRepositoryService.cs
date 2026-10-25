@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text;
 using MDEditor.Core.Interfaces;
+using MDEditor.Core.Localization;
 using MDEditor.Core.Models;
 using Octokit;
 
@@ -48,7 +49,7 @@ public class GitHubRepositoryService : IGitHubRepositoryService
     public static string DetectLineEnding(string text) => text.Contains("\r\n") ? "CRLF" : "LF";
 
     private IGitHubClient Client =>
-        _authService.CreateClient() ?? throw new InvalidOperationException("Sign in to GitHub first (Tools > GitHub Accounts...).");
+        _authService.CreateClient() ?? throw new InvalidOperationException(Loc.Get("Err_SignInFirst"));
 
     public async Task<IReadOnlyList<GitHubRepoInfo>> GetRepositoriesAsync(CancellationToken cancellationToken = default)
     {
@@ -176,7 +177,7 @@ public class GitHubRepositoryService : IGitHubRepositoryService
     {
         var contents = await client.Repository.Content.GetAllContentsByRef(owner, repo, path, reference);
         var file = contents.FirstOrDefault(c => c.Type.Value == ContentType.File)
-            ?? throw new InvalidOperationException($"'{path}' is not a file.");
+            ?? throw new InvalidOperationException(Loc.Format("Err_NotAFile", path));
 
         string text;
         if (!string.IsNullOrEmpty(file.Content) || file.Size == 0)
@@ -215,7 +216,7 @@ public class GitHubRepositoryService : IGitHubRepositoryService
             }
             catch (ApiValidationException ex) when (ex.Message.Contains("already exists", StringComparison.OrdinalIgnoreCase))
             {
-                throw new InvalidOperationException($"A branch named '{targetBranch}' already exists. Choose another name.", ex);
+                throw new InvalidOperationException(Loc.Format("Err_BranchExists", targetBranch), ex);
             }
             cancellationToken.ThrowIfCancellationRequested();
         }
@@ -235,11 +236,11 @@ public class GitHubRepositoryService : IGitHubRepositoryService
         }
         catch (ApiException ex) when (IsConflict(ex))
         {
-            throw new GitHubConflictException($"{document.FileName} was changed on GitHub since you opened it.", ex);
+            throw new GitHubConflictException(Loc.Format("Err_Conflict", document.FileName), ex);
         }
         catch (NotFoundException ex) when (!document.CanPush)
         {
-            throw new InvalidOperationException($"You don't have permission to commit to {document.RepoFullName}.", ex);
+            throw new InvalidOperationException(Loc.Format("Err_NoPermission", document.RepoFullName), ex);
         }
 
         _loggingService.LogInformation("Committed {Path} to {Repo}@{Branch}", document.Path, document.RepoFullName, targetBranch);

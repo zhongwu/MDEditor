@@ -38,6 +38,8 @@ public partial class GitHubAccountsWindow : Window
         Closed += (s, e) => _operationCts?.Cancel();
         _authService.AccountsChanged += OnAccountsChanged;
         Closed += (s, e) => _authService.AccountsChanged -= OnAccountsChanged;
+        Loc.LanguageChanged += OnAccountsChanged; // the account rows are built in code
+        Closed += (s, e) => Loc.LanguageChanged -= OnAccountsChanged;
     }
 
     private void OnAccountsChanged(object? sender, EventArgs e) => RefreshAccounts();
@@ -51,14 +53,14 @@ public partial class GitHubAccountsWindow : Window
         foreach (var account in _authService.Accounts)
         {
             bool isActive = account == active;
-            var method = account.AuthMethod == GitHubAuthMethod.OAuthDevice ? "Browser sign-in" : "Personal access token";
+            var method = account.AuthMethod == GitHubAuthMethod.OAuthDevice ? Loc.Get("GH_MethodBrowser") : Loc.Get("GH_MethodPat");
             var name = account.Name != null ? $" ({account.Name})" : string.Empty;
             var item = new ListBoxItem
             {
-                Content = $"{account.Login}{name} - {method}{(isActive ? "  [Active]" : string.Empty)}",
+                Content = $"{account.Login}{name} - {method}{(isActive ? Loc.Get("GH_ActiveSuffix") : string.Empty)}",
                 Tag = account.Login,
                 FontWeight = isActive ? FontWeights.SemiBold : FontWeights.Normal,
-                ToolTip = account.Scopes.Count > 0 ? "Scopes: " + string.Join(", ", account.Scopes) : "Scopes: not reported (fine-grained token)",
+                ToolTip = account.Scopes.Count > 0 ? Loc.Format("GH_Scopes", string.Join(", ", account.Scopes)) : Loc.Get("GH_ScopesUnknown"),
             };
             AccountsList.Items.Add(item);
             if (string.Equals(account.Login, selectedLogin, StringComparison.OrdinalIgnoreCase))
@@ -81,7 +83,7 @@ public partial class GitHubAccountsWindow : Window
         AddTokenButton.IsEnabled = !busy;
         DeviceFlowButton.IsEnabled = !busy;
         DeviceFlowButton.ToolTip = string.IsNullOrWhiteSpace(_authService.OAuthClientId)
-            ? "Set an OAuth App Client ID under Advanced to enable browser sign-in."
+            ? Loc.Get("GH_NeedClientIdTip")
             : null;
     }
 
@@ -105,19 +107,19 @@ public partial class GitHubAccountsWindow : Window
             return;
 
         var result = MessageBox.Show(this,
-            $"Remove \"{login}\" from MDEditor?\n\nThe stored token is deleted from this computer. To revoke it completely, also remove it on github.com (Settings > Applications, or Developer settings > Personal access tokens).",
-            "Remove Account", MessageBoxButton.OKCancel, MessageBoxImage.Question);
+            Loc.Format("GH_RemoveConfirm", login),
+            Loc.Get("GH_RemoveTitle"), MessageBoxButton.OKCancel, MessageBoxImage.Question);
         if (result != MessageBoxResult.OK)
             return;
 
         try
         {
             _authService.RemoveAccount(login);
-            ShowStatus($"Removed {login}.", isError: false);
+            ShowStatus(Loc.Format("GH_Removed", login), isError: false);
         }
         catch (Exception ex)
         {
-            ShowStatus($"Couldn't remove the account: {ex.Message}", isError: true);
+            ShowStatus(Loc.Format("GH_RemoveFailed", ex.Message), isError: true);
         }
     }
 
@@ -126,7 +128,7 @@ public partial class GitHubAccountsWindow : Window
         CommitClientId();
         if (string.IsNullOrWhiteSpace(_authService.OAuthClientId))
         {
-            ShowStatus("Browser sign-in needs an OAuth App Client ID - set one under Advanced below, or use a Personal Access Token.", isError: true);
+            ShowStatus(Loc.Get("GH_NeedClientId"), isError: true);
             return;
         }
 
@@ -134,14 +136,14 @@ public partial class GitHubAccountsWindow : Window
         {
             _deviceCode = await _authService.StartDeviceFlowAsync(ct);
             UserCodeText.Text = _deviceCode.UserCode;
-            DeviceFlowStatusText.Text = $"Waiting for you to approve on GitHub... (code expires at {_deviceCode.ExpiresAt.LocalDateTime:t})";
+            DeviceFlowStatusText.Text = Loc.Format("GH_WaitingExpires", _deviceCode.ExpiresAt.LocalDateTime.ToString("t", Loc.Culture));
             DeviceFlowPanel.Visibility = Visibility.Visible;
 
             CopyCodeAndOpenBrowser();
 
             var account = await _authService.CompleteDeviceFlowAsync(_deviceCode, ct);
             Activate();
-            ShowStatus($"Signed in as {account.Login}.", isError: false);
+            ShowStatus(Loc.Format("GH_SignedInAs", account.Login), isError: false);
         });
 
         _deviceCode = null;
@@ -174,16 +176,16 @@ public partial class GitHubAccountsWindow : Window
         var token = TokenBox.Password;
         if (string.IsNullOrWhiteSpace(token))
         {
-            ShowStatus("Paste a Personal Access Token first.", isError: true);
+            ShowStatus(Loc.Get("GH_PasteTokenFirst"), isError: true);
             return;
         }
 
         await RunOperationAsync(async ct =>
         {
-            ShowStatus("Checking token with GitHub...", isError: false);
+            ShowStatus(Loc.Get("GH_CheckingToken"), isError: false);
             var account = await _authService.AddAccountWithTokenAsync(token, ct);
             TokenBox.Clear();
-            ShowStatus($"Connected {account.Login}.", isError: false);
+            ShowStatus(Loc.Format("GH_ConnectedAccount", account.Login), isError: false);
         });
     }
 
@@ -211,7 +213,7 @@ public partial class GitHubAccountsWindow : Window
         catch (OperationCanceledException)
         {
             if (IsLoaded)
-                ShowStatus("Sign-in cancelled.", isError: false);
+                ShowStatus(Loc.Get("GH_SignInCancelled"), isError: false);
         }
         catch (Exception ex)
         {
@@ -255,7 +257,7 @@ public partial class GitHubAccountsWindow : Window
         }
         catch (Exception ex)
         {
-            ShowStatus($"Couldn't open the browser ({ex.Message}). Go to {url}", isError: true);
+            ShowStatus(Loc.Format("GH_BrowserOpenFailedGoTo", ex.Message, url), isError: true);
         }
     }
 }

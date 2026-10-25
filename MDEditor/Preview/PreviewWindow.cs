@@ -90,7 +90,7 @@ public sealed class PreviewWindow : Window
 
         if (mode == PreviewWindowMode.Presentation)
         {
-            Title = "MDEditor - Presentation";
+            Title = Loc.Get("Title_Presentation");
             WindowStyle = WindowStyle.None;
             ResizeMode = ResizeMode.NoResize;
             WindowState = WindowState.Maximized;
@@ -98,7 +98,7 @@ public sealed class PreviewWindow : Window
         }
         else
         {
-            Title = "MDEditor - Print Preview";
+            Title = Loc.Get("Title_PrintPreview");
             Width = 1000;
             Height = 800;
             MinWidth = 600;
@@ -116,17 +116,17 @@ public sealed class PreviewWindow : Window
     {
         var toolbar = new ToolBar();
 
-        var printButton = new Button { Content = "Print...", ToolTip = "Open print preview (Ctrl+P)", Margin = new Thickness(2, 0, 2, 0) };
+        var printButton = new Button { Content = Loc.Get("Print_Print"), ToolTip = Loc.Get("Print_PrintTip"), Margin = new Thickness(2, 0, 2, 0) };
         printButton.Click += (s, e) => ShowPrintUI(CoreWebView2PrintDialogKind.Browser);
         toolbar.Items.Add(printButton);
 
-        var systemButton = new Button { Content = "System Dialog...", ToolTip = "Print with the Windows print dialog", Margin = new Thickness(2, 0, 2, 0) };
+        var systemButton = new Button { Content = Loc.Get("Print_System"), ToolTip = Loc.Get("Print_SystemTip"), Margin = new Thickness(2, 0, 2, 0) };
         systemButton.Click += (s, e) => ShowPrintUI(CoreWebView2PrintDialogKind.System);
         toolbar.Items.Add(systemButton);
 
         toolbar.Items.Add(new Separator());
 
-        var closeButton = new Button { Content = "Close", ToolTip = "Close print preview", Margin = new Thickness(2, 0, 2, 0) };
+        var closeButton = new Button { Content = Loc.Get("Common_Close"), ToolTip = Loc.Get("Print_CloseTip"), Margin = new Thickness(2, 0, 2, 0) };
         closeButton.Click += (s, e) => Close();
         toolbar.Items.Add(closeButton);
 
@@ -167,7 +167,7 @@ public sealed class PreviewWindow : Window
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"PreviewWindow initialization failed: {ex.Message}");
-            MessageBox.Show(this, $"Unable to open the preview window: {ex.Message}", "MDEditor",
+            MessageBox.Show(this, Loc.Format("Msg_PreviewWindowFailed", ex.Message), "MDEditor",
                 MessageBoxButton.OK, MessageBoxImage.Error);
             Close();
         }
@@ -260,7 +260,7 @@ public sealed class PreviewWindow : Window
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, $"Printing is not available: {ex.Message}", "Print Preview",
+            MessageBox.Show(this, Loc.Format("Msg_PrintUnavailable", ex.Message), Loc.Get("Shortcut_PrintPreview"),
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }

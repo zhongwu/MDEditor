@@ -30,7 +30,7 @@ public partial class GitHubConflictDialog : Window
     {
         InitializeComponent();
         _document = document;
-        HeadlineText.Text = $"{document.FileName} changed on {document.RepoFullName}@{document.Branch}.";
+        HeadlineText.Text = Loc.Format("GH_ConflictHeadline", document.FileName, document.RepoFullName, document.Branch);
 
         SourceInitialized += (s, e) => ThemeService.ApplyTitleBar(this, ThemeService.IsDark);
         Loaded += (s, e) => NewBranchButton.Focus();
@@ -56,7 +56,7 @@ public partial class GitHubConflictDialog : Window
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, $"Couldn't open the browser: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(this, Loc.Format("Common_BrowserOpenFailed", ex.Message), Loc.Get("Common_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

@@ -245,17 +245,18 @@
 - [x] Auto-save interval — configurable (10s-2min), applied live to the existing auto-save timer
 - [x] Line ending style (LF/CRLF) — applied on Save/Save As via `LineEndingNormalizer`; auto-save draft and HTML export stay unaffected
 
-#### 6.4 Multi-Language Support (UI Localization)
-- [ ] String externalization — move every user-visible string (menus, toolbar tooltips, dialogs, message boxes, status bar, Settings, GitHub windows) out of XAML/C# into `.resx` resources (`Resources/Strings.resx` as the English default + one `Strings.<culture>.resx` per language)
-- [ ] Localization service — `ILocalizationService` (current culture, available languages, `LanguageChanged` event) plus a XAML markup extension (e.g. `{loc:Tr Menu_File}`) so bindings refresh when the language changes
-- [ ] Language picker in Settings — "Match Windows" (default, follows `CultureInfo.CurrentUICulture`) or an explicit language; persisted as `appearance.language`; applied live without restart where possible (restart prompt as fallback)
-- [ ] Initial languages — English (default) plus at least one more (target list TBD); missing keys fall back to English
-- [ ] Culture-aware formatting — dates (history list, recovery prompts), numbers (word count, zoom %) via the selected culture; keep file content and Markdown output culture-invariant
-- [ ] Keyboard shortcut display — localize modifier names in menus/Settings (e.g. "Strg" for German) while keeping stored gestures invariant
-- [ ] Layout robustness — avoid fixed widths that clip longer translations (German/French run ~30% longer); verify dialogs with a pseudo-localized build (padded/accented strings)
-- [ ] Localized bundled content — Markdown Guide / user guide per language (fallback to English)
-- [ ] Right-to-left languages (stretch) — `FlowDirection.RightToLeft` for RTL cultures (Arabic, Hebrew) in the app chrome; editor/preview follow the document's own direction
-- [ ] Tests — every key in `Strings.resx` exists in each translation (or is intentionally English), no unused keys, format placeholders (`{0}`) match across languages
+#### 6.4 Multi-Language Support (UI Localization) 🔄 CORE DONE
+- [x] String externalization — ~350 user-visible strings (menus, toolbar tooltips, context menu, dialogs, message boxes, file-dialog filters, status bar, Settings, find/go-to bars, print/presentation windows, GitHub windows, GitHub service errors, snippet labels) moved to `MDEditor.Core/Resources/Strings*.resx`. Source of truth is `MDEditor.Core/Resources/strings.tsv` (key / en / zh-Hans / zh-Hant); `tools/Generate-Strings.ps1` regenerates the .resx files. Log messages, default commit/PR messages and inserted Markdown stay English
+- [x] Localization service — static `Loc` (Core: `Get`/`Format`, `Culture`, `SupportedLanguages`, `LanguageChanged`) plus the `{loc:Tr Key}` markup extension (binds to an indexer source, so XAML text updates live); code-built text (title bar, status bar, recent files, accounts list, shortcut rows) refreshes on `LanguageChanged`
+- [x] Language picker in Settings (Appearance tab) — "Match Windows" (default) / English / 简体中文 / 繁體中文 (native names); persisted as `appearance.language`; applied live, no restart
+- [x] Initial languages — English, Simplified Chinese (zh-Hans), Traditional Chinese (zh-Hant). Windows zh-CN/SG map to zh-Hans, zh-TW/HK/MO to zh-Hant, everything else to English; missing keys fall back to English
+- [x] Culture-aware formatting — history dates and device-code expiry time use the UI culture; only the UI culture changes (number/date parsing and file content stay culture-invariant)
+- [ ] Keyboard shortcut display — not needed for Chinese (Windows uses Ctrl/Shift/Alt); revisit for German etc.
+- [ ] Layout robustness — Chinese is shorter than English, so no clipping expected; pseudo-localization check still to do before adding longer languages
+- [ ] Localized bundled content — Markdown Guide / user guide don't exist yet (Help menu items are stubs)
+- [ ] Right-to-left languages (stretch)
+- [x] Tests — every key present and non-empty in each translation with matching `{n}` placeholders, translations not copies of English, every key used in source exists, no unused keys, culture mapping, live switching of a real XAML dialog
+- Known limitation: CJK font fallback (YaHei vs JhengHei) is chosen at startup, so after a live switch between Simplified and Traditional the glyph style updates on the next launch
 
 ---
 

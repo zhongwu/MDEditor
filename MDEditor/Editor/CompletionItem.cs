@@ -5,6 +5,12 @@ public sealed record CompletionItem(string Display, string Insert, string Descri
 {
     /// <summary>Optional emoji glyph or icon shown before the display text.</summary>
     public string? Glyph { get; init; }
+
+    /// <summary>
+    /// Resource key for a localized display label. <see cref="Display"/> keeps the English label,
+    /// which typed queries still match in every language.
+    /// </summary>
+    public string? LabelKey { get; init; }
 }
 
 /// <summary>What triggered a completion request.</summary>

@@ -1,0 +1,1071 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Common_Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Common_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Common_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Common_Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Common_Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Common_Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="Common_Loading" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Common_UnsavedDiscard" xml:space="preserve">
+    <value>You have unsaved changes. Discard them?</value>
+  </data>
+  <data name="Common_BrowserOpenFailed" xml:space="preserve">
+    <value>Couldn't open the browser: {0}</value>
+  </data>
+  <data name="Doc_UntitledBase" xml:space="preserve">
+    <value>Untitled</value>
+  </data>
+  <data name="Menu_File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="Menu_New" xml:space="preserve">
+    <value>New</value>
+  </data>
+  <data name="Menu_Open" xml:space="preserve">
+    <value>Open...</value>
+  </data>
+  <data name="Menu_OpenFromGitHub" xml:space="preserve">
+    <value>Open from GitHub...</value>
+  </data>
+  <data name="Menu_RecentFiles" xml:space="preserve">
+    <value>Recent Files</value>
+  </data>
+  <data name="Menu_NoRecentFiles" xml:space="preserve">
+    <value>(No recent files)</value>
+  </data>
+  <data name="Menu_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Menu_SaveAs" xml:space="preserve">
+    <value>Save As...</value>
+  </data>
+  <data name="Menu_ExportHtml" xml:space="preserve">
+    <value>Export HTML</value>
+  </data>
+  <data name="Menu_ExportPdf" xml:space="preserve">
+    <value>Export PDF</value>
+  </data>
+  <data name="Menu_PrintPreview" xml:space="preserve">
+    <value>Print Preview...</value>
+  </data>
+  <data name="Menu_Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="Menu_Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Menu_Undo" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="Menu_Redo" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="Menu_Cut" xml:space="preserve">
+    <value>Cut</value>
+  </data>
+  <data name="Menu_Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Menu_Paste" xml:space="preserve">
+    <value>Paste</value>
+  </data>
+  <data name="Menu_Find" xml:space="preserve">
+    <value>Find</value>
+  </data>
+  <data name="Menu_Replace" xml:space="preserve">
+    <value>Replace</value>
+  </data>
+  <data name="Menu_FindInPreview" xml:space="preserve">
+    <value>Find in Preview</value>
+  </data>
+  <data name="Menu_GoToLine" xml:space="preserve">
+    <value>Go to Line...</value>
+  </data>
+  <data name="Menu_SelectAll" xml:space="preserve">
+    <value>Select All</value>
+  </data>
+  <data name="Menu_View" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="Menu_ShowPreview" xml:space="preserve">
+    <value>Show Preview</value>
+  </data>
+  <data name="Menu_ShowEditor" xml:space="preserve">
+    <value>Show Editor</value>
+  </data>
+  <data name="Menu_ShowOutline" xml:space="preserve">
+    <value>Show Outline</value>
+  </data>
+  <data name="Menu_ShowLineNumbers" xml:space="preserve">
+    <value>Show Line Numbers</value>
+  </data>
+  <data name="Menu_ShowMinimap" xml:space="preserve">
+    <value>Show Minimap</value>
+  </data>
+  <data name="Menu_ShowScrollSync" xml:space="preserve">
+    <value>Show Scroll Sync</value>
+  </data>
+  <data name="Menu_WordWrap" xml:space="preserve">
+    <value>Word Wrap</value>
+  </data>
+  <data name="Menu_ZoomIn" xml:space="preserve">
+    <value>Zoom In</value>
+  </data>
+  <data name="Menu_ZoomOut" xml:space="preserve">
+    <value>Zoom Out</value>
+  </data>
+  <data name="Menu_ResetZoom" xml:space="preserve">
+    <value>Reset Zoom</value>
+  </data>
+  <data name="Menu_PresentationMode" xml:space="preserve">
+    <value>Presentation Mode</value>
+  </data>
+  <data name="Menu_Format" xml:space="preserve">
+    <value>Format</value>
+  </data>
+  <data name="Menu_Heading1" xml:space="preserve">
+    <value>Heading 1</value>
+  </data>
+  <data name="Menu_Heading2" xml:space="preserve">
+    <value>Heading 2</value>
+  </data>
+  <data name="Menu_Heading3" xml:space="preserve">
+    <value>Heading 3</value>
+  </data>
+  <data name="Menu_Heading4" xml:space="preserve">
+    <value>Heading 4</value>
+  </data>
+  <data name="Menu_Heading5" xml:space="preserve">
+    <value>Heading 5</value>
+  </data>
+  <data name="Menu_Heading6" xml:space="preserve">
+    <value>Heading 6</value>
+  </data>
+  <data name="Menu_Bold" xml:space="preserve">
+    <value>Bold</value>
+  </data>
+  <data name="Menu_Italic" xml:space="preserve">
+    <value>Italic</value>
+  </data>
+  <data name="Menu_Strikethrough" xml:space="preserve">
+    <value>Strikethrough</value>
+  </data>
+  <data name="Menu_InlineCode" xml:space="preserve">
+    <value>Inline Code</value>
+  </data>
+  <data name="Menu_CodeBlock" xml:space="preserve">
+    <value>Code Block</value>
+  </data>
+  <data name="Menu_Blockquote" xml:space="preserve">
+    <value>Blockquote</value>
+  </data>
+  <data name="Menu_UnorderedList" xml:space="preserve">
+    <value>Unordered List</value>
+  </data>
+  <data name="Menu_OrderedList" xml:space="preserve">
+    <value>Ordered List</value>
+  </data>
+  <data name="Menu_TaskList" xml:space="preserve">
+    <value>Task List</value>
+  </data>
+  <data name="Menu_Link" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="Menu_Image" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="Menu_Table" xml:space="preserve">
+    <value>Table</value>
+  </data>
+  <data name="Menu_HorizontalRule" xml:space="preserve">
+    <value>Horizontal Rule</value>
+  </data>
+  <data name="Menu_MathBlock" xml:space="preserve">
+    <value>Math Block</value>
+  </data>
+  <data name="Menu_Tools" xml:space="preserve">
+    <value>Tools</value>
+  </data>
+  <data name="Menu_SmartTypography" xml:space="preserve">
+    <value>Smart Typography</value>
+  </data>
+  <data name="Menu_GitHubAccounts" xml:space="preserve">
+    <value>GitHub Accounts...</value>
+  </data>
+  <data name="Menu_CommitToGitHub" xml:space="preserve">
+    <value>Commit to GitHub...</value>
+  </data>
+  <data name="Menu_FileHistory" xml:space="preserve">
+    <value>File History (GitHub)...</value>
+  </data>
+  <data name="Menu_Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Menu_Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="Menu_KeyboardShortcuts" xml:space="preserve">
+    <value>Keyboard Shortcuts</value>
+  </data>
+  <data name="Menu_MarkdownGuide" xml:space="preserve">
+    <value>Markdown Guide</value>
+  </data>
+  <data name="Menu_About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="Menu_InsertLink" xml:space="preserve">
+    <value>Insert Link</value>
+  </data>
+  <data name="Menu_InsertImage" xml:space="preserve">
+    <value>Insert Image</value>
+  </data>
+  <data name="Menu_InsertTable" xml:space="preserve">
+    <value>Insert Table</value>
+  </data>
+  <data name="Menu_InsertHorizontalRule" xml:space="preserve">
+    <value>Insert Horizontal Rule</value>
+  </data>
+  <data name="Menu_CopyAsMarkdown" xml:space="preserve">
+    <value>Copy as Markdown</value>
+  </data>
+  <data name="Menu_CopyAsHtml" xml:space="preserve">
+    <value>Copy as HTML</value>
+  </data>
+  <data name="Tip_New" xml:space="preserve">
+    <value>New (Ctrl+N)</value>
+  </data>
+  <data name="Tip_Open" xml:space="preserve">
+    <value>Open (Ctrl+O)</value>
+  </data>
+  <data name="Tip_Save" xml:space="preserve">
+    <value>Save (Ctrl+S)</value>
+  </data>
+  <data name="Tip_Undo" xml:space="preserve">
+    <value>Undo (Ctrl+Z)</value>
+  </data>
+  <data name="Tip_Redo" xml:space="preserve">
+    <value>Redo (Ctrl+Y)</value>
+  </data>
+  <data name="Tip_Bold" xml:space="preserve">
+    <value>Bold (Ctrl+B)</value>
+  </data>
+  <data name="Tip_Italic" xml:space="preserve">
+    <value>Italic (Ctrl+I)</value>
+  </data>
+  <data name="Tip_Strikethrough" xml:space="preserve">
+    <value>Strikethrough (Ctrl+Shift+X)</value>
+  </data>
+  <data name="Tip_InlineCode" xml:space="preserve">
+    <value>Inline Code (Ctrl+`)</value>
+  </data>
+  <data name="Tip_CodeBlock" xml:space="preserve">
+    <value>Code Block (Ctrl+Shift+C)</value>
+  </data>
+  <data name="Tip_Blockquote" xml:space="preserve">
+    <value>Blockquote (Ctrl+Q)</value>
+  </data>
+  <data name="Tip_Heading1" xml:space="preserve">
+    <value>Heading 1 (Ctrl+1)</value>
+  </data>
+  <data name="Tip_Heading2" xml:space="preserve">
+    <value>Heading 2 (Ctrl+2)</value>
+  </data>
+  <data name="Tip_Heading3" xml:space="preserve">
+    <value>Heading 3 (Ctrl+3)</value>
+  </data>
+  <data name="Tip_UnorderedList" xml:space="preserve">
+    <value>Unordered List (Ctrl+Shift+L)</value>
+  </data>
+  <data name="Tip_OrderedList" xml:space="preserve">
+    <value>Ordered List (Ctrl+Shift+O)</value>
+  </data>
+  <data name="Tip_TaskList" xml:space="preserve">
+    <value>Task List (Ctrl+Shift+T)</value>
+  </data>
+  <data name="Tip_InsertLink" xml:space="preserve">
+    <value>Insert Link (Ctrl+K)</value>
+  </data>
+  <data name="Tip_InsertImage" xml:space="preserve">
+    <value>Insert Image (Ctrl+Shift+I)</value>
+  </data>
+  <data name="Tip_TogglePreview" xml:space="preserve">
+    <value>Toggle Preview (Ctrl+Shift+P)</value>
+  </data>
+  <data name="Tip_ToggleEditor" xml:space="preserve">
+    <value>Toggle Editor</value>
+  </data>
+  <data name="Tip_ToggleOutline" xml:space="preserve">
+    <value>Toggle Outline (Ctrl+Shift+E)</value>
+  </data>
+  <data name="Tip_FindInPreview" xml:space="preserve">
+    <value>Find in Preview (Ctrl+Shift+F)</value>
+  </data>
+  <data name="Tip_PrintPreview" xml:space="preserve">
+    <value>Print Preview (Ctrl+P)</value>
+  </data>
+  <data name="Tip_PresentationMode" xml:space="preserve">
+    <value>Presentation Mode (F5)</value>
+  </data>
+  <data name="Tip_CloseOutline" xml:space="preserve">
+    <value>Close Outline (Ctrl+Shift+E)</value>
+  </data>
+  <data name="Tip_CollapseAll" xml:space="preserve">
+    <value>Collapse All</value>
+  </data>
+  <data name="Tip_ExpandAll" xml:space="preserve">
+    <value>Expand All</value>
+  </data>
+  <data name="Tip_ToggleReplace" xml:space="preserve">
+    <value>Toggle Replace (Ctrl+H)</value>
+  </data>
+  <data name="Tip_MatchCase" xml:space="preserve">
+    <value>Match Case</value>
+  </data>
+  <data name="Tip_PreviousMatch" xml:space="preserve">
+    <value>Previous Match (Shift+Enter / Shift+F3)</value>
+  </data>
+  <data name="Tip_NextMatch" xml:space="preserve">
+    <value>Next Match (Enter / F3)</value>
+  </data>
+  <data name="Tip_CloseEsc" xml:space="preserve">
+    <value>Close (Esc)</value>
+  </data>
+  <data name="Tip_ReplaceEnter" xml:space="preserve">
+    <value>Replace (Enter)</value>
+  </data>
+  <data name="Tip_ReplaceAll" xml:space="preserve">
+    <value>Replace All (Ctrl+Enter)</value>
+  </data>
+  <data name="Tip_GoToLineBox" xml:space="preserve">
+    <value>Line number, or line:column</value>
+  </data>
+  <data name="Pane_Outline" xml:space="preserve">
+    <value>OUTLINE</value>
+  </data>
+  <data name="Pane_Editor" xml:space="preserve">
+    <value>EDITOR</value>
+  </data>
+  <data name="Pane_Preview" xml:space="preserve">
+    <value>PREVIEW</value>
+  </data>
+  <data name="Outline_Empty" xml:space="preserve">
+    <value>No headings in this document.</value>
+  </data>
+  <data name="Find_ReplaceAll" xml:space="preserve">
+    <value>Replace All</value>
+  </data>
+  <data name="Find_NoResults" xml:space="preserve">
+    <value>No results</value>
+  </data>
+  <data name="Find_Count" xml:space="preserve">
+    <value>{0} of {1}{2}</value>
+  </data>
+  <data name="Find_Replaced" xml:space="preserve">
+    <value>Replaced {0}</value>
+  </data>
+  <data name="GoTo_Label" xml:space="preserve">
+    <value>Go to line:</value>
+  </data>
+  <data name="GoTo_Status" xml:space="preserve">
+    <value>Ln {0}, Col {1} · type 1–{2}</value>
+  </data>
+  <data name="GoTo_Range" xml:space="preserve">
+    <value>Enter a line from 1 to {0}</value>
+  </data>
+  <data name="GoTo_LineColumn" xml:space="preserve">
+    <value>Go to line {0}, column {1}</value>
+  </data>
+  <data name="GoTo_LineOf" xml:space="preserve">
+    <value>Go to line {0} of {1}</value>
+  </data>
+  <data name="Status_InitialPosition" xml:space="preserve">
+    <value>Ln 1, Col 1</value>
+  </data>
+  <data name="Status_InitialWords" xml:space="preserve">
+    <value>Words: 0</value>
+  </data>
+  <data name="Status_SignIn" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="Status_GitHubSignedIn" xml:space="preserve">
+    <value>GitHub: signed in as {0}{1}. Click to manage accounts.</value>
+  </data>
+  <data name="Status_GitHubAccountCount" xml:space="preserve">
+    <value> ({0} accounts)</value>
+  </data>
+  <data name="Status_GitHubNotSignedIn" xml:space="preserve">
+    <value>GitHub: not signed in. Click to connect an account.</value>
+  </data>
+  <data name="Title_OpenDroppedFile" xml:space="preserve">
+    <value>Open Dropped File</value>
+  </data>
+  <data name="Title_NewFile" xml:space="preserve">
+    <value>New File</value>
+  </data>
+  <data name="Title_OpenFile" xml:space="preserve">
+    <value>Open File</value>
+  </data>
+  <data name="Title_OpenRecentFile" xml:space="preserve">
+    <value>Open Recent File</value>
+  </data>
+  <data name="Title_ExportComplete" xml:space="preserve">
+    <value>Export Complete</value>
+  </data>
+  <data name="Title_CrashRecovery" xml:space="preserve">
+    <value>Crash Recovery</value>
+  </data>
+  <data name="Title_InvalidShortcut" xml:space="preserve">
+    <value>Invalid Shortcut</value>
+  </data>
+  <data name="Title_ShortcutConflict" xml:space="preserve">
+    <value>Shortcut Conflict</value>
+  </data>
+  <data name="Title_Presentation" xml:space="preserve">
+    <value>MDEditor - Presentation</value>
+  </data>
+  <data name="Title_PrintPreview" xml:space="preserve">
+    <value>MDEditor - Print Preview</value>
+  </data>
+  <data name="Dialog_OpenMarkdown" xml:space="preserve">
+    <value>Open Markdown File</value>
+  </data>
+  <data name="Dialog_SaveMarkdownAs" xml:space="preserve">
+    <value>Save Markdown File As</value>
+  </data>
+  <data name="Dialog_ExportHtml" xml:space="preserve">
+    <value>Export as HTML</value>
+  </data>
+  <data name="Dialog_ExportPdf" xml:space="preserve">
+    <value>Export as PDF</value>
+  </data>
+  <data name="Filter_Open" xml:space="preserve">
+    <value>Markdown Files (*.md;*.markdown)|*.md;*.markdown|Text Files (*.txt)|*.txt|All Files (*.*)|*.*</value>
+  </data>
+  <data name="Filter_Save" xml:space="preserve">
+    <value>Markdown Files (*.md)|*.md|Text Files (*.txt)|*.txt|All Files (*.*)|*.*</value>
+  </data>
+  <data name="Filter_Html" xml:space="preserve">
+    <value>HTML Files (*.html)|*.html|All Files (*.*)|*.*</value>
+  </data>
+  <data name="Filter_Pdf" xml:space="preserve">
+    <value>PDF Files (*.pdf)|*.pdf|All Files (*.*)|*.*</value>
+  </data>
+  <data name="Msg_ErrorOpeningFile" xml:space="preserve">
+    <value>Error opening file: {0}</value>
+  </data>
+  <data name="Msg_ErrorEmbeddingImage" xml:space="preserve">
+    <value>Error embedding image: {0}</value>
+  </data>
+  <data name="Msg_ErrorSavingFile" xml:space="preserve">
+    <value>Error saving file: {0}</value>
+  </data>
+  <data name="Msg_Exported" xml:space="preserve">
+    <value>Exported to {0}</value>
+  </data>
+  <data name="Msg_ErrorExporting" xml:space="preserve">
+    <value>Error exporting: {0}</value>
+  </data>
+  <data name="Msg_PdfUnsupported" xml:space="preserve">
+    <value>PDF export failed. The WebView2 engine may not support printing to PDF.</value>
+  </data>
+  <data name="Msg_PreviewNotReady" xml:space="preserve">
+    <value>Preview not initialized yet.</value>
+  </data>
+  <data name="Msg_PdfFailed" xml:space="preserve">
+    <value>PDF export failed: {0}</value>
+  </data>
+  <data name="Msg_SaveBeforeClosing" xml:space="preserve">
+    <value>Save changes to {0} before closing?</value>
+  </data>
+  <data name="Msg_RecoverDraft" xml:space="preserve">
+    <value>A draft from a previous session was found. Would you like to recover it?</value>
+  </data>
+  <data name="Msg_ShortcutNeedsModifier" xml:space="preserve">
+    <value>Shortcuts need at least one modifier key (Ctrl/Shift/Alt), except function keys.</value>
+  </data>
+  <data name="Msg_ShortcutConflict" xml:space="preserve">
+    <value>This shortcut is already used by "{0}". Reassign it to this command instead?</value>
+  </data>
+  <data name="Msg_PreviewWindowFailed" xml:space="preserve">
+    <value>Unable to open the preview window: {0}</value>
+  </data>
+  <data name="Msg_PrintUnavailable" xml:space="preserve">
+    <value>Printing is not available: {0}</value>
+  </data>
+  <data name="Shortcut_Unbound" xml:space="preserve">
+    <value>(unbound)</value>
+  </data>
+  <data name="Shortcut_SaveAs" xml:space="preserve">
+    <value>Save As</value>
+  </data>
+  <data name="Shortcut_GoToLine" xml:space="preserve">
+    <value>Go to Line</value>
+  </data>
+  <data name="Shortcut_PrintPreview" xml:space="preserve">
+    <value>Print Preview</value>
+  </data>
+  <data name="Print_Print" xml:space="preserve">
+    <value>Print...</value>
+  </data>
+  <data name="Print_PrintTip" xml:space="preserve">
+    <value>Open print preview (Ctrl+P)</value>
+  </data>
+  <data name="Print_System" xml:space="preserve">
+    <value>System Dialog...</value>
+  </data>
+  <data name="Print_SystemTip" xml:space="preserve">
+    <value>Print with the Windows print dialog</value>
+  </data>
+  <data name="Print_CloseTip" xml:space="preserve">
+    <value>Close print preview</value>
+  </data>
+  <data name="Settings_Appearance" xml:space="preserve">
+    <value>Appearance</value>
+  </data>
+  <data name="Settings_Theme" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="Settings_Light" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="Settings_Dark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="Settings_MatchWindows" xml:space="preserve">
+    <value>Match Windows</value>
+  </data>
+  <data name="Settings_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Settings_Editor" xml:space="preserve">
+    <value>Editor</value>
+  </data>
+  <data name="Settings_FontFamily" xml:space="preserve">
+    <value>Font Family</value>
+  </data>
+  <data name="Settings_FontSize" xml:space="preserve">
+    <value>Font Size</value>
+  </data>
+  <data name="Settings_AutoSave" xml:space="preserve">
+    <value>Auto-save Interval</value>
+  </data>
+  <data name="Settings_10Seconds" xml:space="preserve">
+    <value>10 seconds</value>
+  </data>
+  <data name="Settings_15Seconds" xml:space="preserve">
+    <value>15 seconds</value>
+  </data>
+  <data name="Settings_30Seconds" xml:space="preserve">
+    <value>30 seconds</value>
+  </data>
+  <data name="Settings_1Minute" xml:space="preserve">
+    <value>1 minute</value>
+  </data>
+  <data name="Settings_2Minutes" xml:space="preserve">
+    <value>2 minutes</value>
+  </data>
+  <data name="Settings_LineEnding" xml:space="preserve">
+    <value>Line Ending (on Save)</value>
+  </data>
+  <data name="Settings_MarkdownPreview" xml:space="preserve">
+    <value>Markdown &amp; Preview</value>
+  </data>
+  <data name="Settings_Flavor" xml:space="preserve">
+    <value>Markdown Flavor</value>
+  </data>
+  <data name="Settings_Math" xml:space="preserve">
+    <value>Math (KaTeX)</value>
+  </data>
+  <data name="Settings_Diagrams" xml:space="preserve">
+    <value>Diagrams (Mermaid)</value>
+  </data>
+  <data name="Settings_Emoji" xml:space="preserve">
+    <value>Emoji shortcodes</value>
+  </data>
+  <data name="Settings_Footnotes" xml:space="preserve">
+    <value>Footnotes</value>
+  </data>
+  <data name="Settings_TaskLists" xml:space="preserve">
+    <value>Task Lists</value>
+  </data>
+  <data name="Settings_CustomCss" xml:space="preserve">
+    <value>Custom Preview CSS</value>
+  </data>
+  <data name="Settings_CustomCssNote" xml:space="preserve">
+    <value>Applies only to the live preview - exported/copied HTML is unaffected.</value>
+  </data>
+  <data name="Settings_ShortcutsNote" xml:space="preserve">
+    <value>Click a shortcut box and press a new key combination to rebind it.</value>
+  </data>
+  <data name="GH_AccountsTitle" xml:space="preserve">
+    <value>GitHub Accounts</value>
+  </data>
+  <data name="GH_ConnectedAccounts" xml:space="preserve">
+    <value>Connected Accounts</value>
+  </data>
+  <data name="GH_NoAccounts" xml:space="preserve">
+    <value>No accounts connected yet.</value>
+  </data>
+  <data name="GH_SetActive" xml:space="preserve">
+    <value>Set Active</value>
+  </data>
+  <data name="GH_SignInBrowserHeading" xml:space="preserve">
+    <value>Sign in with Browser</value>
+  </data>
+  <data name="GH_SignInBrowserNote" xml:space="preserve">
+    <value>Approve MDEditor on github.com with a one-time code. Recommended - no token to copy or manage.</value>
+  </data>
+  <data name="GH_SignInBrowserButton" xml:space="preserve">
+    <value>Sign in with Browser...</value>
+  </data>
+  <data name="GH_EnterCode" xml:space="preserve">
+    <value>Enter this code on GitHub:</value>
+  </data>
+  <data name="GH_CopyAndOpen" xml:space="preserve">
+    <value>Copy Code &amp; Open GitHub</value>
+  </data>
+  <data name="GH_Waiting" xml:space="preserve">
+    <value>Waiting for you to approve on GitHub...</value>
+  </data>
+  <data name="GH_WaitingExpires" xml:space="preserve">
+    <value>Waiting for you to approve on GitHub... (code expires at {0})</value>
+  </data>
+  <data name="GH_PatHeading" xml:space="preserve">
+    <value>Personal Access Token</value>
+  </data>
+  <data name="GH_PatNote" xml:space="preserve">
+    <value>Classic tokens need the repo scope (plus gist for gists). Fine-grained tokens need Contents: Read and write.</value>
+  </data>
+  <data name="GH_CreateToken" xml:space="preserve">
+    <value>Create a token on GitHub</value>
+  </data>
+  <data name="GH_AddToken" xml:space="preserve">
+    <value>Add Token</value>
+  </data>
+  <data name="GH_Advanced" xml:space="preserve">
+    <value>Advanced</value>
+  </data>
+  <data name="GH_ClientIdLabel" xml:space="preserve">
+    <value>OAuth App Client ID override (leave as-is unless you use your own OAuth App)</value>
+  </data>
+  <data name="GH_ClientIdNote" xml:space="preserve">
+    <value>Register an OAuth App on GitHub (Settings &gt; Developer settings) with "Enable Device Flow" checked, then paste its Client ID here. Tokens are stored in Windows Credential Manager.</value>
+  </data>
+  <data name="GH_MethodBrowser" xml:space="preserve">
+    <value>Browser sign-in</value>
+  </data>
+  <data name="GH_MethodPat" xml:space="preserve">
+    <value>Personal access token</value>
+  </data>
+  <data name="GH_ActiveSuffix" xml:space="preserve">
+    <value>  [Active]</value>
+  </data>
+  <data name="GH_Scopes" xml:space="preserve">
+    <value>Scopes: {0}</value>
+  </data>
+  <data name="GH_ScopesUnknown" xml:space="preserve">
+    <value>Scopes: not reported (fine-grained token)</value>
+  </data>
+  <data name="GH_NeedClientIdTip" xml:space="preserve">
+    <value>Set an OAuth App Client ID under Advanced to enable browser sign-in.</value>
+  </data>
+  <data name="GH_RemoveConfirm" xml:space="preserve">
+    <value>Remove "{0}" from MDEditor?
+
+The stored token is deleted from this computer. To revoke it completely, also remove it on github.com (Settings &gt; Applications, or Developer settings &gt; Personal access tokens).</value>
+  </data>
+  <data name="GH_RemoveTitle" xml:space="preserve">
+    <value>Remove Account</value>
+  </data>
+  <data name="GH_Removed" xml:space="preserve">
+    <value>Removed {0}.</value>
+  </data>
+  <data name="GH_RemoveFailed" xml:space="preserve">
+    <value>Couldn't remove the account: {0}</value>
+  </data>
+  <data name="GH_NeedClientId" xml:space="preserve">
+    <value>Browser sign-in needs an OAuth App Client ID - set one under Advanced below, or use a Personal Access Token.</value>
+  </data>
+  <data name="GH_SignedInAs" xml:space="preserve">
+    <value>Signed in as {0}.</value>
+  </data>
+  <data name="GH_PasteTokenFirst" xml:space="preserve">
+    <value>Paste a Personal Access Token first.</value>
+  </data>
+  <data name="GH_CheckingToken" xml:space="preserve">
+    <value>Checking token with GitHub...</value>
+  </data>
+  <data name="GH_ConnectedAccount" xml:space="preserve">
+    <value>Connected {0}.</value>
+  </data>
+  <data name="GH_SignInCancelled" xml:space="preserve">
+    <value>Sign-in cancelled.</value>
+  </data>
+  <data name="GH_BrowserOpenFailedGoTo" xml:space="preserve">
+    <value>Couldn't open the browser ({0}). Go to {1}</value>
+  </data>
+  <data name="GH_OpenFromGitHubTitle" xml:space="preserve">
+    <value>Open from GitHub</value>
+  </data>
+  <data name="GH_OpenFromGitHubTitleAccount" xml:space="preserve">
+    <value>Open from GitHub - {0}</value>
+  </data>
+  <data name="GH_ReloadRepos" xml:space="preserve">
+    <value>Reload repositories</value>
+  </data>
+  <data name="GH_FilterRepos" xml:space="preserve">
+    <value>Filter repositories</value>
+  </data>
+  <data name="GH_Branch" xml:space="preserve">
+    <value>Branch:</value>
+  </data>
+  <data name="GH_MarkdownOnly" xml:space="preserve">
+    <value>Markdown files only</value>
+  </data>
+  <data name="GH_SelectRepo" xml:space="preserve">
+    <value>Select a repository.</value>
+  </data>
+  <data name="GH_LoadingRepos" xml:space="preserve">
+    <value>Loading repositories...</value>
+  </data>
+  <data name="GH_RepoCount" xml:space="preserve">
+    <value>{0} repositories</value>
+  </data>
+  <data name="GH_LoadReposFailed" xml:space="preserve">
+    <value>Couldn't load repositories: {0}</value>
+  </data>
+  <data name="GH_ReadOnly" xml:space="preserve">
+    <value>  (read-only)</value>
+  </data>
+  <data name="GH_LoadingBranches" xml:space="preserve">
+    <value>Loading branches...</value>
+  </data>
+  <data name="GH_RepoEmpty" xml:space="preserve">
+    <value>This repository is empty.</value>
+  </data>
+  <data name="GH_LoadBranchesFailed" xml:space="preserve">
+    <value>Couldn't load branches: {0}</value>
+  </data>
+  <data name="GH_LoadingFiles" xml:space="preserve">
+    <value>Loading files...</value>
+  </data>
+  <data name="GH_LoadFilesFailed" xml:space="preserve">
+    <value>Couldn't load files: {0}</value>
+  </data>
+  <data name="GH_NoMarkdownFiles" xml:space="preserve">
+    <value>No Markdown files on this branch.</value>
+  </data>
+  <data name="GH_NoFiles" xml:space="preserve">
+    <value>This branch has no files.</value>
+  </data>
+  <data name="GH_Truncated" xml:space="preserve">
+    <value>This repository is very large; GitHub returned only part of its file list.</value>
+  </data>
+  <data name="GH_Downloading" xml:space="preserve">
+    <value>Downloading {0}...</value>
+  </data>
+  <data name="GH_OpenFileFailed" xml:space="preserve">
+    <value>Couldn't open {0}: {1}</value>
+  </data>
+  <data name="GH_CommitTitle" xml:space="preserve">
+    <value>Commit to GitHub</value>
+  </data>
+  <data name="GH_CommitConflictBanner" xml:space="preserve">
+    <value>This file changed on GitHub since you opened it. Your edit will go to a new branch based on the version you opened, so nothing is overwritten. Open a pull request to merge it.</value>
+  </data>
+  <data name="GH_CommitMessage" xml:space="preserve">
+    <value>Commit message</value>
+  </data>
+  <data name="GH_CommitDescription" xml:space="preserve">
+    <value>Extended description (optional)</value>
+  </data>
+  <data name="GH_CommitNewBranch" xml:space="preserve">
+    <value>Create a new branch for this commit</value>
+  </data>
+  <data name="GH_Commit" xml:space="preserve">
+    <value>Commit</value>
+  </data>
+  <data name="GH_CommitDirect" xml:space="preserve">
+    <value>Commit directly to the {0} branch</value>
+  </data>
+  <data name="GH_OpenPrInto" xml:space="preserve">
+    <value>Open a pull request into {0}</value>
+  </data>
+  <data name="GH_CommitAndOpenPr" xml:space="preserve">
+    <value>Commit &amp; Open PR</value>
+  </data>
+  <data name="GH_EnterCommitMessage" xml:space="preserve">
+    <value>Enter a commit message.</value>
+  </data>
+  <data name="GH_InvalidBranchName" xml:space="preserve">
+    <value>Branch names can't contain spaces or ~ ^ : ? * [ \, or start/end with '/' or '.'.</value>
+  </data>
+  <data name="GH_BranchSameName" xml:space="preserve">
+    <value>The new branch needs a different name from the current one.</value>
+  </data>
+  <data name="GH_CreatingBranch" xml:space="preserve">
+    <value>Creating branch {0} and committing...</value>
+  </data>
+  <data name="GH_Committing" xml:space="preserve">
+    <value>Committing...</value>
+  </data>
+  <data name="GH_ConflictTitle" xml:space="preserve">
+    <value>File Changed on GitHub</value>
+  </data>
+  <data name="GH_ConflictHeadline" xml:space="preserve">
+    <value>{0} changed on {1}@{2}.</value>
+  </data>
+  <data name="GH_ConflictBody" xml:space="preserve">
+    <value>Someone committed a newer version of this file after you opened it. How do you want to save your changes?</value>
+  </data>
+  <data name="GH_ConflictNewBranch" xml:space="preserve">
+    <value>Commit to a new branch (recommended)</value>
+  </data>
+  <data name="GH_ConflictNewBranchNote" xml:space="preserve">
+    <value>Keeps both versions; open a pull request to merge them on GitHub.</value>
+  </data>
+  <data name="GH_ConflictOverwrite" xml:space="preserve">
+    <value>Overwrite with my version</value>
+  </data>
+  <data name="GH_ConflictOverwriteNote" xml:space="preserve">
+    <value>Replaces their changes on the branch with your text.</value>
+  </data>
+  <data name="GH_ConflictLoadTheirs" xml:space="preserve">
+    <value>Discard my changes and load theirs</value>
+  </data>
+  <data name="GH_ConflictLoadTheirsNote" xml:space="preserve">
+    <value>Replaces the editor's text with the latest version from GitHub.</value>
+  </data>
+  <data name="GH_SeeLatest" xml:space="preserve">
+    <value>See the latest version on GitHub</value>
+  </data>
+  <data name="GH_HistoryTitle" xml:space="preserve">
+    <value>File History</value>
+  </data>
+  <data name="GH_HistoryTitleFile" xml:space="preserve">
+    <value>History - {0}</value>
+  </data>
+  <data name="GH_ChangesInCommit" xml:space="preserve">
+    <value>Changes in this commit</value>
+  </data>
+  <data name="GH_VsCurrent" xml:space="preserve">
+    <value>This version vs. my current text</value>
+  </data>
+  <data name="GH_ShowWholeFile" xml:space="preserve">
+    <value>Show whole file</value>
+  </data>
+  <data name="GH_LoadingHistory" xml:space="preserve">
+    <value>Loading history...</value>
+  </data>
+  <data name="GH_RestoreVersion" xml:space="preserve">
+    <value>Restore This Version</value>
+  </data>
+  <data name="GH_RestoreTip" xml:space="preserve">
+    <value>Load this version into the editor. Nothing changes on GitHub until you save (commit).</value>
+  </data>
+  <data name="GH_ViewCommit" xml:space="preserve">
+    <value>View Commit on GitHub</value>
+  </data>
+  <data name="GH_NoCommits" xml:space="preserve">
+    <value>No commits found for this file on this branch.</value>
+  </data>
+  <data name="GH_Showing100" xml:space="preserve">
+    <value>Showing the 100 most recent commits.</value>
+  </data>
+  <data name="GH_CommitCount" xml:space="preserve">
+    <value>{0} commits</value>
+  </data>
+  <data name="GH_LoadHistoryFailed" xml:space="preserve">
+    <value>Couldn't load history: {0}</value>
+  </data>
+  <data name="GH_LoadVersionFailed" xml:space="preserve">
+    <value>Couldn't load this version: {0}</value>
+  </data>
+  <data name="GH_StatsTipVsCurrent" xml:space="preserve">
+    <value>Lines added/removed going from this version to your current text</value>
+  </data>
+  <data name="GH_StatsTipCommit" xml:space="preserve">
+    <value>Lines added/removed by this commit</value>
+  </data>
+  <data name="GH_FileMissingAtCommit" xml:space="preserve">
+    <value>This file doesn't exist at this commit (it may have been renamed or deleted).</value>
+  </data>
+  <data name="GH_IdenticalToCurrent" xml:space="preserve">
+    <value>Your current text is identical to this version.</value>
+  </data>
+  <data name="GH_CommitNoChange" xml:space="preserve">
+    <value>This commit didn't change the file's text.</value>
+  </data>
+  <data name="GH_UnchangedLines" xml:space="preserve">
+    <value>··· {0} unchanged lines ···</value>
+  </data>
+  <data name="GH_UnchangedLine" xml:space="preserve">
+    <value>··· 1 unchanged line ···</value>
+  </data>
+  <data name="GH_SignInFirstPrompt" xml:space="preserve">
+    <value>Sign in to GitHub first. Open GitHub Accounts now?</value>
+  </data>
+  <data name="GH_HistoryOnlyGitHub" xml:space="preserve">
+    <value>History is available for files opened from GitHub (File &gt; Open from GitHub...).</value>
+  </data>
+  <data name="GH_ReplaceUnsavedWithVersion" xml:space="preserve">
+    <value>Replace your unsaved changes with this version?</value>
+  </data>
+  <data name="GH_RestoreVersionTitle" xml:space="preserve">
+    <value>Restore Version</value>
+  </data>
+  <data name="GH_NotFromGitHub" xml:space="preserve">
+    <value>This document isn't from GitHub. Use File &gt; Open from GitHub... to edit a repository file, then save to commit it.</value>
+  </data>
+  <data name="GH_NoWriteAccess" xml:space="preserve">
+    <value>Your account ({0}) doesn't have write access to {1}. Use File &gt; Save As... to keep a local copy.</value>
+  </data>
+  <data name="GH_PrOpened" xml:space="preserve">
+    <value>Committed to the new branch {0} and opened a pull request.
+
+View the pull request on GitHub?</value>
+  </data>
+  <data name="GH_PrOpenedTitle" xml:space="preserve">
+    <value>Pull Request Opened</value>
+  </data>
+  <data name="GH_CommitFailed" xml:space="preserve">
+    <value>Couldn't commit</value>
+  </data>
+  <data name="GH_LoadLatestFailed" xml:space="preserve">
+    <value>Couldn't load the latest version</value>
+  </data>
+  <data name="GH_ErrorWithPrefix" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="GH_BrowserOpenFailedUrl" xml:space="preserve">
+    <value>Couldn't open the browser: {0}
+
+{1}</value>
+  </data>
+  <data name="Err_NoClientId" xml:space="preserve">
+    <value>No OAuth App client ID is configured, so browser sign-in is unavailable. Use a Personal Access Token instead, or set a client ID.</value>
+  </data>
+  <data name="Err_SignInCancelled" xml:space="preserve">
+    <value>Sign-in was cancelled on GitHub.</value>
+  </data>
+  <data name="Err_CodeExpired" xml:space="preserve">
+    <value>The sign-in code expired. Please try again.</value>
+  </data>
+  <data name="Err_NoAccessToken" xml:space="preserve">
+    <value>GitHub did not return an access token.</value>
+  </data>
+  <data name="Err_TokenRejected" xml:space="preserve">
+    <value>GitHub rejected the token. Check that it was copied correctly and hasn't expired or been revoked.</value>
+  </data>
+  <data name="Err_SignInFirst" xml:space="preserve">
+    <value>Sign in to GitHub first (Tools &gt; GitHub Accounts...).</value>
+  </data>
+  <data name="Err_NotAFile" xml:space="preserve">
+    <value>'{0}' is not a file.</value>
+  </data>
+  <data name="Err_BranchExists" xml:space="preserve">
+    <value>A branch named '{0}' already exists. Choose another name.</value>
+  </data>
+  <data name="Err_Conflict" xml:space="preserve">
+    <value>{0} was changed on GitHub since you opened it.</value>
+  </data>
+  <data name="Err_NoPermission" xml:space="preserve">
+    <value>You don't have permission to commit to {0}.</value>
+  </data>
+  <data name="Snip_Bold" xml:space="preserve">
+    <value>Bold</value>
+  </data>
+  <data name="Snip_Italic" xml:space="preserve">
+    <value>Italic</value>
+  </data>
+  <data name="Snip_Strikethrough" xml:space="preserve">
+    <value>Strikethrough</value>
+  </data>
+  <data name="Snip_InlineCode" xml:space="preserve">
+    <value>Inline code</value>
+  </data>
+  <data name="Snip_CodeFence" xml:space="preserve">
+    <value>Code fence</value>
+  </data>
+  <data name="Snip_Heading1" xml:space="preserve">
+    <value>Heading 1</value>
+  </data>
+  <data name="Snip_Heading2" xml:space="preserve">
+    <value>Heading 2</value>
+  </data>
+  <data name="Snip_Heading3" xml:space="preserve">
+    <value>Heading 3</value>
+  </data>
+  <data name="Snip_Heading4" xml:space="preserve">
+    <value>Heading 4</value>
+  </data>
+  <data name="Snip_Heading5" xml:space="preserve">
+    <value>Heading 5</value>
+  </data>
+  <data name="Snip_Heading6" xml:space="preserve">
+    <value>Heading 6</value>
+  </data>
+  <data name="Snip_BulletedList" xml:space="preserve">
+    <value>Bulleted list</value>
+  </data>
+  <data name="Snip_NumberedList" xml:space="preserve">
+    <value>Numbered list</value>
+  </data>
+  <data name="Snip_TaskList" xml:space="preserve">
+    <value>Task list</value>
+  </data>
+  <data name="Snip_Blockquote" xml:space="preserve">
+    <value>Blockquote</value>
+  </data>
+  <data name="Snip_Link" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="Snip_Image" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="Snip_Table" xml:space="preserve">
+    <value>Table</value>
+  </data>
+  <data name="Snip_HorizontalRule" xml:space="preserve">
+    <value>Horizontal rule</value>
+  </data>
+  <data name="Snip_MathBlock" xml:space="preserve">
+    <value>Math block</value>
+  </data>
+  <data name="Snip_InlineMath" xml:space="preserve">
+    <value>Inline math</value>
+  </data>
+  <data name="Snip_Footnote" xml:space="preserve">
+    <value>Footnote</value>
+  </data>
+  <data name="Snip_Mermaid" xml:space="preserve">
+    <value>Mermaid diagram</value>
+  </data>
+</root>
