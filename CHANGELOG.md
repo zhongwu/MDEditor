@@ -4,6 +4,23 @@ All notable changes to MDEditor are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow [Semantic Versioning](https://semver.org/).
 The release workflow publishes the section matching the pushed `vX.Y.Z` tag as the GitHub release notes.
 
+## [Unreleased]
+
+### Added
+- Auto-update check via `IUpdateService` / `UpdateService` (GitHub Releases), with `UpdateServiceTests`.
+- MSIX packaging pipeline (`tools/Build-Msix.ps1`, `MDEditor/Packaging/`), dev certificate helper, and release/CI GitHub Actions workflows.
+- Accessibility: `AutomationProperties.Name` on icon-only toolbar buttons and main panes (outline, editor, preview).
+- Performance regression guards for rendering, word counting, and line-ending normalization on 10 MB documents.
+- `SettingsService` constructor accepting an explicit settings file path (for test isolation).
+
+### Changed
+- README "Current Status" table updated to reflect completed phases (v0.9.0-dev).
+- Large-document performance test now uses unique headings to avoid Markdig quadratic auto-ids.
+
+### Fixed
+- A `null` value in `settings.json` now falls back to the default instead of returning `null`.
+- Removed duplicate xUnit `InlineData` rows in `TextStatisticsTests`.
+
 ## [0.3.0]
 
 ### Added
