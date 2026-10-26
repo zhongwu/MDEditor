@@ -1,0 +1,63 @@
+name: Release
+
+# Push a tag such as v0.3.0 (matching <Version> in Directory.Build.props, with a CHANGELOG.md entry).
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Check tag, project version and changelog agree
+        id: ver
+        shell: pwsh
+        run: |
+          $version = '${{ github.ref_name }}'.TrimStart('v')
+          $props = ([xml](Get-Content Directory.Build.props)).Project.PropertyGroup.Version
+          if ($props -ne $version) { throw "Tag $version does not match Directory.Build.props version $props" }
+          ./tools/Get-ReleaseNotes.ps1 -Version $version | Set-Content release-notes.md
+          "version=$version" >> $env:GITHUB_OUTPUT
+          "prerelease=$($version.Contains('-').ToString().ToLower())" >> $env:GITHUB_OUTPUT
+
+      - run: dotnet test MDEditor.slnx -c Release
+
+      # Optional code signing: add repository secrets to sign the MSIX with a real certificate.
+      #   WINDOWS_CERT_PFX_BASE64  base64 of the .pfx    WINDOWS_CERT_PASSWORD  its password
+      #   WINDOWS_CERT_SUBJECT     the certificate's subject, e.g. "CN=Your Name" (must equal the MSIX publisher)
+      - name: Build packages
+        shell: pwsh
+        env:
+          PFX_BASE64: ${{ secrets.WINDOWS_CERT_PFX_BASE64 }}
+          PFX_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
+          CERT_SUBJECT: ${{ secrets.WINDOWS_CERT_SUBJECT }}
+        run: |
+          $extra = @{}
+          if ($env:PFX_BASE64) {
+            [IO.File]::WriteAllBytes("$PWD/signing.pfx", [Convert]::FromBase64String($env:PFX_BASE64))
+            $extra = @{ CertPath = "$PWD/signing.pfx"; CertPassword = (ConvertTo-SecureString $env:PFX_PASSWORD -AsPlainText -Force); Publisher = $env:CERT_SUBJECT }
+          } else {
+            Write-Warning 'No signing certificate configured: the MSIX will be unsigned (the portable zip still works).'
+          }
+          foreach ($rid in 'win-x64', 'win-arm64') {
+            ./tools/Build-Msix.ps1 -Runtime $rid @extra
+          }
+          Remove-Item signing.pfx -ErrorAction SilentlyContinue
+
+      - name: Publish GitHub release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $flags = @()
+          if ('${{ steps.ver.outputs.prerelease }}' -eq 'true') { $flags += '--prerelease' }
+          gh release create '${{ github.ref_name }}' @flags --title 'MDEditor ${{ steps.ver.outputs.version }}' `
+            --notes-file release-notes.md (Get-ChildItem artifacts/*.msix, artifacts/*.zip).FullName

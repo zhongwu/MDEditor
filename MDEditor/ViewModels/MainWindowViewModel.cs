@@ -144,6 +144,7 @@ public sealed partial class MainWindowViewModel : ObservableObject
     /// </summary>
     public Action? MarkdownGuideCallback { get; set; }
     public Action? AboutCallback { get; set; }
+    public Action? CheckForUpdatesCallback { get; set; }
 
     /// <summary>
     /// Callback for opening the GitHub Accounts window.
@@ -646,6 +647,13 @@ public sealed partial class MainWindowViewModel : ObservableObject
     {
         _loggingService.LogInformation("About requested");
         AboutCallback?.Invoke();
+    }
+
+    [RelayCommand]
+    private void CheckForUpdates()
+    {
+        _loggingService.LogInformation("Check for updates requested");
+        CheckForUpdatesCallback?.Invoke();
     }
 
     [RelayCommand]

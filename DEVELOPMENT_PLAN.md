@@ -270,11 +270,11 @@
 - [ ] Accessibility (Narrator, high contrast, keyboard nav) — partial: icon-only buttons and main panes now have AutomationProperties.Name; high contrast / manual Narrator pass still open
 
 #### 7.2 Packaging & Deployment
-- [ ] MSIX packaging with WPF
-- [ ] Code signing certificate
-- [ ] Auto-update (MSIX auto-update or GitHub Releases)
+- [x] MSIX packaging with WPF — `tools/Build-Msix.ps1` (manifest in `MDEditor/Packaging/`), x64 + ARM64, plus portable zip
+- [ ] Code signing certificate — pipeline ready (script + release workflow sign when `WINDOWS_CERT_*` secrets exist); a real certificate still has to be purchased/provided
+- [x] Auto-update (MSIX auto-update or GitHub Releases) — Help → Check for Updates against the latest GitHub release; installs are manual (opens the download page)
 - [ ] Microsoft Store submission (optional)
-- [ ] GitHub Releases with changelog
+- [x] GitHub Releases with changelog — `CHANGELOG.md` + tag-triggered `.github/workflows/release.yml`
 
 #### 7.3 Documentation
 - [x] User guide (Markdown, bundled in app) — Help → Markdown Guide, localized (see 6.4)

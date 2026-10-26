@@ -1368,4 +1368,21 @@ graph TD
 如果不需要数学公式、流程图、表情符号、脚注和任务列表，可以在
 **设置 -&gt; Markdown 与预览** 中分别关闭它们。</value>
   </data>
+  <data name="Menu_CheckForUpdates" xml:space="preserve">
+    <value>检查更新...</value>
+  </data>
+  <data name="Update_Title" xml:space="preserve">
+    <value>检查更新</value>
+  </data>
+  <data name="Update_Available" xml:space="preserve">
+    <value>MDEditor {0} 已发布（当前版本 {1}）。
+
+是否打开下载页面？</value>
+  </data>
+  <data name="Update_UpToDate" xml:space="preserve">
+    <value>已是最新版本（{0}）。</value>
+  </data>
+  <data name="Update_CheckFailed" xml:space="preserve">
+    <value>无法检查更新：{0}</value>
+  </data>
 </root>

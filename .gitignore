@@ -32,3 +32,6 @@ Thumbs.db
 
 # Local settings
 *.local
+# Packaging output
+artifacts/
+*.pfx

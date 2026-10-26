@@ -1,0 +1,10 @@
+<Project>
+  <PropertyGroup>
+    <!-- Single source of truth for the app version; the release workflow tags vX.Y.Z to match. -->
+    <Version>0.3.0</Version>
+    <Authors>zhongwu</Authors>
+    <Product>MDEditor</Product>
+    <Copyright>Copyright (c) zhongwu</Copyright>
+    <RepositoryUrl>https://github.com/zhongwu/MDEditor</RepositoryUrl>
+  </PropertyGroup>
+</Project>

@@ -150,6 +150,7 @@
             </MenuItem>
             <MenuItem Header="{loc:Tr Menu_Help}">
                 <MenuItem Header="{loc:Tr Menu_MarkdownGuide}" Command="{Binding MarkdownGuideCommand}" />
+                <MenuItem Header="{loc:Tr Menu_CheckForUpdates}" Command="{Binding CheckForUpdatesCommand}" />
                 <Separator />
                 <MenuItem Header="{loc:Tr Menu_About}" Command="{Binding AboutCommand}" />
             </MenuItem>

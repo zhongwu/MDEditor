@@ -157,6 +157,7 @@ public partial class MainWindow : Window
         // Help
         ViewModel.MarkdownGuideCallback = ShowMarkdownGuideWindow;
         ViewModel.AboutCallback = ShowAboutWindow;
+        ViewModel.CheckForUpdatesCallback = () => _ = CheckForUpdatesAsync();
 
         // GitHub (Phase 5)
         ViewModel.GitHubAccountsCallback = ShowGitHubAccountsWindow;
@@ -1164,6 +1165,32 @@ public partial class MainWindow : Window
         _aboutWindow = new AboutWindow { Owner = this };
         _aboutWindow.Closed += (s, e) => _aboutWindow = null;
         _aboutWindow.Show();
+    }
+
+    private async Task CheckForUpdatesAsync()
+    {
+        var title = Loc.Get("Update_Title");
+        var current = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version ?? new Version(0, 0, 0);
+        try
+        {
+            var update = await App.Services.GetRequiredService<IUpdateService>().CheckForUpdateAsync(current);
+            if (update == null)
+            {
+                MessageBox.Show(this, Loc.Format("Update_UpToDate", current.ToString(3)), title, MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var answer = MessageBox.Show(this, Loc.Format("Update_Available", update.Version.ToString(3), current.ToString(3)),
+                title, MessageBoxButton.YesNo, MessageBoxImage.Information);
+            if (answer == MessageBoxResult.Yes)
+            {
+                OpenInBrowser(update.HtmlUrl);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(this, Loc.Format("Update_CheckFailed", ex.Message), title, MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
     }
 
     private void OnThemeChanged(bool isDark)

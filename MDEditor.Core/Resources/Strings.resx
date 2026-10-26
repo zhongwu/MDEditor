@@ -1368,4 +1368,21 @@ Here's a footnote reference.[^1]
 Math, diagrams, emoji, footnotes, and task lists can each be turned off in
 **Settings -&gt; Markdown &amp; Preview** if you don't want them.</value>
   </data>
+  <data name="Menu_CheckForUpdates" xml:space="preserve">
+    <value>Check for Updates...</value>
+  </data>
+  <data name="Update_Title" xml:space="preserve">
+    <value>Check for Updates</value>
+  </data>
+  <data name="Update_Available" xml:space="preserve">
+    <value>MDEditor {0} is available (you have {1}).
+
+Open the download page?</value>
+  </data>
+  <data name="Update_UpToDate" xml:space="preserve">
+    <value>You are up to date (version {0}).</value>
+  </data>
+  <data name="Update_CheckFailed" xml:space="preserve">
+    <value>Couldn't check for updates: {0}</value>
+  </data>
 </root>
