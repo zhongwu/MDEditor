@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
 using MDEditor.Core.Interfaces;
@@ -163,11 +163,10 @@ public partial class MainWindow : Window
         ViewModel.GitHubAccountsCallback = ShowGitHubAccountsWindow;
         ViewModel.OpenFromGitHubCallback = OpenFromGitHub;
         ViewModel.GitHubSyncCallback = CommitToGitHub;
-        ViewModel.GitHubHistoryCallback = ShowGitHubHistory;
+        ViewModel.HistoryCallback = ShowHistory;
         ViewModel.OpenGistCallback = OpenGist;
         ViewModel.SaveAsGistCallback = SaveAsGist;
         ViewModel.ViewGistCallback = ViewGistOnGitHub;
-        ViewModel.GistHistoryCallback = ShowGistHistory;
         _gitHubAuthService = App.Services.GetRequiredService<IGitHubAuthService>();
         _gitHubRepoService = App.Services.GetRequiredService<IGitHubRepositoryService>();
         _gistService = App.Services.GetRequiredService<IGitHubGistService>();
@@ -1394,6 +1393,7 @@ public partial class MainWindow : Window
         // GitHub/gist-only menu items in sync.
         ViewModel.IsGitHubDocument = _gitHubDocument != null;
         ViewModel.IsGistDocument = _gistDocument != null;
+        ViewModel.IsRemoteDocument = _gitHubDocument != null || _gistDocument != null;
     }
 
     private void SetEditorText(string text)

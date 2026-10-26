@@ -190,24 +190,32 @@
 - [x] Multi-account support — Tools > GitHub Accounts... (add / set active / remove), active account shown in the status bar; `IGitHubAuthService.CreateClient()` hands authenticated clients to 5.2+
 
 #### 5.2 Repository Operations ✅ COMPLETED
-- [x] Browse repositories (list user/org repos) — File > Open from GitHub...: filterable list (owned, collaborator, org), private/read-only markers, remembers the last repo
+- [x] Browse repositories (list user/org repos) — File > Open from > GitHub Repository...: filterable list (owned, collaborator, org), private/read-only markers, remembers the last repo
 - [x] Browse files in repository (tree view) — branch picker (default first), recursive tree with "Markdown files only" filter (folders without Markdown pruned), truncation warning for huge repos
 - [x] Open file from GitHub — downloaded straight into the editor (no temp file); title shows `file (owner/repo@branch)`; branch head commit pinned at open
-- [x] Save/Sync back to GitHub (Save, or Tools > Commit to GitHub...):
+- [x] Save/Sync back to GitHub (Save, or File > Commit... / Ctrl+Shift+Enter):
   - [x] Commit changes with message (+ optional description); preserves the file's original line endings
   - [x] Create new branch / PR option — branch created from the opened commit, optional PR into the original branch; later saves follow the new branch
   - [x] Handle merge conflicts (basic) — stale SHA detected (409/422) → choose: commit to new branch (recommended), overwrite theirs, or discard mine and load theirs
 - Save As detaches the document from GitHub (becomes a local file); read-only repos explain that Save As is the way to keep changes
 
 #### 5.3 Version History ✅ COMPLETED
-- [x] View commit history for current file — Tools > File History (GitHub)...: last 100 commits on the branch that touched the file (summary, author, date, short SHA, full message tooltip), View Commit on GitHub
+- [x] View commit history for current file — File > History...: last 100 commits on the branch that touched the file (summary, author, date, short SHA, full message tooltip), View Commit on GitHub
 - [x] Compare with previous version (diff view) — built-in Myers line diff (`LineDiff`, no extra package): "Changes in this commit" (vs. parent) or "This version vs. my current text"; +/- stats, old/new line numbers, unchanged runs collapsed with 3 lines of context (or "Show whole file"), virtualized list
 - [x] Restore previous version — loads the version into the editor (marked unsaved, confirms before discarding edits); the next save commits it with a pre-filled "Restore <file> to <sha>" message, so history is never rewritten
 
 #### 5.4 Gist Support (Bonus) ✅ COMPLETED
 - [x] Create/Update secret/public gists — File > Save as Gist... (file name, optional description, secret by default; link copied to clipboard, offer to open); Save on a gist document updates it in place, preserving line endings. Gists have no per-file SHA, so a newer `updated_at` on GitHub prompts overwrite / load latest / keep editing. Missing `gist` scope on a PAT gets an explanatory error
-- [x] Open gist files — File > Open Gist...: your gists (filterable, public/secret marker, file count, updated date) or any gist by URL/ID (pre-filled from a gist link on the clipboard); pick a file (Markdown first). Other people's gists open read-only (Save explains Save as Gist / Save As); Tools > Open Gist in Browser while a gist is open
+- [x] Open gist files — File > Open from > GitHub Gist...: your gists (filterable, public/secret marker, file count, updated date) or any gist by URL/ID (pre-filled from a gist link on the clipboard); pick a file (Markdown first). Other people's gists open read-only (Save explains Save as Gist / Save As); File > Open Gist in Browser while a gist is open
 
+#### 5.6 File Menu & Source Organization ✅ COMPLETED
+Local, GitHub and gist documents had grown into scattered menu entries, with Commit and History hidden under Tools. The File menu now groups by source and keeps document actions together:
+- [x] **Open from ▸** submenu — GitHub Repository..., GitHub Gist... (plain Open... / Ctrl+O stays the local-file entry); Gitee and other hosts plug in here later
+- [x] **Commit...** (Ctrl+Shift+Enter) moved from Tools to File, next to Save; shown only for GitHub repository documents
+- [x] **One History... entry** replacing the separate File History (GitHub) and Gist History items; opens the repository commit history or the gist revision history depending on the open document, shown for any GitHub-hosted document
+- [x] Open Gist in Browser moved next to History; Tools keeps GitHub Accounts, Smart Typography and Settings
+- [x] Labels made host-neutral (Commit..., History...) so Gitee can reuse them (see 5.5); localized in en / zh-Hans / zh-Hant
+- [ ] Follow-ups: a **Save To ▸** submenu once there is more than one remote save target (GitHub repository / Gist / Gitee); move GitHub Accounts under File or Settings; "Save (commit)" wording for GitHub documents; show repo · branch · path in the title/status bar
 #### 5.5 Gitee Support (Planned — post-v0.3.0)
 Goal: let users in China (where github.com can be slow or blocked) open, edit and sync Markdown files on [Gitee](https://gitee.com) like they do on GitHub. Today every GitHub feature is hardcoded to github.com via Octokit.NET (`GitHubAuthService`, `GitHubRepositoryService`, `GitHubGistService`, and `https://github.com/...` URLs in the models), so this needs a provider abstraction first.
 - [ ] Provider abstraction: introduce provider-neutral interfaces (auth, repository, file history) that the existing GitHub services implement, and make the UI/ViewModels depend on them instead of GitHub types; keep gists GitHub-only (Gitee has no equivalent)
@@ -459,7 +467,7 @@ MainWindow
 - [ ] Diagram editing (mermaid live editor)
 - [ ] Notebook interface (code blocks execution)
 - [ ] Mobile companion app (WPF mobile)
-- [ ] Other Git hosts beyond GitHub/Gitee (GitLab, Azure DevOps, Bitbucket) — builds on the provider abstraction in 5.5
+- [ ] Other Git hosts beyond GitHub/Gitee (GitLab, Azure DevOps, Bitbucket) — builds on the provider abstraction in 5.5 and the File menu structure in 5.6
 
 ---
 

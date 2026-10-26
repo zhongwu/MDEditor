@@ -4,6 +4,11 @@ All notable changes to MDEditor are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow [Semantic Versioning](https://semver.org/).
 The release workflow publishes the section matching the pushed `vX.Y.Z` tag as the GitHub release notes.
 
+## [Unreleased]
+
+### Changed
+- File menu reorganized: Open from submenu (GitHub Repository / Gist), Commit... (Ctrl+Shift+Enter) and a single History... entry moved from Tools to File.
+
 ## [0.3.0]
 
 ### Added

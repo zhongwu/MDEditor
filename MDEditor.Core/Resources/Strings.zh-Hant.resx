@@ -52,7 +52,7 @@
     <value>開啟...</value>
   </data>
   <data name="Menu_OpenFromGitHub" xml:space="preserve">
-    <value>從 GitHub 開啟...</value>
+    <value>GitHub 儲存庫...</value>
   </data>
   <data name="Menu_RecentFiles" xml:space="preserve">
     <value>最近使用的檔案</value>
@@ -220,10 +220,10 @@
     <value>GitHub 帳戶...</value>
   </data>
   <data name="Menu_CommitToGitHub" xml:space="preserve">
-    <value>提交至 GitHub...</value>
+    <value>提交...</value>
   </data>
   <data name="Menu_FileHistory" xml:space="preserve">
-    <value>檔案歷程記錄 (GitHub)...</value>
+    <value>歷程記錄...</value>
   </data>
   <data name="Menu_Settings" xml:space="preserve">
     <value>設定</value>
@@ -1069,7 +1069,7 @@
     <value>Mermaid 圖表</value>
   </data>
   <data name="Menu_OpenGist" xml:space="preserve">
-    <value>開啟 Gist...</value>
+    <value>GitHub Gist...</value>
   </data>
   <data name="Menu_SaveAsGist" xml:space="preserve">
     <value>另存為 Gist...</value>
@@ -1202,9 +1202,6 @@
   </data>
   <data name="Status_Words" xml:space="preserve">
     <value>字數：{0}</value>
-  </data>
-  <data name="Menu_GistHistory" xml:space="preserve">
-    <value>Gist 歷程記錄...</value>
   </data>
   <data name="Gist_HistoryTitle" xml:space="preserve">
     <value>Gist 歷程記錄</value>
@@ -1384,5 +1381,8 @@ graph TD
   </data>
   <data name="Update_CheckFailed" xml:space="preserve">
     <value>無法檢查更新：{0}</value>
+  </data>
+  <data name="Menu_OpenFrom" xml:space="preserve">
+    <value>開啟自</value>
   </data>
 </root>

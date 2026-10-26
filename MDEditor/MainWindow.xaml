@@ -16,6 +16,7 @@
         <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenFileCommand}" />
         <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveFileCommand}" />
         <KeyBinding Key="S" Modifiers="Control+Shift" Command="{Binding SaveAsFileCommand}" />
+        <KeyBinding Key="Return" Modifiers="Control+Shift" Command="{Binding GitHubSyncCommand}" />
         <KeyBinding Key="P" Modifiers="Control+Shift" Command="{Binding TogglePreviewCommand}" />
         <KeyBinding Key="E" Modifiers="Control+Shift" Command="{Binding ToggleOutlineCommand}" />
         <KeyBinding Key="F" Modifiers="Control" Command="{Binding FindCommand}" />
@@ -57,8 +58,10 @@
             <MenuItem Header="{loc:Tr Menu_File}">
                 <MenuItem Header="{loc:Tr Menu_New}" Command="{Binding NewFileCommand}" InputGestureText="Ctrl+N" />
                 <MenuItem Header="{loc:Tr Menu_Open}" Command="{Binding OpenFileCommand}" InputGestureText="Ctrl+O" />
-                <MenuItem Header="{loc:Tr Menu_OpenFromGitHub}" Command="{Binding OpenFromGitHubCommand}" />
-                <MenuItem Header="{loc:Tr Menu_OpenGist}" Command="{Binding OpenGistCommand}" />
+                <MenuItem Header="{loc:Tr Menu_OpenFrom}">
+                    <MenuItem Header="{loc:Tr Menu_OpenFromGitHub}" Command="{Binding OpenFromGitHubCommand}" />
+                    <MenuItem Header="{loc:Tr Menu_OpenGist}" Command="{Binding OpenGistCommand}" />
+                </MenuItem>
                 <MenuItem Header="{loc:Tr Menu_RecentFiles}" Name="RecentFilesMenu">
                     <MenuItem Header="{loc:Tr Menu_NoRecentFiles}" IsEnabled="False" />
                 </MenuItem>
@@ -66,6 +69,12 @@
                 <MenuItem Header="{loc:Tr Menu_Save}" Command="{Binding SaveFileCommand}" InputGestureText="Ctrl+S" />
                 <MenuItem Header="{loc:Tr Menu_SaveAs}" Command="{Binding SaveAsFileCommand}" InputGestureText="Ctrl+Shift+S" />
                 <MenuItem Header="{loc:Tr Menu_SaveAsGist}" Command="{Binding SaveAsGistCommand}" />
+                <MenuItem Header="{loc:Tr Menu_CommitToGitHub}" Command="{Binding GitHubSyncCommand}" InputGestureText="Ctrl+Shift+Enter"
+                          Visibility="{Binding IsGitHubDocument, Converter={StaticResource BoolToVisibility}}" />
+                <MenuItem Header="{loc:Tr Menu_FileHistory}" Command="{Binding HistoryCommand}"
+                          Visibility="{Binding IsRemoteDocument, Converter={StaticResource BoolToVisibility}}" />
+                <MenuItem Header="{loc:Tr Menu_ViewGist}" Command="{Binding ViewGistCommand}"
+                          Visibility="{Binding IsGistDocument, Converter={StaticResource BoolToVisibility}}" />
                 <Separator />
                 <MenuItem Header="{loc:Tr Menu_ExportHtml}" Command="{Binding ExportHtmlCommand}" />
                 <MenuItem Header="{loc:Tr Menu_ExportPdf}" Command="{Binding ExportPdfCommand}" />
@@ -138,14 +147,7 @@
                           Click="SmartTypography_Click" />
                 <Separator />
                 <MenuItem Header="{loc:Tr Menu_GitHubAccounts}" Command="{Binding GitHubAccountsCommand}" />
-                <MenuItem Header="{loc:Tr Menu_CommitToGitHub}" Command="{Binding GitHubSyncCommand}"
-                          Visibility="{Binding IsGitHubDocument, Converter={StaticResource BoolToVisibility}}" />
-                <MenuItem Header="{loc:Tr Menu_FileHistory}" Command="{Binding GitHubHistoryCommand}"
-                          Visibility="{Binding IsGitHubDocument, Converter={StaticResource BoolToVisibility}}" />
-                <MenuItem Header="{loc:Tr Menu_ViewGist}" Command="{Binding ViewGistCommand}"
-                          Visibility="{Binding IsGistDocument, Converter={StaticResource BoolToVisibility}}" />
-                <MenuItem Header="{loc:Tr Menu_GistHistory}" Command="{Binding GistHistoryCommand}"
-                          Visibility="{Binding IsGistDocument, Converter={StaticResource BoolToVisibility}}" />
+
                 <MenuItem Header="{loc:Tr Menu_Settings}" Command="{Binding SettingsCommand}" />
             </MenuItem>
             <MenuItem Header="{loc:Tr Menu_Help}">

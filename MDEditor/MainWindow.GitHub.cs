@@ -106,6 +106,15 @@ public partial class MainWindow
         SetEditorText(file.Text);
     }
 
+    /// <summary>One History entry for both kinds of remote document.</summary>
+    private void ShowHistory()
+    {
+        if (_gistDocument != null)
+            ShowGistHistory();
+        else
+            ShowGitHubHistory();
+    }
+
     private void ShowGitHubHistory()
     {
         var document = _gitHubDocument;

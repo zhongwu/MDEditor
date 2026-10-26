@@ -52,7 +52,7 @@
     <value>Open...</value>
   </data>
   <data name="Menu_OpenFromGitHub" xml:space="preserve">
-    <value>Open from GitHub...</value>
+    <value>GitHub Repository...</value>
   </data>
   <data name="Menu_RecentFiles" xml:space="preserve">
     <value>Recent Files</value>
@@ -220,10 +220,10 @@
     <value>GitHub Accounts...</value>
   </data>
   <data name="Menu_CommitToGitHub" xml:space="preserve">
-    <value>Commit to GitHub...</value>
+    <value>Commit...</value>
   </data>
   <data name="Menu_FileHistory" xml:space="preserve">
-    <value>File History (GitHub)...</value>
+    <value>History...</value>
   </data>
   <data name="Menu_Settings" xml:space="preserve">
     <value>Settings</value>
@@ -1069,7 +1069,7 @@ View the pull request on GitHub?</value>
     <value>Mermaid diagram</value>
   </data>
   <data name="Menu_OpenGist" xml:space="preserve">
-    <value>Open Gist...</value>
+    <value>GitHub Gist...</value>
   </data>
   <data name="Menu_SaveAsGist" xml:space="preserve">
     <value>Save as Gist...</value>
@@ -1202,9 +1202,6 @@ Cancel – keep editing</value>
   </data>
   <data name="Status_Words" xml:space="preserve">
     <value>Words: {0}</value>
-  </data>
-  <data name="Menu_GistHistory" xml:space="preserve">
-    <value>Gist History...</value>
   </data>
   <data name="Gist_HistoryTitle" xml:space="preserve">
     <value>Gist History</value>
@@ -1384,5 +1381,8 @@ Open the download page?</value>
   </data>
   <data name="Update_CheckFailed" xml:space="preserve">
     <value>Couldn't check for updates: {0}</value>
+  </data>
+  <data name="Menu_OpenFrom" xml:space="preserve">
+    <value>Open from</value>
   </data>
 </root>

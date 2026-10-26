@@ -11,7 +11,7 @@ Doc_UntitledBase	Untitled	未命名	未命名
 Menu_File	File	文件	檔案
 Menu_New	New	新建	新增
 Menu_Open	Open...	打开...	開啟...
-Menu_OpenFromGitHub	Open from GitHub...	从 GitHub 打开...	從 GitHub 開啟...
+Menu_OpenFromGitHub	GitHub Repository...	GitHub 仓库...	GitHub 儲存庫...
 Menu_RecentFiles	Recent Files	最近的文件	最近使用的檔案
 Menu_NoRecentFiles	(No recent files)	（无最近文件）	（沒有最近使用的檔案）
 Menu_Save	Save	保存	儲存
@@ -67,8 +67,8 @@ Menu_MathBlock	Math Block	数学公式块	數學公式區塊
 Menu_Tools	Tools	工具	工具
 Menu_SmartTypography	Smart Typography	智能标点	智慧標點
 Menu_GitHubAccounts	GitHub Accounts...	GitHub 账户...	GitHub 帳戶...
-Menu_CommitToGitHub	Commit to GitHub...	提交到 GitHub...	提交至 GitHub...
-Menu_FileHistory	File History (GitHub)...	文件历史 (GitHub)...	檔案歷程記錄 (GitHub)...
+Menu_CommitToGitHub	Commit...	提交...	提交...
+Menu_FileHistory	History...	历史...	歷程記錄...
 Menu_Settings	Settings	设置	設定
 Menu_Help	Help	帮助	說明
 Menu_KeyboardShortcuts	Keyboard Shortcuts	键盘快捷键	鍵盤快速鍵
@@ -348,7 +348,7 @@ Snip_MathBlock	Math block	数学公式块	數學公式區塊
 Snip_InlineMath	Inline math	行内公式	行內公式
 Snip_Footnote	Footnote	脚注	註腳
 Snip_Mermaid	Mermaid diagram	Mermaid 图表	Mermaid 圖表
-Menu_OpenGist	Open Gist...	打开 Gist...	開啟 Gist...
+Menu_OpenGist	GitHub Gist...	GitHub Gist...	GitHub Gist...
 Menu_SaveAsGist	Save as Gist...	另存为 Gist...	另存為 Gist...
 Menu_ViewGist	Open Gist in Browser	在浏览器中打开 Gist	在瀏覽器中開啟 Gist
 Gist_OpenTitle	Open Gist	打开 Gist	開啟 Gist
@@ -391,7 +391,6 @@ Err_GistConflict	The gist containing {0} was changed on GitHub since you opened 
 Err_SignInExpired	GitHub rejected the saved sign-in (Bad credentials). The token was probably revoked or has expired - remove the account and sign in again (Tools > GitHub Accounts...).	GitHub 拒绝了已保存的登录信息（Bad credentials）。令牌可能已被撤销或已过期，请移除该账户后重新登录（工具 > GitHub 账户...）。	GitHub 拒絕了已儲存的登入資訊（Bad credentials）。權杖可能已遭撤銷或已過期，請移除該帳戶後重新登入（工具 > GitHub 帳戶...）。
 Status_Position	Ln {0}, Col {1}	第 {0} 行，第 {1} 列	第 {0} 行，第 {1} 欄
 Status_Words	Words: {0}	字数：{0}	字數：{0}
-Menu_GistHistory	Gist History...	Gist 历史...	Gist 歷程記錄...
 Gist_HistoryTitle	Gist History	Gist 历史	Gist 歷程記錄
 Gist_ChangesInRevision	Changes in this revision	此修订中的更改	此修訂中的變更
 Gist_ViewRevision	View Revision on GitHub	在 GitHub 上查看修订	在 GitHub 上檢視修訂
@@ -411,3 +410,4 @@ Update_Title	Check for Updates	检查更新	檢查更新
 Update_Available	MDEditor {0} is available (you have {1}).\n\nOpen the download page?	MDEditor {0} 已发布（当前版本 {1}）。\n\n是否打开下载页面？	MDEditor {0} 已發佈（目前版本 {1}）。\n\n是否開啟下載頁面？
 Update_UpToDate	You are up to date (version {0}).	已是最新版本（{0}）。	已是最新版本（{0}）。
 Update_CheckFailed	Couldn't check for updates: {0}	无法检查更新：{0}	無法檢查更新：{0}
+Menu_OpenFrom	Open from	打开自	開啟自

@@ -41,6 +41,13 @@ public sealed partial class MainWindowViewModel : ObservableObject
     private bool _isGistDocument;
 
     /// <summary>
+    /// True while the open document lives on GitHub (repository file or gist); shows the shared
+    /// History item, which opens whichever history window fits the document.
+    /// </summary>
+    [ObservableProperty]
+    private bool _isRemoteDocument;
+
+    /// <summary>
     /// Automatically saves the preview state to settings whenever it changes.
     /// Also ensures at least one pane (editor or preview) stays visible.
     /// </summary>
@@ -162,9 +169,9 @@ public sealed partial class MainWindowViewModel : ObservableObject
     public Action? GitHubSyncCallback { get; set; }
 
     /// <summary>
-    /// Callback for showing the current GitHub file's version history.
+    /// Callback for showing the open document's version history (GitHub file or gist revisions).
     /// </summary>
-    public Action? GitHubHistoryCallback { get; set; }
+    public Action? HistoryCallback { get; set; }
 
     /// <summary>
     /// Callbacks for gist support: open a gist file, save as a new gist, view the gist online.
@@ -172,7 +179,6 @@ public sealed partial class MainWindowViewModel : ObservableObject
     public Action? OpenGistCallback { get; set; }
     public Action? SaveAsGistCallback { get; set; }
     public Action? ViewGistCallback { get; set; }
-    public Action? GistHistoryCallback { get; set; }
 
     /// <summary>
     /// Callback for new file.
@@ -586,10 +592,10 @@ public sealed partial class MainWindowViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void GitHubHistory()
+    private void History()
     {
-        _loggingService.LogInformation("GitHub file history requested");
-        GitHubHistoryCallback?.Invoke();
+        _loggingService.LogInformation("Document history requested");
+        HistoryCallback?.Invoke();
     }
 
     [RelayCommand]
@@ -613,12 +619,6 @@ public sealed partial class MainWindowViewModel : ObservableObject
         ViewGistCallback?.Invoke();
     }
 
-    [RelayCommand]
-    private void GistHistory()
-    {
-        _loggingService.LogInformation("Gist history requested");
-        GistHistoryCallback?.Invoke();
-    }
 
     [RelayCommand]
     private void OpenFromGitHub()

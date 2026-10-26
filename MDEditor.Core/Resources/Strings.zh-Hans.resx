@@ -52,7 +52,7 @@
     <value>打开...</value>
   </data>
   <data name="Menu_OpenFromGitHub" xml:space="preserve">
-    <value>从 GitHub 打开...</value>
+    <value>GitHub 仓库...</value>
   </data>
   <data name="Menu_RecentFiles" xml:space="preserve">
     <value>最近的文件</value>
@@ -220,10 +220,10 @@
     <value>GitHub 账户...</value>
   </data>
   <data name="Menu_CommitToGitHub" xml:space="preserve">
-    <value>提交到 GitHub...</value>
+    <value>提交...</value>
   </data>
   <data name="Menu_FileHistory" xml:space="preserve">
-    <value>文件历史 (GitHub)...</value>
+    <value>历史...</value>
   </data>
   <data name="Menu_Settings" xml:space="preserve">
     <value>设置</value>
@@ -1069,7 +1069,7 @@
     <value>Mermaid 图表</value>
   </data>
   <data name="Menu_OpenGist" xml:space="preserve">
-    <value>打开 Gist...</value>
+    <value>GitHub Gist...</value>
   </data>
   <data name="Menu_SaveAsGist" xml:space="preserve">
     <value>另存为 Gist...</value>
@@ -1202,9 +1202,6 @@
   </data>
   <data name="Status_Words" xml:space="preserve">
     <value>字数：{0}</value>
-  </data>
-  <data name="Menu_GistHistory" xml:space="preserve">
-    <value>Gist 历史...</value>
   </data>
   <data name="Gist_HistoryTitle" xml:space="preserve">
     <value>Gist 历史</value>
@@ -1384,5 +1381,8 @@ graph TD
   </data>
   <data name="Update_CheckFailed" xml:space="preserve">
     <value>无法检查更新：{0}</value>
+  </data>
+  <data name="Menu_OpenFrom" xml:space="preserve">
+    <value>打开自</value>
   </data>
 </root>
