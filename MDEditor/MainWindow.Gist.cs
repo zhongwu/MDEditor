@@ -35,6 +35,7 @@ public partial class MainWindow
     {
         _currentFilePath = null;
         _gitHubDocument = null;
+        _gitLabDocument = null;
         _gistDocument = file.Document;
         _pendingCommitMessage = null;
         SetEditorText(file.Text);
@@ -52,6 +53,7 @@ public partial class MainWindow
         // The new gist is now the document: later saves update it.
         _currentFilePath = null;
         _gitHubDocument = null;
+        _gitLabDocument = null;
         _gistDocument = gist;
         _isDirty = false;
         UpdateTitleBar();

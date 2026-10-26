@@ -1406,4 +1406,141 @@ Open the download page?</value>
   <data name="Source_GistSaveDesc" xml:space="preserve">
     <value>Create a new gist from this document</value>
   </data>
+  <data name="GL_Err_InvalidUrl" xml:space="preserve">
+    <value>'{0}' isn't a valid server address. Use something like https://gitlab.example.com or http://host:port.</value>
+  </data>
+  <data name="GL_Err_Unreachable" xml:space="preserve">
+    <value>Couldn't reach {0}: {1}</value>
+  </data>
+  <data name="GL_Err_NotGitLab" xml:space="preserve">
+    <value>{0} doesn't look like a GitLab server (no GitLab API response). Check the address and port.</value>
+  </data>
+  <data name="GL_Err_TokenRejected" xml:space="preserve">
+    <value>{0} rejected the access token. Check that it was copied correctly, hasn't expired, and has the api scope.</value>
+  </data>
+  <data name="GL_Err_SignInFirst" xml:space="preserve">
+    <value>Connect a GitLab account first.</value>
+  </data>
+  <data name="GL_Err_Conflict" xml:space="preserve">
+    <value>{0} was changed on the server since you opened it.</value>
+  </data>
+  <data name="Menu_GitLabAccounts" xml:space="preserve">
+    <value>GitLab Accounts...</value>
+  </data>
+  <data name="GL_AccountsTitle" xml:space="preserve">
+    <value>GitLab Accounts</value>
+  </data>
+  <data name="GL_ConnectedAccounts" xml:space="preserve">
+    <value>Connected accounts</value>
+  </data>
+  <data name="GL_NoAccounts" xml:space="preserve">
+    <value>No GitLab accounts connected.</value>
+  </data>
+  <data name="GL_ConnectHeading" xml:space="preserve">
+    <value>Connect a GitLab server</value>
+  </data>
+  <data name="GL_ServerLabel" xml:space="preserve">
+    <value>Server address</value>
+  </data>
+  <data name="GL_ServerHint" xml:space="preserve">
+    <value>For example http://unicornlab.fun:35080 or https://gitlab.com</value>
+  </data>
+  <data name="GL_TokenLabel" xml:space="preserve">
+    <value>Personal access token</value>
+  </data>
+  <data name="GL_TokenNote" xml:space="preserve">
+    <value>Create one on your GitLab server under Preferences &gt; Access tokens with the api scope (read_api for read-only access).</value>
+  </data>
+  <data name="GL_CreateToken" xml:space="preserve">
+    <value>Open the token page</value>
+  </data>
+  <data name="GL_SkipCert" xml:space="preserve">
+    <value>Accept an untrusted (self-signed) certificate for this server</value>
+  </data>
+  <data name="GL_Connect" xml:space="preserve">
+    <value>Connect</value>
+  </data>
+  <data name="GL_Connecting" xml:space="preserve">
+    <value>Connecting...</value>
+  </data>
+  <data name="GL_Connected" xml:space="preserve">
+    <value>Connected: {0}</value>
+  </data>
+  <data name="GL_FillBoth" xml:space="preserve">
+    <value>Enter the server address and an access token.</value>
+  </data>
+  <data name="GL_ActiveSuffix" xml:space="preserve">
+    <value>  (active)</value>
+  </data>
+  <data name="GL_ServerVersionTip" xml:space="preserve">
+    <value>GitLab version {0}</value>
+  </data>
+  <data name="GL_RemoveTitle" xml:space="preserve">
+    <value>Remove GitLab account</value>
+  </data>
+  <data name="GL_RemoveConfirm" xml:space="preserve">
+    <value>Remove {0} from MDEditor? The stored token is deleted from this computer; revoke it on the GitLab server to invalidate it.</value>
+  </data>
+  <data name="GL_Removed" xml:space="preserve">
+    <value>Removed {0}.</value>
+  </data>
+  <data name="GL_OpenTitle" xml:space="preserve">
+    <value>Open from GitLab</value>
+  </data>
+  <data name="GL_OpenTitleAccount" xml:space="preserve">
+    <value>Open from GitLab - {0}</value>
+  </data>
+  <data name="GL_Truncated" xml:space="preserve">
+    <value>This project is very large; only part of its file list was loaded.</value>
+  </data>
+  <data name="GL_SignInFirstPrompt" xml:space="preserve">
+    <value>Connect a GitLab account first. Open GitLab Accounts now?</value>
+  </data>
+  <data name="GL_NoWriteAccess" xml:space="preserve">
+    <value>Your account ({0}) doesn't have write access to {1}. Use File &gt; Save As... to keep a local copy.</value>
+  </data>
+  <data name="GL_CommitTitle" xml:space="preserve">
+    <value>Commit to GitLab</value>
+  </data>
+  <data name="GL_CommitConflictBanner" xml:space="preserve">
+    <value>This file changed on the server since you opened it. Your edit will go to a new branch based on the version you opened, so nothing is overwritten. Open a merge request to merge it.</value>
+  </data>
+  <data name="GL_OpenMrInto" xml:space="preserve">
+    <value>Open a merge request into {0}</value>
+  </data>
+  <data name="GL_CommitAndOpenMr" xml:space="preserve">
+    <value>Commit &amp; Open MR</value>
+  </data>
+  <data name="GL_MrOpened" xml:space="preserve">
+    <value>Committed to the new branch {0} and opened a merge request.
+
+View the merge request in the browser?</value>
+  </data>
+  <data name="GL_MrOpenedTitle" xml:space="preserve">
+    <value>Merge Request Opened</value>
+  </data>
+  <data name="GL_ConflictTitle" xml:space="preserve">
+    <value>File Changed on the Server</value>
+  </data>
+  <data name="GL_ConflictNewBranchNote" xml:space="preserve">
+    <value>Keeps both versions; open a merge request to merge them on GitLab.</value>
+  </data>
+  <data name="GL_ConflictLoadTheirsNote" xml:space="preserve">
+    <value>Replaces the editor's text with the latest version from GitLab.</value>
+  </data>
+  <data name="GL_SeeLatest" xml:space="preserve">
+    <value>See the latest version on GitLab</value>
+  </data>
+  <data name="GL_ViewCommit" xml:space="preserve">
+    <value>View Commit on GitLab</value>
+  </data>
+  <data name="GL_RestoreTip" xml:space="preserve">
+    <value>Load this version into the editor. Nothing changes on GitLab until you save (commit).</value>
+  </data>
+  <data name="Source_GitLabProject" xml:space="preserve">
+    <value>GitLab project</value>
+  </data>
+  <data name="Source_GitLabOpenDesc" xml:space="preserve">
+    <value>Browse your GitLab projects (gitlab.com or a self-hosted server) and open a file</value>
+  </data>
 </root>

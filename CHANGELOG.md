@@ -6,6 +6,9 @@ The release workflow publishes the section matching the pushed `vX.Y.Z` tag as t
 
 ## [Unreleased]
 
+### Added
+- GitLab support (gitlab.com and self-hosted servers on any port): Tools > GitLab Accounts... connects with a personal access token; File > Open from... > GitLab project opens a file; Save / Commit... commits it (directly, or to a new branch with a merge request, with conflict handling); History... shows the file's commits with diff and restore.
+
 ### Changed
 - File menu reorganized: one "Open from..." item and "Save As..." now ask where (GitHub repository / gist / this computer) instead of separate menu items; Commit... (Ctrl+Shift+Enter) and a single History... entry moved from Tools to File.
 

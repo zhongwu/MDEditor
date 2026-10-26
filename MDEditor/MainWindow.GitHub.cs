@@ -1,3 +1,4 @@
+using MDEditor.Core.Interfaces;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
@@ -19,6 +20,22 @@ public partial class MainWindow
 
     // Suggested message for the next commit (e.g. after restoring an old version).
     private string? _pendingCommitMessage;
+
+    private GitLabAccountsWindow? _gitLabAccountsWindow;
+    private readonly IGitLabAuthService _gitLabAuthService;
+
+    internal void ShowGitLabAccountsWindow()
+    {
+        if (_gitLabAccountsWindow != null)
+        {
+            _gitLabAccountsWindow.Activate();
+            return;
+        }
+
+        _gitLabAccountsWindow = new GitLabAccountsWindow(_gitLabAuthService) { Owner = this };
+        _gitLabAccountsWindow.Closed += (s, e) => _gitLabAccountsWindow = null;
+        _gitLabAccountsWindow.Show();
+    }
 
     internal void ShowGitHubAccountsWindow()
     {
@@ -101,6 +118,7 @@ public partial class MainWindow
     {
         _currentFilePath = null;
         _gistDocument = null;
+        _gitLabDocument = null;
         _gitHubDocument = file.Document;
         _pendingCommitMessage = null;
         SetEditorText(file.Text);
@@ -111,6 +129,8 @@ public partial class MainWindow
     {
         if (_gistDocument != null)
             ShowGistHistory();
+        else if (_gitLabDocument != null)
+            ShowGitLabHistory();
         else
             ShowGitHubHistory();
     }

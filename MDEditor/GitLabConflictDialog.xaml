@@ -1,0 +1,40 @@
+<Window x:Class="MDEditor.GitLabConflictDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:MDEditor.Localization"
+        Title="{loc:Tr GL_ConflictTitle}" Width="480" SizeToContent="Height" ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        Background="{DynamicResource WindowBackgroundBrush}"
+        Foreground="{DynamicResource WindowForegroundBrush}">
+    <StackPanel Margin="16">
+        <TextBlock x:Name="HeadlineText" FontWeight="SemiBold" TextWrapping="Wrap" Margin="0,0,0,6" />
+        <TextBlock TextWrapping="Wrap" Opacity="0.85" Margin="0,0,0,16"
+                   Text="{loc:Tr GH_ConflictBody}" />
+
+        <Button x:Name="NewBranchButton" HorizontalContentAlignment="Left" Padding="10,6" Margin="0,0,0,8" Click="NewBranch_Click">
+            <StackPanel>
+                <TextBlock Text="{loc:Tr GH_ConflictNewBranch}" FontWeight="SemiBold" />
+                <TextBlock Text="{loc:Tr GL_ConflictNewBranchNote}" Opacity="0.8" TextWrapping="Wrap" />
+            </StackPanel>
+        </Button>
+        <Button HorizontalContentAlignment="Left" Padding="10,6" Margin="0,0,0,8" Click="Overwrite_Click">
+            <StackPanel>
+                <TextBlock Text="{loc:Tr GH_ConflictOverwrite}" FontWeight="SemiBold" />
+                <TextBlock Text="{loc:Tr GH_ConflictOverwriteNote}" Opacity="0.8" TextWrapping="Wrap" />
+            </StackPanel>
+        </Button>
+        <Button HorizontalContentAlignment="Left" Padding="10,6" Margin="0,0,0,8" Click="LoadTheirs_Click">
+            <StackPanel>
+                <TextBlock Text="{loc:Tr GH_ConflictLoadTheirs}" FontWeight="SemiBold" />
+                <TextBlock Text="{loc:Tr GL_ConflictLoadTheirsNote}" Opacity="0.8" TextWrapping="Wrap" />
+            </StackPanel>
+        </Button>
+
+        <DockPanel Margin="0,8,0,0">
+            <Button DockPanel.Dock="Right" Content="{loc:Tr Common_Cancel}" IsCancel="True" Padding="16,3" />
+            <TextBlock VerticalAlignment="Center">
+                <Hyperlink x:Name="ViewLink" Click="ViewLink_Click"><Run Text="{loc:Tr GL_SeeLatest}" /></Hyperlink>
+            </TextBlock>
+        </DockPanel>
+    </StackPanel>
+</Window>

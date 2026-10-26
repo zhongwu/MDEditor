@@ -47,6 +47,14 @@ public sealed partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private bool _isRemoteDocument;
 
+    /// <summary>True while the open document is a GitLab repository file.</summary>
+    [ObservableProperty]
+    private bool _isGitLabDocument;
+
+    /// <summary>True for repository documents (GitHub or GitLab); shows the Commit item.</summary>
+    [ObservableProperty]
+    private bool _isCommittableDocument;
+
     /// <summary>
     /// Automatically saves the preview state to settings whenever it changes.
     /// Also ensures at least one pane (editor or preview) stays visible.
@@ -157,6 +165,7 @@ public sealed partial class MainWindowViewModel : ObservableObject
     /// Callback for opening the GitHub Accounts window.
     /// </summary>
     public Action? GitHubAccountsCallback { get; set; }
+    public Action? GitLabAccountsCallback { get; set; }
 
     /// <summary>
     /// Callback for the "Open from..." chooser (GitHub repository, gist, other hosts later).
@@ -575,6 +584,13 @@ public sealed partial class MainWindowViewModel : ObservableObject
     }
 
     // Tools commands
+    [RelayCommand]
+    private void GitLabAccounts()
+    {
+        _loggingService.LogInformation("GitLab accounts requested");
+        GitLabAccountsCallback?.Invoke();
+    }
+
     [RelayCommand]
     private void GitHubAccounts()
     {

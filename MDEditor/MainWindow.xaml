@@ -67,7 +67,7 @@
                 <MenuItem Header="{loc:Tr Menu_SaveAs}" Command="{Binding SaveAsFileCommand}" InputGestureText="Ctrl+Shift+S" />
 
                 <MenuItem Header="{loc:Tr Menu_CommitToGitHub}" Command="{Binding GitHubSyncCommand}" InputGestureText="Ctrl+Shift+Enter"
-                          Visibility="{Binding IsGitHubDocument, Converter={StaticResource BoolToVisibility}}" />
+                          Visibility="{Binding IsCommittableDocument, Converter={StaticResource BoolToVisibility}}" />
                 <MenuItem Header="{loc:Tr Menu_FileHistory}" Command="{Binding HistoryCommand}"
                           Visibility="{Binding IsRemoteDocument, Converter={StaticResource BoolToVisibility}}" />
                 <MenuItem Header="{loc:Tr Menu_ViewGist}" Command="{Binding ViewGistCommand}"
@@ -144,6 +144,7 @@
                           Click="SmartTypography_Click" />
                 <Separator />
                 <MenuItem Header="{loc:Tr Menu_GitHubAccounts}" Command="{Binding GitHubAccountsCommand}" />
+                <MenuItem Header="{loc:Tr Menu_GitLabAccounts}" Command="{Binding GitLabAccountsCommand}" />
 
                 <MenuItem Header="{loc:Tr Menu_Settings}" Command="{Binding SettingsCommand}" />
             </MenuItem>

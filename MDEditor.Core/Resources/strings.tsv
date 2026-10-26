@@ -418,3 +418,48 @@ Source_RepoOpenDesc	Browse your repositories and open a file	浏览你的仓库�
 Source_GitHubGist	GitHub Gist	GitHub Gist	GitHub Gist
 Source_GistOpenDesc	Open one of your gists, or any gist by link	打开你的 Gist，或通过链接打开任意 Gist	開啟你的 Gist，或透過連結開啟任何 Gist
 Source_GistSaveDesc	Create a new gist from this document	用当前文档创建新的 Gist	用目前文件建立新的 Gist
+GL_Err_InvalidUrl	'{0}' isn't a valid server address. Use something like https://gitlab.example.com or http://host:port.	“{0}”不是有效的服务器地址。请使用类似 https://gitlab.example.com 或 http://host:port 的格式。	「{0}」不是有效的伺服器位址。請使用類似 https://gitlab.example.com 或 http://host:port 的格式。
+GL_Err_Unreachable	Couldn't reach {0}: {1}	无法连接到 {0}：{1}	無法連線至 {0}：{1}
+GL_Err_NotGitLab	{0} doesn't look like a GitLab server (no GitLab API response). Check the address and port.	{0} 似乎不是 GitLab 服务器（没有收到 GitLab API 响应）。请检查地址和端口。	{0} 似乎不是 GitLab 伺服器（沒有收到 GitLab API 回應）。請檢查位址和連接埠。
+GL_Err_TokenRejected	{0} rejected the access token. Check that it was copied correctly, hasn't expired, and has the api scope.	{0} 拒绝了访问令牌。请检查是否复制正确、是否已过期，以及是否具有 api 权限范围。	{0} 拒絕了存取權杖。請檢查是否複製正確、是否已過期，以及是否具有 api 權限範圍。
+GL_Err_SignInFirst	Connect a GitLab account first.	请先连接 GitLab 账户。	請先連接 GitLab 帳戶。
+GL_Err_Conflict	{0} was changed on the server since you opened it.	自你打开以来，{0} 已在服务器上被更改。	自您開啟後，{0} 已在伺服器上被變更。
+Menu_GitLabAccounts	GitLab Accounts...	GitLab 账户...	GitLab 帳戶...
+GL_AccountsTitle	GitLab Accounts	GitLab 账户	GitLab 帳戶
+GL_ConnectedAccounts	Connected accounts	已连接的账户	已連接的帳戶
+GL_NoAccounts	No GitLab accounts connected.	尚未连接 GitLab 账户。	尚未連接 GitLab 帳戶。
+GL_ConnectHeading	Connect a GitLab server	连接 GitLab 服务器	連接 GitLab 伺服器
+GL_ServerLabel	Server address	服务器地址	伺服器位址
+GL_ServerHint	For example http://unicornlab.fun:35080 or https://gitlab.com	例如 http://unicornlab.fun:35080 或 https://gitlab.com	例如 http://unicornlab.fun:35080 或 https://gitlab.com
+GL_TokenLabel	Personal access token	个人访问令牌	個人存取權杖
+GL_TokenNote	Create one on your GitLab server under Preferences > Access tokens with the api scope (read_api for read-only access).	在你的 GitLab 服务器的“偏好设置 > 访问令牌”中创建，勾选 api 权限范围（只读访问可用 read_api）。	在您的 GitLab 伺服器的「偏好設定 > 存取權杖」中建立，勾選 api 權限範圍（唯讀存取可用 read_api）。
+GL_CreateToken	Open the token page	打开令牌页面	開啟權杖頁面
+GL_SkipCert	Accept an untrusted (self-signed) certificate for this server	接受此服务器的不受信任（自签名）证书	接受此伺服器的不受信任（自簽章）憑證
+GL_Connect	Connect	连接	連接
+GL_Connecting	Connecting...	正在连接…	正在連接…
+GL_Connected	Connected: {0}	已连接：{0}	已連接：{0}
+GL_FillBoth	Enter the server address and an access token.	请输入服务器地址和访问令牌。	請輸入伺服器位址和存取權杖。
+GL_ActiveSuffix	  (active)	（当前）	（目前）
+GL_ServerVersionTip	GitLab version {0}	GitLab 版本 {0}	GitLab 版本 {0}
+GL_RemoveTitle	Remove GitLab account	移除 GitLab 账户	移除 GitLab 帳戶
+GL_RemoveConfirm	Remove {0} from MDEditor? The stored token is deleted from this computer; revoke it on the GitLab server to invalidate it.	从 MDEditor 中移除 {0}？已存储的令牌会从此电脑删除；如需使其失效，请在 GitLab 服务器上撤销。	從 MDEditor 中移除 {0}？已儲存的權杖會從此電腦刪除；如需使其失效，請在 GitLab 伺服器上撤銷。
+GL_Removed	Removed {0}.	已移除 {0}。	已移除 {0}。
+GL_OpenTitle	Open from GitLab	从 GitLab 打开	從 GitLab 開啟
+GL_OpenTitleAccount	Open from GitLab - {0}	从 GitLab 打开 - {0}	從 GitLab 開啟 - {0}
+GL_Truncated	This project is very large; only part of its file list was loaded.	此项目非常大；只加载了部分文件列表。	此專案非常大；只載入了部分檔案清單。
+GL_SignInFirstPrompt	Connect a GitLab account first. Open GitLab Accounts now?	请先连接 GitLab 账户。现在打开 GitLab 账户吗？	請先連接 GitLab 帳戶。現在開啟 GitLab 帳戶嗎？
+GL_NoWriteAccess	Your account ({0}) doesn't have write access to {1}. Use File > Save As... to keep a local copy.	你的账户 ({0}) 没有 {1} 的写入权限。请使用“文件 > 另存为...”保留本地副本。	您的帳戶 ({0}) 沒有 {1} 的寫入權限。請使用「檔案 > 另存新檔...」保留本機複本。
+GL_CommitTitle	Commit to GitLab	提交到 GitLab	提交至 GitLab
+GL_CommitConflictBanner	This file changed on the server since you opened it. Your edit will go to a new branch based on the version you opened, so nothing is overwritten. Open a merge request to merge it.	自你打开此文件以来，它已在服务器上被更改。你的修改将提交到基于你打开时版本的新分支，不会覆盖任何内容。请创建合并请求进行合并。	自您開啟此檔案後，它已在伺服器上被變更。您的編輯將提交至以您開啟時版本為基礎的新分支，不會覆寫任何內容。請建立合併請求進行合併。
+GL_OpenMrInto	Open a merge request into {0}	创建合并请求到 {0}	建立合併請求至 {0}
+GL_CommitAndOpenMr	Commit & Open MR	提交并创建合并请求	提交並建立合併請求
+GL_MrOpened	Committed to the new branch {0} and opened a merge request.\n\nView the merge request in the browser?	已提交到新分支 {0} 并创建了合并请求。\n\n在浏览器中查看该合并请求吗？	已提交至新分支 {0} 並建立了合併請求。\n\n要在瀏覽器中檢視該合併請求嗎？
+GL_MrOpenedTitle	Merge Request Opened	已创建合并请求	已建立合併請求
+GL_ConflictTitle	File Changed on the Server	文件已在服务器上更改	檔案已在伺服器上變更
+GL_ConflictNewBranchNote	Keeps both versions; open a merge request to merge them on GitLab.	保留两个版本；在 GitLab 上创建合并请求进行合并。	保留兩個版本；在 GitLab 上建立合併請求進行合併。
+GL_ConflictLoadTheirsNote	Replaces the editor's text with the latest version from GitLab.	用 GitLab 上的最新版本替换编辑器中的文本。	以 GitLab 上的最新版本取代編輯器中的文字。
+GL_SeeLatest	See the latest version on GitLab	在 GitLab 上查看最新版本	在 GitLab 上檢視最新版本
+GL_ViewCommit	View Commit on GitLab	在 GitLab 上查看提交	在 GitLab 上檢視提交
+GL_RestoreTip	Load this version into the editor. Nothing changes on GitLab until you save (commit).	将此版本加载到编辑器中。在保存（提交）之前，GitLab 上不会有任何更改。	將此版本載入編輯器。在儲存（提交）之前，GitLab 上不會有任何變更。
+Source_GitLabProject	GitLab project	GitLab 项目	GitLab 專案
+Source_GitLabOpenDesc	Browse your GitLab projects (gitlab.com or a self-hosted server) and open a file	浏览你的 GitLab 项目（gitlab.com 或自托管服务器）并打开文件	瀏覽你的 GitLab 專案（gitlab.com 或自架伺服器）並開啟檔案

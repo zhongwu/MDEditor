@@ -37,6 +37,13 @@ public static class CoreServiceCollectionExtensions
             sp.GetRequiredService<ITokenStore>(),
             sp.GetRequiredService<ILoggingService>()));
         services.AddSingleton<IGitHubRepositoryService, GitHubRepositoryService>();
+
+        // GitLab (Phase 5.7): gitlab.com and self-hosted servers
+        services.AddSingleton<IGitLabAuthService>(sp => new GitLabAuthService(
+            sp.GetRequiredService<ISettingsService>(),
+            sp.GetRequiredService<ITokenStore>(),
+            sp.GetRequiredService<ILoggingService>()));
+        services.AddSingleton<IGitLabRepositoryService, GitLabRepositoryService>();
         services.AddSingleton<IGitHubGistService>(sp => new GitHubGistService(
             sp.GetRequiredService<IGitHubAuthService>(),
             sp.GetRequiredService<ILoggingService>()));

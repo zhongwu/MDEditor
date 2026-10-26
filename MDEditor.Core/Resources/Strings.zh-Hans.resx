@@ -1406,4 +1406,141 @@ graph TD
   <data name="Source_GistSaveDesc" xml:space="preserve">
     <value>用当前文档创建新的 Gist</value>
   </data>
+  <data name="GL_Err_InvalidUrl" xml:space="preserve">
+    <value>“{0}”不是有效的服务器地址。请使用类似 https://gitlab.example.com 或 http://host:port 的格式。</value>
+  </data>
+  <data name="GL_Err_Unreachable" xml:space="preserve">
+    <value>无法连接到 {0}：{1}</value>
+  </data>
+  <data name="GL_Err_NotGitLab" xml:space="preserve">
+    <value>{0} 似乎不是 GitLab 服务器（没有收到 GitLab API 响应）。请检查地址和端口。</value>
+  </data>
+  <data name="GL_Err_TokenRejected" xml:space="preserve">
+    <value>{0} 拒绝了访问令牌。请检查是否复制正确、是否已过期，以及是否具有 api 权限范围。</value>
+  </data>
+  <data name="GL_Err_SignInFirst" xml:space="preserve">
+    <value>请先连接 GitLab 账户。</value>
+  </data>
+  <data name="GL_Err_Conflict" xml:space="preserve">
+    <value>自你打开以来，{0} 已在服务器上被更改。</value>
+  </data>
+  <data name="Menu_GitLabAccounts" xml:space="preserve">
+    <value>GitLab 账户...</value>
+  </data>
+  <data name="GL_AccountsTitle" xml:space="preserve">
+    <value>GitLab 账户</value>
+  </data>
+  <data name="GL_ConnectedAccounts" xml:space="preserve">
+    <value>已连接的账户</value>
+  </data>
+  <data name="GL_NoAccounts" xml:space="preserve">
+    <value>尚未连接 GitLab 账户。</value>
+  </data>
+  <data name="GL_ConnectHeading" xml:space="preserve">
+    <value>连接 GitLab 服务器</value>
+  </data>
+  <data name="GL_ServerLabel" xml:space="preserve">
+    <value>服务器地址</value>
+  </data>
+  <data name="GL_ServerHint" xml:space="preserve">
+    <value>例如 http://unicornlab.fun:35080 或 https://gitlab.com</value>
+  </data>
+  <data name="GL_TokenLabel" xml:space="preserve">
+    <value>个人访问令牌</value>
+  </data>
+  <data name="GL_TokenNote" xml:space="preserve">
+    <value>在你的 GitLab 服务器的“偏好设置 &gt; 访问令牌”中创建，勾选 api 权限范围（只读访问可用 read_api）。</value>
+  </data>
+  <data name="GL_CreateToken" xml:space="preserve">
+    <value>打开令牌页面</value>
+  </data>
+  <data name="GL_SkipCert" xml:space="preserve">
+    <value>接受此服务器的不受信任（自签名）证书</value>
+  </data>
+  <data name="GL_Connect" xml:space="preserve">
+    <value>连接</value>
+  </data>
+  <data name="GL_Connecting" xml:space="preserve">
+    <value>正在连接…</value>
+  </data>
+  <data name="GL_Connected" xml:space="preserve">
+    <value>已连接：{0}</value>
+  </data>
+  <data name="GL_FillBoth" xml:space="preserve">
+    <value>请输入服务器地址和访问令牌。</value>
+  </data>
+  <data name="GL_ActiveSuffix" xml:space="preserve">
+    <value>（当前）</value>
+  </data>
+  <data name="GL_ServerVersionTip" xml:space="preserve">
+    <value>GitLab 版本 {0}</value>
+  </data>
+  <data name="GL_RemoveTitle" xml:space="preserve">
+    <value>移除 GitLab 账户</value>
+  </data>
+  <data name="GL_RemoveConfirm" xml:space="preserve">
+    <value>从 MDEditor 中移除 {0}？已存储的令牌会从此电脑删除；如需使其失效，请在 GitLab 服务器上撤销。</value>
+  </data>
+  <data name="GL_Removed" xml:space="preserve">
+    <value>已移除 {0}。</value>
+  </data>
+  <data name="GL_OpenTitle" xml:space="preserve">
+    <value>从 GitLab 打开</value>
+  </data>
+  <data name="GL_OpenTitleAccount" xml:space="preserve">
+    <value>从 GitLab 打开 - {0}</value>
+  </data>
+  <data name="GL_Truncated" xml:space="preserve">
+    <value>此项目非常大；只加载了部分文件列表。</value>
+  </data>
+  <data name="GL_SignInFirstPrompt" xml:space="preserve">
+    <value>请先连接 GitLab 账户。现在打开 GitLab 账户吗？</value>
+  </data>
+  <data name="GL_NoWriteAccess" xml:space="preserve">
+    <value>你的账户 ({0}) 没有 {1} 的写入权限。请使用“文件 &gt; 另存为...”保留本地副本。</value>
+  </data>
+  <data name="GL_CommitTitle" xml:space="preserve">
+    <value>提交到 GitLab</value>
+  </data>
+  <data name="GL_CommitConflictBanner" xml:space="preserve">
+    <value>自你打开此文件以来，它已在服务器上被更改。你的修改将提交到基于你打开时版本的新分支，不会覆盖任何内容。请创建合并请求进行合并。</value>
+  </data>
+  <data name="GL_OpenMrInto" xml:space="preserve">
+    <value>创建合并请求到 {0}</value>
+  </data>
+  <data name="GL_CommitAndOpenMr" xml:space="preserve">
+    <value>提交并创建合并请求</value>
+  </data>
+  <data name="GL_MrOpened" xml:space="preserve">
+    <value>已提交到新分支 {0} 并创建了合并请求。
+
+在浏览器中查看该合并请求吗？</value>
+  </data>
+  <data name="GL_MrOpenedTitle" xml:space="preserve">
+    <value>已创建合并请求</value>
+  </data>
+  <data name="GL_ConflictTitle" xml:space="preserve">
+    <value>文件已在服务器上更改</value>
+  </data>
+  <data name="GL_ConflictNewBranchNote" xml:space="preserve">
+    <value>保留两个版本；在 GitLab 上创建合并请求进行合并。</value>
+  </data>
+  <data name="GL_ConflictLoadTheirsNote" xml:space="preserve">
+    <value>用 GitLab 上的最新版本替换编辑器中的文本。</value>
+  </data>
+  <data name="GL_SeeLatest" xml:space="preserve">
+    <value>在 GitLab 上查看最新版本</value>
+  </data>
+  <data name="GL_ViewCommit" xml:space="preserve">
+    <value>在 GitLab 上查看提交</value>
+  </data>
+  <data name="GL_RestoreTip" xml:space="preserve">
+    <value>将此版本加载到编辑器中。在保存（提交）之前，GitLab 上不会有任何更改。</value>
+  </data>
+  <data name="Source_GitLabProject" xml:space="preserve">
+    <value>GitLab 项目</value>
+  </data>
+  <data name="Source_GitLabOpenDesc" xml:space="preserve">
+    <value>浏览你的 GitLab 项目（gitlab.com 或自托管服务器）并打开文件</value>
+  </data>
 </root>

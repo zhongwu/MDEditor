@@ -224,11 +224,24 @@ Goal: let users in China (where github.com can be slow or blocked) open, edit an
 - [ ] Gitee authentication: personal access token (Gitee OAuth device flow is not available), stored in Windows Credential Manager like GitHub tokens; multi-account like GitHub
 - [ ] Gitee repository operations via Gitee REST API v5 (`https://gitee.com/api/v5`): list repos/branches/tree, open file, save/commit with message, create branch + pull request, conflict detection via file `sha`
 - [ ] Gitee file history: commit list for a file, view a version, diff vs parent / vs current, restore — reusing `GitHubHistoryWindow` and `LineDiff`
-- [ ] Provider-aware links: commit/blob/PR URLs and "open in browser" built per provider (Gitee uses `gitee.com/{owner}/{repo}/blob/{branch}/{path}`)
+- [ ] Remaining: Save As... to GitLab (create a new file in a project), private-project images in the preview (needs the PRIVATE-TOKEN header on raw URLs), a visible warning for plain-HTTP servers.: commit/blob/PR URLs and "open in browser" built per provider (Gitee uses `gitee.com/{owner}/{repo}/blob/{branch}/{path}`)
 - [ ] Image URL rewriting for relative images on Gitee (raw URLs differ from GitHub's)
-- [ ] Settings: optional custom host (enables GitHub Enterprise Server and self-hosted Gitee later)
+- [ ] Settings: optional custom host (enables GitHub Enterprise Server and self-hosted Gitee later; GitLab gets this in 5.7)
 - [ ] Localization (en / zh-Hans / zh-Hant) for all new strings; unit tests with a mocked HTTP layer
 - Open questions: Gitee API rate limits and token scopes; whether to use `HttpClient` directly or a community SDK; update checks stay on GitHub Releases
+#### 5.7 GitLab Support, including self-hosted (🔄 IN PROGRESS — open / commit / history work; polish and live testing remain)
+Goal: open, edit and sync Markdown files on GitLab, both gitlab.com and self-hosted servers (for example a team instance at a custom URL and port). Builds on the provider abstraction from 5.5, so the File menu choosers (Open from... / Save As...) gain a GitLab option without new menu items.
+- [ ] GitLab provider behind the provider-neutral interfaces from 5.5; reuse the same document, commit and history UI. **Status:** implemented first as its own services (`IGitLabAuthService`, `IGitLabRepositoryService`, `GitLab*` models; only the neutral tree/commit/conflict types are shared with GitHub) so GitHub is untouched; unifying both behind one provider interface is still the 5.5 refactor
+- [x] **Server URL setting** per account (default `https://gitlab.com`): accepts `http(s)://host[:port]` for self-hosted instances; connection test that checks `GET /api/v4/version` and reports unreachable / wrong server / not authorized clearly
+- [x] Authentication (Core + Tools > GitLab Accounts... window): personal access token (scopes `api` or `read_api` + `write_repository`), stored in Windows Credential Manager per server + account; multi-account like GitHub
+- [x] Project browsing and file operations **service layer** via GitLab REST API v4 (projects, branches, recursive tree, read file, commit with conflict detection, new branch + merge request; unit-tested against a scripted fake server). **UI done:** File > Open from... > GitLab project (project/branch/file browser), Save / Commit... (commit dialog with new branch + merge request, conflict dialog with new-branch / overwrite / load-theirs), History... (diff and restore). Not yet exercised against a real server. Original scope: (`/api/v4`): list projects the user is a member of (project IDs / URL-encoded `namespace/path`), branches, repository tree, read file, create/update file with commit message, create branch + merge request; optimistic concurrency via `last_commit_id` / blob SHA
+- [x] File history **service layer** (`repository/commits?path=`, file at commit); **history window done**: for a file, view a version at a commit, diff vs parent / vs current, restore — reusing the history window and `LineDiff`
+- [ ] Snippets as the gist equivalent (optional): open / save / update personal snippets
+- [ ] Remaining: Save As... to GitLab (create a new file in a project), private-project images in the preview (needs the PRIVATE-TOKEN header on raw URLs), a visible warning for plain-HTTP servers. ("open in browser" for blob, commit and merge request URLs use GitLab's `/-/blob/`, `/-/commit/` form) and relative-image rewriting for GitLab raw URLs
+- [ ] Self-hosted details: custom ports, plain http:// and a per-account "accept untrusted certificate" option are supported; a visible warning for plain-HTTP servers is still to do; no hardcoded gitlab.com in the services
+- [ ] Localization (en / zh-Hans / zh-Hant) and unit tests against a mocked HTTP layer
+- Open questions: GitLab SDK (GitLabApiClient / NGitLab) versus a small `HttpClient` wrapper shared with Gitee; token scopes across GitLab versions; rate limits on self-hosted servers
+- Test target: the self-hosted instance used in development is a standard GitLab (sign-in at `/users/sign_in`, API v4)
 ---
 
 ### Phase 6: Advanced Features (Week 6-7) ✅ COMPLETED
@@ -468,7 +481,7 @@ MainWindow
 - [ ] Diagram editing (mermaid live editor)
 - [ ] Notebook interface (code blocks execution)
 - [ ] Mobile companion app (WPF mobile)
-- [ ] Other Git hosts beyond GitHub/Gitee (GitLab, Azure DevOps, Bitbucket) — builds on the provider abstraction in 5.5 and the File menu structure in 5.6
+- [ ] Other Git hosts beyond GitHub/Gitee/GitLab (Azure DevOps, Bitbucket) — builds on the provider abstraction in 5.5 and the File menu structure in 5.6
 
 ---
 

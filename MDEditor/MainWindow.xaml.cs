@@ -161,11 +161,14 @@ public partial class MainWindow : Window
 
         // GitHub (Phase 5)
         ViewModel.GitHubAccountsCallback = ShowGitHubAccountsWindow;
+        ViewModel.GitLabAccountsCallback = ShowGitLabAccountsWindow;
         ViewModel.OpenFromCallback = ShowOpenFromPicker;
-        ViewModel.GitHubSyncCallback = CommitToGitHub;
+        ViewModel.GitHubSyncCallback = CommitRemote;
         ViewModel.HistoryCallback = ShowHistory;
         ViewModel.ViewGistCallback = ViewGistOnGitHub;
         _gitHubAuthService = App.Services.GetRequiredService<IGitHubAuthService>();
+        _gitLabAuthService = App.Services.GetRequiredService<IGitLabAuthService>();
+        _gitLabRepoService = App.Services.GetRequiredService<IGitLabRepositoryService>();
         _gitHubRepoService = App.Services.GetRequiredService<IGitHubRepositoryService>();
         _gistService = App.Services.GetRequiredService<IGitHubGistService>();
         _gitHubAuthService.AccountsChanged += (s, e) => UpdateGitHubStatus();
@@ -564,6 +567,7 @@ public partial class MainWindow : Window
                     var content = System.IO.File.ReadAllText(file, encoding);
                     _currentFilePath = file;
                     _gitHubDocument = null;
+                    _gitLabDocument = null;
                     _gistDocument = null;
                     SetEditorText(content);
                     AddRecentFile(file);
@@ -973,7 +977,9 @@ public partial class MainWindow : Window
     }
 
     private PreviewRenderOptions GetPreviewRenderOptions() =>
-        new(ThemeService.IsDark, _customCss, _gitHubDocument?.RawFolderUrl, _gitHubDocument?.RawRootUrl);
+        new(ThemeService.IsDark, _customCss,
+            _gitHubDocument?.RawFolderUrl ?? _gitLabDocument?.RawFolderUrl,
+            _gitHubDocument?.RawRootUrl ?? _gitLabDocument?.RawRootUrl);
 
     // --- Settings window hooks: these apply a change live; the Settings window itself persists
     // the value via ISettingsService before calling in. ---
@@ -1372,6 +1378,7 @@ public partial class MainWindow : Window
     /// <summary>File name of the open document, whether local, from a repository, or from a gist.</summary>
     private string CurrentDocumentName =>
         _gitHubDocument?.FileName
+        ?? _gitLabDocument?.FileName
         ?? _gistDocument?.FileName
         ?? (string.IsNullOrEmpty(_currentFilePath) ? UntitledFileName : System.IO.Path.GetFileName(_currentFilePath));
 
@@ -1379,19 +1386,22 @@ public partial class MainWindow : Window
     {
         var fileName = CurrentDocumentName;
         var location = _gitHubDocument != null ? $" ({_gitHubDocument.RepoFullName}@{_gitHubDocument.Branch})"
+            : _gitLabDocument != null ? $" ({_gitLabDocument.ProjectPath}@{_gitLabDocument.Branch})"
             : _gistDocument != null ? $" (Gist: {_gistDocument.DisplayName})"
             : "";
         var dirty = _isDirty ? " ●" : "";
         Title = $"MDEditor - {fileName}{location}{dirty}";
         EditorFileName.Text = fileName + location;
-        EditorFileName.ToolTip = _gitHubDocument?.DisplayName ?? _gistDocument?.HtmlUrl ?? _currentFilePath;
+        EditorFileName.ToolTip = _gitHubDocument?.DisplayName ?? _gitLabDocument?.DisplayName ?? _gistDocument?.HtmlUrl ?? _currentFilePath;
         EditorDirtyIndicator.Visibility = _isDirty ? Visibility.Visible : Visibility.Collapsed;
 
         // Every change of document identity (open, Save As, commit) ends here, so this keeps the
         // GitHub/gist-only menu items in sync.
         ViewModel.IsGitHubDocument = _gitHubDocument != null;
         ViewModel.IsGistDocument = _gistDocument != null;
-        ViewModel.IsRemoteDocument = _gitHubDocument != null || _gistDocument != null;
+        ViewModel.IsGitLabDocument = _gitLabDocument != null;
+        ViewModel.IsCommittableDocument = _gitHubDocument != null || _gitLabDocument != null;
+        ViewModel.IsRemoteDocument = _gitHubDocument != null || _gitLabDocument != null || _gistDocument != null;
     }
 
     private void SetEditorText(string text)
@@ -1422,6 +1432,7 @@ public partial class MainWindow : Window
 
         _currentFilePath = null;
         _gitHubDocument = null;
+        _gitLabDocument = null;
         _gistDocument = null;
         SetEditorText("");
     }
@@ -1450,6 +1461,7 @@ public partial class MainWindow : Window
                 var content = System.IO.File.ReadAllText(dialog.FileName, encoding);
                 _currentFilePath = dialog.FileName;
                 _gitHubDocument = null;
+                _gitLabDocument = null;
                 _gistDocument = null;
                 SetEditorText(content);
                 AddRecentFile(dialog.FileName);
@@ -1466,6 +1478,12 @@ public partial class MainWindow : Window
         if (_gitHubDocument != null)
         {
             CommitToGitHub();
+            return;
+        }
+
+        if (_gitLabDocument != null)
+        {
+            CommitToGitLab(initialMessage: null, conflictMode: false);
             return;
         }
 
@@ -1501,9 +1519,11 @@ public partial class MainWindow : Window
     {
         var picked = PickSource(Loc.Get("Source_OpenTitle"),
             new SourceOption(Loc.Get("Source_GitHubRepo"), Loc.Get("Source_RepoOpenDesc")),
-            new SourceOption(Loc.Get("Source_GitHubGist"), Loc.Get("Source_GistOpenDesc")));
+            new SourceOption(Loc.Get("Source_GitHubGist"), Loc.Get("Source_GistOpenDesc")),
+            new SourceOption(Loc.Get("Source_GitLabProject"), Loc.Get("Source_GitLabOpenDesc")));
         if (picked == 0) OpenFromGitHub();
         else if (picked == 1) OpenGist();
+        else if (picked == 2) OpenFromGitLab();
     }
 
     /// <summary>Save As... - pick this computer or a new gist, then run that flow.</summary>
@@ -1541,6 +1561,7 @@ public partial class MainWindow : Window
                 System.IO.File.WriteAllText(dialog.FileName, text);
                 _currentFilePath = dialog.FileName;
                 _gitHubDocument = null;
+                _gitLabDocument = null;
                 _gistDocument = null;
                 _isDirty = false;
                 AddRecentFile(dialog.FileName);
@@ -1808,6 +1829,7 @@ public partial class MainWindow : Window
                         var content = System.IO.File.ReadAllText(path, encoding);
                         _currentFilePath = path;
                         _gitHubDocument = null;
+                        _gitLabDocument = null;
                         _gistDocument = null;
                         SetEditorText(content);
                         AddRecentFile(path);
