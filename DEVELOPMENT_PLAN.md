@@ -208,6 +208,18 @@
 - [x] Create/Update secret/public gists — File > Save as Gist... (file name, optional description, secret by default; link copied to clipboard, offer to open); Save on a gist document updates it in place, preserving line endings. Gists have no per-file SHA, so a newer `updated_at` on GitHub prompts overwrite / load latest / keep editing. Missing `gist` scope on a PAT gets an explanatory error
 - [x] Open gist files — File > Open Gist...: your gists (filterable, public/secret marker, file count, updated date) or any gist by URL/ID (pre-filled from a gist link on the clipboard); pick a file (Markdown first). Other people's gists open read-only (Save explains Save as Gist / Save As); Tools > Open Gist in Browser while a gist is open
 
+#### 5.5 Gitee Support (Planned — post-v0.3.0)
+Goal: let users in China (where github.com can be slow or blocked) open, edit and sync Markdown files on [Gitee](https://gitee.com) like they do on GitHub. Today every GitHub feature is hardcoded to github.com via Octokit.NET (`GitHubAuthService`, `GitHubRepositoryService`, `GitHubGistService`, and `https://github.com/...` URLs in the models), so this needs a provider abstraction first.
+- [ ] Provider abstraction: introduce provider-neutral interfaces (auth, repository, file history) that the existing GitHub services implement, and make the UI/ViewModels depend on them instead of GitHub types; keep gists GitHub-only (Gitee has no equivalent)
+- [ ] Provider selection: GitHub / Gitee choice in the account and repository windows; account model gains a provider and host; menu labels and tooltips stop saying "GitHub" when the active document is on Gitee
+- [ ] Gitee authentication: personal access token (Gitee OAuth device flow is not available), stored in Windows Credential Manager like GitHub tokens; multi-account like GitHub
+- [ ] Gitee repository operations via Gitee REST API v5 (`https://gitee.com/api/v5`): list repos/branches/tree, open file, save/commit with message, create branch + pull request, conflict detection via file `sha`
+- [ ] Gitee file history: commit list for a file, view a version, diff vs parent / vs current, restore — reusing `GitHubHistoryWindow` and `LineDiff`
+- [ ] Provider-aware links: commit/blob/PR URLs and "open in browser" built per provider (Gitee uses `gitee.com/{owner}/{repo}/blob/{branch}/{path}`)
+- [ ] Image URL rewriting for relative images on Gitee (raw URLs differ from GitHub's)
+- [ ] Settings: optional custom host (enables GitHub Enterprise Server and self-hosted Gitee later)
+- [ ] Localization (en / zh-Hans / zh-Hant) for all new strings; unit tests with a mocked HTTP layer
+- Open questions: Gitee API rate limits and token scopes; whether to use `HttpClient` directly or a community SDK; update checks stay on GitHub Releases
 ---
 
 ### Phase 6: Advanced Features (Week 6-7) ✅ COMPLETED
@@ -447,6 +459,7 @@ MainWindow
 - [ ] Diagram editing (mermaid live editor)
 - [ ] Notebook interface (code blocks execution)
 - [ ] Mobile companion app (WPF mobile)
+- [ ] Other Git hosts beyond GitHub/Gitee (GitLab, Azure DevOps, Bitbucket) — builds on the provider abstraction in 5.5
 
 ---
 
