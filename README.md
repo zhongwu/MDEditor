@@ -2,17 +2,17 @@
 
 A modern **Markdown desktop editor** built with **WPF** and **.NET 10**, featuring a dual-pane interface with live preview, rich formatting toolbar, file management, and GitHub synchronization.
 
-## Current Status (v0.2.0-dev)
+## Current Status (v0.9.0-dev)
 
 | Phase | Status | Notes |
 |-------|--------|-------|
 | **1. Foundation & Project Setup** | ✅ Complete | WPF app, DI, MVVM, settings, logging |
-| **2. Editor Core** | ✅ Complete | Syntax highlight, line numbers, find/replace, go-to-line, word wrap, live preview with KaTeX/Mermaid |
-| **3. Toolbar & Formatting** | ✅ Complete | All format commands, menus, toolbar |
-| **4. File Operations** | Mostly Done | New/Open/Save/Save As/Export HTML, drag & drop |
-| **5. GitHub Integration** | ⏳ Not Started | Auth, repo browser, sync |
-| **6. Advanced Features** | 🔄 In Progress | 6.1 editor enhancements and 6.2 preview enhancements done; settings & themes pending |
-| **7. Polish & Release** | ⏳ Not Started | Tests, packaging, docs |
+| **2. Editor Core** | ✅ Complete | RichTextBox editor, line numbers, find/replace, go-to-line, word wrap, live preview with KaTeX/Mermaid (syntax highlighting disabled) |
+| **3. Toolbar & Formatting** | ✅ Complete | All format commands, menus, toolbar, context menu |
+| **4. File Operations** | ✅ Complete | New/Open/Save/Save As/Export HTML/PDF, drag & drop, recent files, auto-save |
+| **5. GitHub Integration** | ✅ Complete | OAuth/PAT multi-account auth, repo browser, open/save/sync, conflict handling, file history & diff, gist support |
+| **6. Advanced Features** | ✅ Complete | Editor enhancements (autocomplete, bracket matching, smart quotes, minimap), view toggles/zoom, preview (scroll sync, outline, find, print, presentation), settings/themes, localization (en/zh-Hans/zh-Hant) |
+| **7. Polish & Release** | 🔄 In Progress | Unit tests ~87% coverage, MSIX packaging, GitHub Releases; UI automation, memory-leak & accessibility passes still open |
 
 ## Implemented Features
 
@@ -159,6 +159,15 @@ See [DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md) for the full roadmap, architectur
 ```bash
 dotnet test
 ```
+
+### Packaging & Releases
+```powershell
+pwsh tools/Build-Msix.ps1   # self-contained publish -> artifacts/ (portable zip + .msix)
+```
+- The app version lives in `Directory.Build.props`; add a matching `## [x.y.z]` entry to `CHANGELOG.md`.
+- Pushing a tag `vX.Y.Z` runs `.github/workflows/release.yml`: it tests, builds x64 and ARM64 packages, and creates a GitHub release with the changelog section as notes.
+- The MSIX is signed only when the repository secrets `WINDOWS_CERT_PFX_BASE64`, `WINDOWS_CERT_PASSWORD` and `WINDOWS_CERT_SUBJECT` are set. For local sideload testing, create a throwaway certificate with `tools/New-DevCertificate.ps1` and pass it to `Build-Msix.ps1 -CertPath`. The portable zip needs no signing.
+- Help → Check for Updates compares the running version with the latest GitHub release.
 
 ## Contributing
 
