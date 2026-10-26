@@ -51,9 +51,6 @@
   <data name="Menu_Open" xml:space="preserve">
     <value>開啟...</value>
   </data>
-  <data name="Menu_OpenFromGitHub" xml:space="preserve">
-    <value>GitHub 儲存庫...</value>
-  </data>
   <data name="Menu_RecentFiles" xml:space="preserve">
     <value>最近使用的檔案</value>
   </data>
@@ -1068,12 +1065,6 @@
   <data name="Snip_Mermaid" xml:space="preserve">
     <value>Mermaid 圖表</value>
   </data>
-  <data name="Menu_OpenGist" xml:space="preserve">
-    <value>GitHub Gist...</value>
-  </data>
-  <data name="Menu_SaveAsGist" xml:space="preserve">
-    <value>另存為 Gist...</value>
-  </data>
   <data name="Menu_ViewGist" xml:space="preserve">
     <value>在瀏覽器中開啟 Gist</value>
   </data>
@@ -1383,6 +1374,36 @@ graph TD
     <value>無法檢查更新：{0}</value>
   </data>
   <data name="Menu_OpenFrom" xml:space="preserve">
+    <value>開啟自...</value>
+  </data>
+  <data name="Source_Continue" xml:space="preserve">
+    <value>繼續</value>
+  </data>
+  <data name="Source_OpenTitle" xml:space="preserve">
     <value>開啟自</value>
+  </data>
+  <data name="Source_SaveTitle" xml:space="preserve">
+    <value>另存新檔</value>
+  </data>
+  <data name="Source_ThisComputer" xml:space="preserve">
+    <value>此電腦</value>
+  </data>
+  <data name="Source_ThisComputerDesc" xml:space="preserve">
+    <value>儲存到此電腦上的檔案</value>
+  </data>
+  <data name="Source_GitHubRepo" xml:space="preserve">
+    <value>GitHub 儲存庫</value>
+  </data>
+  <data name="Source_RepoOpenDesc" xml:space="preserve">
+    <value>瀏覽你的儲存庫並開啟檔案</value>
+  </data>
+  <data name="Source_GitHubGist" xml:space="preserve">
+    <value>GitHub Gist</value>
+  </data>
+  <data name="Source_GistOpenDesc" xml:space="preserve">
+    <value>開啟你的 Gist，或透過連結開啟任何 Gist</value>
+  </data>
+  <data name="Source_GistSaveDesc" xml:space="preserve">
+    <value>用目前文件建立新的 Gist</value>
   </data>
 </root>

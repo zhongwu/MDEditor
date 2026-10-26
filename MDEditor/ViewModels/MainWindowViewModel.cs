@@ -159,9 +159,9 @@ public sealed partial class MainWindowViewModel : ObservableObject
     public Action? GitHubAccountsCallback { get; set; }
 
     /// <summary>
-    /// Callback for opening a file from a GitHub repository.
+    /// Callback for the "Open from..." chooser (GitHub repository, gist, other hosts later).
     /// </summary>
-    public Action? OpenFromGitHubCallback { get; set; }
+    public Action? OpenFromCallback { get; set; }
 
     /// <summary>
     /// Callback for committing the current GitHub file.
@@ -174,10 +174,8 @@ public sealed partial class MainWindowViewModel : ObservableObject
     public Action? HistoryCallback { get; set; }
 
     /// <summary>
-    /// Callbacks for gist support: open a gist file, save as a new gist, view the gist online.
+    /// Callback for viewing the open gist on GitHub.
     /// </summary>
-    public Action? OpenGistCallback { get; set; }
-    public Action? SaveAsGistCallback { get; set; }
     public Action? ViewGistCallback { get; set; }
 
     /// <summary>
@@ -598,19 +596,6 @@ public sealed partial class MainWindowViewModel : ObservableObject
         HistoryCallback?.Invoke();
     }
 
-    [RelayCommand]
-    private void OpenGist()
-    {
-        _loggingService.LogInformation("Open gist requested");
-        OpenGistCallback?.Invoke();
-    }
-
-    [RelayCommand]
-    private void SaveAsGist()
-    {
-        _loggingService.LogInformation("Save as gist requested");
-        SaveAsGistCallback?.Invoke();
-    }
 
     [RelayCommand]
     private void ViewGist()
@@ -621,10 +606,10 @@ public sealed partial class MainWindowViewModel : ObservableObject
 
 
     [RelayCommand]
-    private void OpenFromGitHub()
+    private void OpenFrom()
     {
-        _loggingService.LogInformation("Open from GitHub requested");
-        OpenFromGitHubCallback?.Invoke();
+        _loggingService.LogInformation("Open from... requested");
+        OpenFromCallback?.Invoke();
     }
 
     [RelayCommand]

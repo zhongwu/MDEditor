@@ -7,7 +7,7 @@ The release workflow publishes the section matching the pushed `vX.Y.Z` tag as t
 ## [Unreleased]
 
 ### Changed
-- File menu reorganized: Open from submenu (GitHub Repository / Gist), Commit... (Ctrl+Shift+Enter) and a single History... entry moved from Tools to File.
+- File menu reorganized: one "Open from..." item and "Save As..." now ask where (GitHub repository / gist / this computer) instead of separate menu items; Commit... (Ctrl+Shift+Enter) and a single History... entry moved from Tools to File.
 
 ## [0.3.0]
 

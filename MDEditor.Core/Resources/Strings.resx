@@ -51,9 +51,6 @@
   <data name="Menu_Open" xml:space="preserve">
     <value>Open...</value>
   </data>
-  <data name="Menu_OpenFromGitHub" xml:space="preserve">
-    <value>GitHub Repository...</value>
-  </data>
   <data name="Menu_RecentFiles" xml:space="preserve">
     <value>Recent Files</value>
   </data>
@@ -1068,12 +1065,6 @@ View the pull request on GitHub?</value>
   <data name="Snip_Mermaid" xml:space="preserve">
     <value>Mermaid diagram</value>
   </data>
-  <data name="Menu_OpenGist" xml:space="preserve">
-    <value>GitHub Gist...</value>
-  </data>
-  <data name="Menu_SaveAsGist" xml:space="preserve">
-    <value>Save as Gist...</value>
-  </data>
   <data name="Menu_ViewGist" xml:space="preserve">
     <value>Open Gist in Browser</value>
   </data>
@@ -1383,6 +1374,36 @@ Open the download page?</value>
     <value>Couldn't check for updates: {0}</value>
   </data>
   <data name="Menu_OpenFrom" xml:space="preserve">
+    <value>Open from...</value>
+  </data>
+  <data name="Source_Continue" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="Source_OpenTitle" xml:space="preserve">
     <value>Open from</value>
+  </data>
+  <data name="Source_SaveTitle" xml:space="preserve">
+    <value>Save As</value>
+  </data>
+  <data name="Source_ThisComputer" xml:space="preserve">
+    <value>This computer</value>
+  </data>
+  <data name="Source_ThisComputerDesc" xml:space="preserve">
+    <value>Save to a file on this PC</value>
+  </data>
+  <data name="Source_GitHubRepo" xml:space="preserve">
+    <value>GitHub repository</value>
+  </data>
+  <data name="Source_RepoOpenDesc" xml:space="preserve">
+    <value>Browse your repositories and open a file</value>
+  </data>
+  <data name="Source_GitHubGist" xml:space="preserve">
+    <value>GitHub Gist</value>
+  </data>
+  <data name="Source_GistOpenDesc" xml:space="preserve">
+    <value>Open one of your gists, or any gist by link</value>
+  </data>
+  <data name="Source_GistSaveDesc" xml:space="preserve">
+    <value>Create a new gist from this document</value>
   </data>
 </root>

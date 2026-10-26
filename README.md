@@ -35,7 +35,7 @@ The `.msix` packages on the release page are only installable once signed with a
 - **Real-time updates** (300ms debounced)
 
 ### Files, GitHub & Gists
-- **File menu** groups documents by where they live: *Open...* (local), *Open from ▸ GitHub Repository... / GitHub Gist...*, *Recent Files*, then *Save*, *Save As...*, *Save as Gist...*
+- **File menu** keeps open and save short: *Open...* (local, Ctrl+O), *Open from...* (choose GitHub repository or GitHub Gist), *Recent Files*, *Save*, and *Save As...* (choose This computer or GitHub Gist)
 - **Commit...** (Ctrl+Shift+Enter) and **History...** sit in the File menu and appear when a GitHub-hosted document is open; History shows commit history for a repository file or revisions for a gist, with diff and restore
 - Sign-in, multi-account support and **GitHub Accounts...** are under Tools
 

@@ -1,0 +1,16 @@
+<Window x:Class="MDEditor.SourcePickerDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:MDEditor.Localization"
+        Width="420" SizeToContent="Height" ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        Background="{DynamicResource WindowBackgroundBrush}"
+        Foreground="{DynamicResource WindowForegroundBrush}">
+    <StackPanel Margin="16">
+        <StackPanel x:Name="OptionsPanel" />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+            <Button Content="{loc:Tr Source_Continue}" IsDefault="True" Padding="16,3" Margin="0,0,8,0" Click="Continue_Click" />
+            <Button Content="{loc:Tr Common_Cancel}" IsCancel="True" Padding="16,3" />
+        </StackPanel>
+    </StackPanel>
+</Window>

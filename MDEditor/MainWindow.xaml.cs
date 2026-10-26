@@ -161,11 +161,9 @@ public partial class MainWindow : Window
 
         // GitHub (Phase 5)
         ViewModel.GitHubAccountsCallback = ShowGitHubAccountsWindow;
-        ViewModel.OpenFromGitHubCallback = OpenFromGitHub;
+        ViewModel.OpenFromCallback = ShowOpenFromPicker;
         ViewModel.GitHubSyncCallback = CommitToGitHub;
         ViewModel.HistoryCallback = ShowHistory;
-        ViewModel.OpenGistCallback = OpenGist;
-        ViewModel.SaveAsGistCallback = SaveAsGist;
         ViewModel.ViewGistCallback = ViewGistOnGitHub;
         _gitHubAuthService = App.Services.GetRequiredService<IGitHubAuthService>();
         _gitHubRepoService = App.Services.GetRequiredService<IGitHubRepositoryService>();
@@ -1479,7 +1477,7 @@ public partial class MainWindow : Window
 
         if (string.IsNullOrEmpty(_currentFilePath))
         {
-            SaveAsFile();
+            SaveAsLocalFile();
             return;
         }
 
@@ -1498,7 +1496,34 @@ public partial class MainWindow : Window
         }
     }
 
+    /// <summary>Open from... - pick GitHub repository or gist, then run that flow.</summary>
+    private void ShowOpenFromPicker()
+    {
+        var picked = PickSource(Loc.Get("Source_OpenTitle"),
+            new SourceOption(Loc.Get("Source_GitHubRepo"), Loc.Get("Source_RepoOpenDesc")),
+            new SourceOption(Loc.Get("Source_GitHubGist"), Loc.Get("Source_GistOpenDesc")));
+        if (picked == 0) OpenFromGitHub();
+        else if (picked == 1) OpenGist();
+    }
+
+    /// <summary>Save As... - pick this computer or a new gist, then run that flow.</summary>
     private void SaveAsFile()
+    {
+        var picked = PickSource(Loc.Get("Source_SaveTitle"),
+            new SourceOption(Loc.Get("Source_ThisComputer"), Loc.Get("Source_ThisComputerDesc")),
+            new SourceOption(Loc.Get("Source_GitHubGist"), Loc.Get("Source_GistSaveDesc")));
+        if (picked == 0) SaveAsLocalFile();
+        else if (picked == 1) SaveAsGist();
+    }
+
+    /// <summary>Shows the chooser; returns the chosen index or -1 when cancelled.</summary>
+    private int PickSource(string title, params SourceOption[] options)
+    {
+        var dialog = new SourcePickerDialog(title, options) { Owner = this };
+        return dialog.ShowDialog() == true ? dialog.SelectedIndex : -1;
+    }
+
+    private void SaveAsLocalFile()
     {
         var dialog = new Microsoft.Win32.SaveFileDialog
         {
