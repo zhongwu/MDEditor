@@ -23,16 +23,16 @@
         <DockPanel Grid.Row="0" Grid.ColumnSpan="3" Margin="0,0,0,10">
             <TextBlock Text="{loc:Tr Gist_UrlLabel}" VerticalAlignment="Center" Margin="0,0,6,0" />
             <Button x:Name="GoButton" DockPanel.Dock="Right" Content="{loc:Tr Gist_Go}" Padding="12,2" Margin="6,0,0,0" Click="Go_Click" />
-            <TextBox x:Name="UrlBox" VerticalContentAlignment="Center" PreviewKeyDown="UrlBox_PreviewKeyDown" ToolTip="{loc:Tr Gist_UrlTip}"
+            <TextBox x:Name="UrlBox" VerticalContentAlignment="Center" PreviewKeyDown="UrlBox_PreviewKeyDown" AutomationProperties.Name="{loc:Tr Gist_UrlTip}" ToolTip="{loc:Tr Gist_UrlTip}"
                      Background="{DynamicResource ControlBackgroundBrush}" Foreground="{DynamicResource ControlForegroundBrush}" />
         </DockPanel>
 
         <!-- My gists -->
         <DockPanel Grid.Row="1" Grid.Column="0" Margin="0,0,0,6">
-            <Button x:Name="RefreshButton" DockPanel.Dock="Right" ToolTip="{loc:Tr Gist_Reload}" Padding="6,2" Margin="6,0,0,0" Click="Refresh_Click">
+            <Button x:Name="RefreshButton" DockPanel.Dock="Right" AutomationProperties.Name="{loc:Tr Gist_Reload}" ToolTip="{loc:Tr Gist_Reload}" Padding="6,2" Margin="6,0,0,0" Click="Refresh_Click">
                 <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE72C;" />
             </Button>
-            <TextBox x:Name="FilterBox" VerticalContentAlignment="Center" TextChanged="FilterBox_TextChanged" ToolTip="{loc:Tr Gist_Filter}"
+            <TextBox x:Name="FilterBox" VerticalContentAlignment="Center" TextChanged="FilterBox_TextChanged" AutomationProperties.Name="{loc:Tr Gist_Filter}" ToolTip="{loc:Tr Gist_Filter}"
                      Background="{DynamicResource ControlBackgroundBrush}" Foreground="{DynamicResource ControlForegroundBrush}" />
         </DockPanel>
         <Grid Grid.Row="2" Grid.Column="0">

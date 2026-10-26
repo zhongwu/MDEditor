@@ -20,11 +20,11 @@
 
         <!-- Repositories -->
         <DockPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,6" LastChildFill="True">
-            <Button x:Name="RefreshButton" DockPanel.Dock="Right" ToolTip="{loc:Tr GH_ReloadRepos}" Padding="6,2" Margin="6,0,0,0" Click="Refresh_Click">
+            <Button x:Name="RefreshButton" DockPanel.Dock="Right" AutomationProperties.Name="{loc:Tr GH_ReloadRepos}" ToolTip="{loc:Tr GH_ReloadRepos}" Padding="6,2" Margin="6,0,0,0" Click="Refresh_Click">
                 <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE72C;" />
             </Button>
             <TextBox x:Name="RepoFilterBox" VerticalContentAlignment="Center" TextChanged="RepoFilterBox_TextChanged"
-                     ToolTip="{loc:Tr GH_FilterRepos}"
+                     AutomationProperties.Name="{loc:Tr GH_FilterRepos}" ToolTip="{loc:Tr GH_FilterRepos}"
                      Background="{DynamicResource ControlBackgroundBrush}" Foreground="{DynamicResource ControlForegroundBrush}" />
         </DockPanel>
         <ListBox x:Name="RepoList" Grid.Row="1" Grid.Column="0"

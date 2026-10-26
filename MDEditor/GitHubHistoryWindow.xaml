@@ -81,7 +81,7 @@
             <Button DockPanel.Dock="Right" Content="{loc:Tr Common_Close}" IsCancel="True" Padding="16,3" Margin="8,0,0,0" />
             <Button x:Name="RestoreButton" DockPanel.Dock="Right" Content="{loc:Tr GH_RestoreVersion}" Padding="16,3" Margin="8,0,0,0"
                     IsEnabled="False" Click="Restore_Click"
-                    ToolTip="{loc:Tr GH_RestoreTip}" />
+                    AutomationProperties.Name="{loc:Tr GH_RestoreTip}" ToolTip="{loc:Tr GH_RestoreTip}" />
             <Button x:Name="ViewOnGitHubButton" DockPanel.Dock="Right" Content="{loc:Tr GH_ViewCommit}" Padding="16,3"
                     IsEnabled="False" Click="ViewOnGitHub_Click" />
             <TextBlock x:Name="StatusText" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Opacity="0.8" />

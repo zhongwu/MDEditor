@@ -156,140 +156,140 @@
         </Menu>
 
         <ToolBar x:Name="MainCommandBar" Grid.Row="1" Background="{DynamicResource ControlBackgroundBrush}">
-            <Button Command="{Binding NewFileCommand}" ToolTip="{loc:Tr Tip_New}">
+            <Button Command="{Binding NewFileCommand}" AutomationProperties.Name="{loc:Tr Tip_New}" ToolTip="{loc:Tr Tip_New}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8A5;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding OpenFileCommand}" ToolTip="{loc:Tr Tip_Open}">
+            <Button Command="{Binding OpenFileCommand}" AutomationProperties.Name="{loc:Tr Tip_Open}" ToolTip="{loc:Tr Tip_Open}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8E5;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding SaveFileCommand}" ToolTip="{loc:Tr Tip_Save}">
+            <Button Command="{Binding SaveFileCommand}" AutomationProperties.Name="{loc:Tr Tip_Save}" ToolTip="{loc:Tr Tip_Save}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE74E;" />
                 </Button.Content>
             </Button>
             <Separator />
-            <Button Command="{Binding UndoCommand}" ToolTip="{loc:Tr Tip_Undo}">
+            <Button Command="{Binding UndoCommand}" AutomationProperties.Name="{loc:Tr Tip_Undo}" ToolTip="{loc:Tr Tip_Undo}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE7A7;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding RedoCommand}" ToolTip="{loc:Tr Tip_Redo}">
+            <Button Command="{Binding RedoCommand}" AutomationProperties.Name="{loc:Tr Tip_Redo}" ToolTip="{loc:Tr Tip_Redo}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE7A6;" />
                 </Button.Content>
             </Button>
             <Separator />
-            <Button Command="{Binding BoldCommand}" ToolTip="{loc:Tr Tip_Bold}">
+            <Button Command="{Binding BoldCommand}" AutomationProperties.Name="{loc:Tr Tip_Bold}" ToolTip="{loc:Tr Tip_Bold}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8DD;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding ItalicCommand}" ToolTip="{loc:Tr Tip_Italic}">
+            <Button Command="{Binding ItalicCommand}" AutomationProperties.Name="{loc:Tr Tip_Italic}" ToolTip="{loc:Tr Tip_Italic}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8DB;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding StrikethroughCommand}" ToolTip="{loc:Tr Tip_Strikethrough}">
+            <Button Command="{Binding StrikethroughCommand}" AutomationProperties.Name="{loc:Tr Tip_Strikethrough}" ToolTip="{loc:Tr Tip_Strikethrough}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xEDE0;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding InlineCodeCommand}" ToolTip="{loc:Tr Tip_InlineCode}">
+            <Button Command="{Binding InlineCodeCommand}" AutomationProperties.Name="{loc:Tr Tip_InlineCode}" ToolTip="{loc:Tr Tip_InlineCode}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE943;" />
                 </Button.Content>
             </Button>
             <Separator />
-            <Button Command="{Binding CodeBlockCommand}" ToolTip="{loc:Tr Tip_CodeBlock}">
+            <Button Command="{Binding CodeBlockCommand}" AutomationProperties.Name="{loc:Tr Tip_CodeBlock}" ToolTip="{loc:Tr Tip_CodeBlock}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE943;" VerticalAlignment="Bottom" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding BlockquoteCommand}" ToolTip="{loc:Tr Tip_Blockquote}">
+            <Button Command="{Binding BlockquoteCommand}" AutomationProperties.Name="{loc:Tr Tip_Blockquote}" ToolTip="{loc:Tr Tip_Blockquote}">
                 <Button.Content>
                     <TextBlock Text="&gt;" />
                 </Button.Content>
             </Button>
             <Separator />
-            <Button Command="{Binding Heading1Command}" ToolTip="{loc:Tr Tip_Heading1}">
+            <Button Command="{Binding Heading1Command}" AutomationProperties.Name="{loc:Tr Tip_Heading1}" ToolTip="{loc:Tr Tip_Heading1}">
                 <Button.Content>
                     <TextBlock Text="H1" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding Heading2Command}" ToolTip="{loc:Tr Tip_Heading2}">
+            <Button Command="{Binding Heading2Command}" AutomationProperties.Name="{loc:Tr Tip_Heading2}" ToolTip="{loc:Tr Tip_Heading2}">
                 <Button.Content>
                     <TextBlock Text="H2" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding Heading3Command}" ToolTip="{loc:Tr Tip_Heading3}">
+            <Button Command="{Binding Heading3Command}" AutomationProperties.Name="{loc:Tr Tip_Heading3}" ToolTip="{loc:Tr Tip_Heading3}">
                 <Button.Content>
                     <TextBlock Text="H3" />
                 </Button.Content>
             </Button>
             <Separator />
-            <Button Command="{Binding UnorderedListCommand}" ToolTip="{loc:Tr Tip_UnorderedList}">
+            <Button Command="{Binding UnorderedListCommand}" AutomationProperties.Name="{loc:Tr Tip_UnorderedList}" ToolTip="{loc:Tr Tip_UnorderedList}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8FD;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding OrderedListCommand}" ToolTip="{loc:Tr Tip_OrderedList}">
+            <Button Command="{Binding OrderedListCommand}" AutomationProperties.Name="{loc:Tr Tip_OrderedList}" ToolTip="{loc:Tr Tip_OrderedList}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8FD;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding TaskListCommand}" ToolTip="{loc:Tr Tip_TaskList}">
+            <Button Command="{Binding TaskListCommand}" AutomationProperties.Name="{loc:Tr Tip_TaskList}" ToolTip="{loc:Tr Tip_TaskList}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE73E;" />
                 </Button.Content>
             </Button>
             <Separator />
-            <Button Command="{Binding InsertLinkCommand}" ToolTip="{loc:Tr Tip_InsertLink}">
+            <Button Command="{Binding InsertLinkCommand}" AutomationProperties.Name="{loc:Tr Tip_InsertLink}" ToolTip="{loc:Tr Tip_InsertLink}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE71B;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding InsertImageCommand}" ToolTip="{loc:Tr Tip_InsertImage}">
+            <Button Command="{Binding InsertImageCommand}" AutomationProperties.Name="{loc:Tr Tip_InsertImage}" ToolTip="{loc:Tr Tip_InsertImage}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8B9;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding InsertTableCommand}" ToolTip="{loc:Tr Menu_InsertTable}">
+            <Button Command="{Binding InsertTableCommand}" AutomationProperties.Name="{loc:Tr Menu_InsertTable}" ToolTip="{loc:Tr Menu_InsertTable}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8F1;" />
                 </Button.Content>
             </Button>
             <Separator />
-            <Button Command="{Binding TogglePreviewCommand}" ToolTip="{loc:Tr Tip_TogglePreview}">
+            <Button Command="{Binding TogglePreviewCommand}" AutomationProperties.Name="{loc:Tr Tip_TogglePreview}" ToolTip="{loc:Tr Tip_TogglePreview}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8A1;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding ToggleEditorCommand}" ToolTip="{loc:Tr Tip_ToggleEditor}">
+            <Button Command="{Binding ToggleEditorCommand}" AutomationProperties.Name="{loc:Tr Tip_ToggleEditor}" ToolTip="{loc:Tr Tip_ToggleEditor}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE70F;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding ToggleOutlineCommand}" ToolTip="{loc:Tr Tip_ToggleOutline}">
+            <Button Command="{Binding ToggleOutlineCommand}" AutomationProperties.Name="{loc:Tr Tip_ToggleOutline}" ToolTip="{loc:Tr Tip_ToggleOutline}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE700;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding FindInPreviewCommand}" ToolTip="{loc:Tr Tip_FindInPreview}">
+            <Button Command="{Binding FindInPreviewCommand}" AutomationProperties.Name="{loc:Tr Tip_FindInPreview}" ToolTip="{loc:Tr Tip_FindInPreview}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE721;" />
                 </Button.Content>
             </Button>
             <Separator />
-            <Button Command="{Binding PrintPreviewCommand}" ToolTip="{loc:Tr Tip_PrintPreview}">
+            <Button Command="{Binding PrintPreviewCommand}" AutomationProperties.Name="{loc:Tr Tip_PrintPreview}" ToolTip="{loc:Tr Tip_PrintPreview}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE749;" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding PresentationModeCommand}" ToolTip="{loc:Tr Tip_PresentationMode}">
+            <Button Command="{Binding PresentationModeCommand}" AutomationProperties.Name="{loc:Tr Tip_PresentationMode}" ToolTip="{loc:Tr Tip_PresentationMode}">
                 <Button.Content>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE740;" />
                 </Button.Content>
@@ -321,15 +321,15 @@
                 <Border Grid.Row="0" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0,0,0,1" Padding="8,4">
                     <DockPanel LastChildFill="False">
                         <TextBlock DockPanel.Dock="Left" Text="{loc:Tr Pane_Outline}" FontSize="12" Foreground="Gray" VerticalAlignment="Center" />
-                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE711;" ToolTip="{loc:Tr Tip_CloseOutline}" Command="{Binding ToggleOutlineCommand}" />
-                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE70E;" ToolTip="{loc:Tr Tip_CollapseAll}" Click="OutlineCollapseAll_Click" />
-                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE70D;" ToolTip="{loc:Tr Tip_ExpandAll}" Click="OutlineExpandAll_Click" />
+                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE711;" AutomationProperties.Name="{loc:Tr Tip_CloseOutline}" ToolTip="{loc:Tr Tip_CloseOutline}" Command="{Binding ToggleOutlineCommand}" />
+                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE70E;" AutomationProperties.Name="{loc:Tr Tip_CollapseAll}" ToolTip="{loc:Tr Tip_CollapseAll}" Click="OutlineCollapseAll_Click" />
+                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE70D;" AutomationProperties.Name="{loc:Tr Tip_ExpandAll}" ToolTip="{loc:Tr Tip_ExpandAll}" Click="OutlineExpandAll_Click" />
                     </DockPanel>
                 </Border>
 
                 <Border Grid.Row="1" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="1" Margin="8,8,4,8" CornerRadius="4">
                     <Grid>
-                        <TreeView x:Name="OutlineTree"
+                        <TreeView x:Name="OutlineTree" AutomationProperties.Name="{loc:Tr Pane_Outline}"
                                   Background="{DynamicResource ControlBackgroundBrush}"
                                   BorderThickness="0"
                                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -437,20 +437,20 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <Button x:Name="EditorFindToggleReplace" Grid.Row="0" Grid.Column="0" Style="{StaticResource PaneHeaderButton}" Margin="0,0,4,0" Content="&#xE76C;" ToolTip="{loc:Tr Tip_ToggleReplace}" Click="EditorFindToggleReplace_Click" />
-                        <TextBox x:Name="EditorFindBox" Grid.Row="0" Grid.Column="1" Background="{DynamicResource ControlBackgroundBrush}" VerticalContentAlignment="Center" Padding="2,1" ToolTip="{loc:Tr Menu_Find}" TextChanged="EditorFindBox_TextChanged" PreviewKeyDown="EditorFindBox_PreviewKeyDown" />
+                        <Button x:Name="EditorFindToggleReplace" Grid.Row="0" Grid.Column="0" Style="{StaticResource PaneHeaderButton}" Margin="0,0,4,0" Content="&#xE76C;" AutomationProperties.Name="{loc:Tr Tip_ToggleReplace}" ToolTip="{loc:Tr Tip_ToggleReplace}" Click="EditorFindToggleReplace_Click" />
+                        <TextBox x:Name="EditorFindBox" Grid.Row="0" Grid.Column="1" Background="{DynamicResource ControlBackgroundBrush}" VerticalContentAlignment="Center" Padding="2,1" AutomationProperties.Name="{loc:Tr Menu_Find}" ToolTip="{loc:Tr Menu_Find}" TextChanged="EditorFindBox_TextChanged" PreviewKeyDown="EditorFindBox_PreviewKeyDown" />
                         <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
-                            <CheckBox x:Name="EditorFindMatchCase" Content="Aa" ToolTip="{loc:Tr Tip_MatchCase}" Margin="8,0,0,0" VerticalAlignment="Center" Click="EditorFindMatchCase_Click" />
+                            <CheckBox x:Name="EditorFindMatchCase" Content="Aa" AutomationProperties.Name="{loc:Tr Tip_MatchCase}" ToolTip="{loc:Tr Tip_MatchCase}" Margin="8,0,0,0" VerticalAlignment="Center" Click="EditorFindMatchCase_Click" />
                             <TextBlock x:Name="EditorFindStatus" MinWidth="72" Margin="8,0,4,0" TextAlignment="Right" VerticalAlignment="Center" Foreground="Gray" />
-                            <Button Style="{StaticResource PaneHeaderButton}" Content="&#xE70E;" ToolTip="{loc:Tr Tip_PreviousMatch}" Click="EditorFindPrevious_Click" />
-                            <Button Style="{StaticResource PaneHeaderButton}" Content="&#xE70D;" ToolTip="{loc:Tr Tip_NextMatch}" Click="EditorFindNext_Click" />
-                            <Button Style="{StaticResource PaneHeaderButton}" Content="&#xE711;" ToolTip="{loc:Tr Tip_CloseEsc}" Click="EditorFindClose_Click" />
+                            <Button Style="{StaticResource PaneHeaderButton}" Content="&#xE70E;" AutomationProperties.Name="{loc:Tr Tip_PreviousMatch}" ToolTip="{loc:Tr Tip_PreviousMatch}" Click="EditorFindPrevious_Click" />
+                            <Button Style="{StaticResource PaneHeaderButton}" Content="&#xE70D;" AutomationProperties.Name="{loc:Tr Tip_NextMatch}" ToolTip="{loc:Tr Tip_NextMatch}" Click="EditorFindNext_Click" />
+                            <Button Style="{StaticResource PaneHeaderButton}" Content="&#xE711;" AutomationProperties.Name="{loc:Tr Tip_CloseEsc}" ToolTip="{loc:Tr Tip_CloseEsc}" Click="EditorFindClose_Click" />
                         </StackPanel>
 
-                        <TextBox x:Name="EditorReplaceBox" Grid.Row="1" Grid.Column="1" Background="{DynamicResource ControlBackgroundBrush}" Margin="0,4,0,0" Visibility="Collapsed" VerticalContentAlignment="Center" Padding="2,1" ToolTip="{loc:Tr Menu_Replace}" PreviewKeyDown="EditorReplaceBox_PreviewKeyDown" />
+                        <TextBox x:Name="EditorReplaceBox" Grid.Row="1" Grid.Column="1" Background="{DynamicResource ControlBackgroundBrush}" Margin="0,4,0,0" Visibility="Collapsed" VerticalContentAlignment="Center" Padding="2,1" AutomationProperties.Name="{loc:Tr Menu_Replace}" ToolTip="{loc:Tr Menu_Replace}" PreviewKeyDown="EditorReplaceBox_PreviewKeyDown" />
                         <StackPanel x:Name="EditorReplaceActions" Grid.Row="1" Grid.Column="2" Orientation="Horizontal" Margin="8,4,0,0" Visibility="Collapsed">
-                            <Button Content="{loc:Tr Menu_Replace}" Padding="8,0" Margin="0,0,4,0" ToolTip="{loc:Tr Tip_ReplaceEnter}" Click="EditorReplace_Click" />
-                            <Button Content="{loc:Tr Find_ReplaceAll}" Padding="8,0" ToolTip="{loc:Tr Tip_ReplaceAll}" Click="EditorReplaceAll_Click" />
+                            <Button Content="{loc:Tr Menu_Replace}" Padding="8,0" Margin="0,0,4,0" AutomationProperties.Name="{loc:Tr Tip_ReplaceEnter}" ToolTip="{loc:Tr Tip_ReplaceEnter}" Click="EditorReplace_Click" />
+                            <Button Content="{loc:Tr Find_ReplaceAll}" Padding="8,0" AutomationProperties.Name="{loc:Tr Tip_ReplaceAll}" ToolTip="{loc:Tr Tip_ReplaceAll}" Click="EditorReplaceAll_Click" />
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -458,10 +458,10 @@
                 <!-- Go to line bar (same slot as the find bar; only one is shown at a time) -->
                 <Border x:Name="GoToLineBar" Grid.Row="1" Visibility="Collapsed" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0,0,0,1" Padding="8,4">
                     <DockPanel LastChildFill="True">
-                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE711;" ToolTip="{loc:Tr Tip_CloseEsc}" Click="GoToLineClose_Click" />
+                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE711;" AutomationProperties.Name="{loc:Tr Tip_CloseEsc}" ToolTip="{loc:Tr Tip_CloseEsc}" Click="GoToLineClose_Click" />
                         <TextBlock x:Name="GoToLineStatus" DockPanel.Dock="Right" MinWidth="72" Margin="8,0,4,0" TextAlignment="Right" VerticalAlignment="Center" Foreground="Gray" />
                         <TextBlock DockPanel.Dock="Left" Text="{loc:Tr GoTo_Label}" VerticalAlignment="Center" Margin="0,0,6,0" />
-                        <TextBox x:Name="GoToLineBox" Background="{DynamicResource ControlBackgroundBrush}" VerticalContentAlignment="Center" Padding="2,1" ToolTip="{loc:Tr Tip_GoToLineBox}" TextChanged="GoToLineBox_TextChanged" PreviewKeyDown="GoToLineBox_PreviewKeyDown" LostKeyboardFocus="GoToLineBox_LostKeyboardFocus" />
+                        <TextBox x:Name="GoToLineBox" Background="{DynamicResource ControlBackgroundBrush}" VerticalContentAlignment="Center" Padding="2,1" AutomationProperties.Name="{loc:Tr Tip_GoToLineBox}" ToolTip="{loc:Tr Tip_GoToLineBox}" TextChanged="GoToLineBox_TextChanged" PreviewKeyDown="GoToLineBox_PreviewKeyDown" LostKeyboardFocus="GoToLineBox_LostKeyboardFocus" />
                     </DockPanel>
                 </Border>
 
@@ -475,7 +475,7 @@
                                                  Grid.Column="0"
                                                  Visibility="Collapsed" />
                         <Grid Grid.Column="1">
-                            <RichTextBox x:Name="MarkdownEditor"
+                            <RichTextBox x:Name="MarkdownEditor" AutomationProperties.Name="{loc:Tr Pane_Editor}"
                                      Background="{DynamicResource EditorBackgroundBrush}"
                                      Foreground="{DynamicResource EditorForegroundBrush}"
                                      CaretBrush="{DynamicResource EditorForegroundBrush}"
@@ -608,17 +608,17 @@
                 <!-- Find in preview bar (its own row: WPF content cannot overlay the WebView2 HWND) -->
                 <Border x:Name="PreviewFindBar" Grid.Row="1" Visibility="Collapsed" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0,0,0,1" Padding="8,4">
                     <DockPanel LastChildFill="True">
-                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE711;" ToolTip="{loc:Tr Tip_CloseEsc}" Click="PreviewFindClose_Click" />
-                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE70D;" ToolTip="{loc:Tr Tip_NextMatch}" Click="PreviewFindNext_Click" />
-                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE70E;" ToolTip="{loc:Tr Tip_PreviousMatch}" Click="PreviewFindPrevious_Click" />
+                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE711;" AutomationProperties.Name="{loc:Tr Tip_CloseEsc}" ToolTip="{loc:Tr Tip_CloseEsc}" Click="PreviewFindClose_Click" />
+                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE70D;" AutomationProperties.Name="{loc:Tr Tip_NextMatch}" ToolTip="{loc:Tr Tip_NextMatch}" Click="PreviewFindNext_Click" />
+                        <Button DockPanel.Dock="Right" Style="{StaticResource PaneHeaderButton}" Content="&#xE70E;" AutomationProperties.Name="{loc:Tr Tip_PreviousMatch}" ToolTip="{loc:Tr Tip_PreviousMatch}" Click="PreviewFindPrevious_Click" />
                         <TextBlock x:Name="PreviewFindStatus" DockPanel.Dock="Right" MinWidth="72" Margin="8,0,4,0" TextAlignment="Right" VerticalAlignment="Center" Foreground="Gray" />
-                        <CheckBox x:Name="PreviewFindMatchCase" DockPanel.Dock="Right" Content="Aa" ToolTip="{loc:Tr Tip_MatchCase}" Margin="8,0,0,0" VerticalAlignment="Center" Click="PreviewFindMatchCase_Click" />
+                        <CheckBox x:Name="PreviewFindMatchCase" DockPanel.Dock="Right" Content="Aa" AutomationProperties.Name="{loc:Tr Tip_MatchCase}" ToolTip="{loc:Tr Tip_MatchCase}" Margin="8,0,0,0" VerticalAlignment="Center" Click="PreviewFindMatchCase_Click" />
                         <TextBox x:Name="PreviewFindBox" Background="{DynamicResource ControlBackgroundBrush}" VerticalContentAlignment="Center" Padding="2,1" TextChanged="PreviewFindBox_TextChanged" PreviewKeyDown="PreviewFindBox_PreviewKeyDown" />
                     </DockPanel>
                 </Border>
 
                 <Border Grid.Row="2" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="1" Margin="8" CornerRadius="4">
-                    <wpf:WebView2 x:Name="MarkdownPreview"
+                    <wpf:WebView2 x:Name="MarkdownPreview" AutomationProperties.Name="{loc:Tr Pane_Preview}"
                                   NavigationStarting="MarkdownPreview_NavigationStarting" />
                 </Border>
             </Grid>

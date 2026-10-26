@@ -263,11 +263,11 @@
 ### Phase 7: Polish & Release (Week 7-8)
 
 #### 7.1 Quality Assurance
-- [ ] Unit tests for core services (>80% coverage)
+- [x] Unit tests for core services (>80% coverage) — MDEditor.Core line coverage ~87%
 - [ ] UI automation tests for critical flows
-- [ ] Performance profiling (large files >10MB)
+- [x] Performance profiling (large files >10MB) — regression-guard tests render/count/normalize 10 MB (note: thousands of identical headings make Markdig auto-ids quadratic)
 - [ ] Memory leak detection
-- [ ] Accessibility (Narrator, high contrast, keyboard nav)
+- [ ] Accessibility (Narrator, high contrast, keyboard nav) — partial: icon-only buttons and main panes now have AutomationProperties.Name; high contrast / manual Narrator pass still open
 
 #### 7.2 Packaging & Deployment
 - [ ] MSIX packaging with WPF

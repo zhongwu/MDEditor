@@ -14,11 +14,21 @@ public class SettingsService : ISettingsService
     private readonly Dictionary<string, object> _settings = new();
 
     public SettingsService()
+        : this(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MDEditor", "settings.json"))
     {
-        var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        var appFolder = Path.Combine(appDataPath, "MDEditor");
-        Directory.CreateDirectory(appFolder);
-        _settingsFilePath = Path.Combine(appFolder, "settings.json");
+    }
+
+    /// <summary>
+    /// Creates a service backed by an explicit settings file (used by tests).
+    /// </summary>
+    public SettingsService(string settingsFilePath)
+    {
+        _settingsFilePath = settingsFilePath;
+        var folder = Path.GetDirectoryName(settingsFilePath);
+        if (!string.IsNullOrEmpty(folder))
+        {
+            Directory.CreateDirectory(folder);
+        }
 
         LoadSettings();
     }
@@ -64,7 +74,7 @@ public class SettingsService : ISettingsService
     /// </summary>
     public T Get<T>(string key, T defaultValue)
     {
-        if (_settings.TryGetValue(key, out var storedValue))
+        if (_settings.TryGetValue(key, out var storedValue) && storedValue != null)
         {
             try
             {
