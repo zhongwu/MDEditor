@@ -4,12 +4,13 @@ All notable changes to MDEditor are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow [Semantic Versioning](https://semver.org/).
 The release workflow publishes the section matching the pushed `vX.Y.Z` tag as the GitHub release notes.
 
-## [Unreleased]
+## [0.4.0]
 
 ### Added
 - GitLab support (gitlab.com and self-hosted servers on any port): Tools > GitLab Accounts... connects with a personal access token; File > Open from... > GitLab project opens a file; Save / Commit... commits it (directly, or to a new branch with a merge request, with conflict handling); History... shows the file's commits with diff and restore.
 
 ### Changed
+- Administrator accounts see every project on the GitLab server and can commit to them without being a member.
 - File menu reorganized: one "Open from..." item and "Save As..." now ask where (GitHub repository / gist / this computer) instead of separate menu items; Commit... (Ctrl+Shift+Enter) and a single History... entry moved from Tools to File.
 
 ## [0.3.0]
@@ -30,4 +31,5 @@ The release workflow publishes the section matching the pushed `vX.Y.Z` tag as t
 - Editor view no longer jumps when clicking, caused by a preview scroll-sync feedback loop.
 - A `null` value in `settings.json` now falls back to the default instead of returning `null`.
 
+[0.4.0]: https://github.com/zhongwu/MDEditor/releases/tag/v0.4.0
 [0.3.0]: https://github.com/zhongwu/MDEditor/releases/tag/v0.3.0

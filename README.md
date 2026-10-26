@@ -4,7 +4,7 @@ A modern **Markdown desktop editor** built with **WPF** and **.NET 10**, featuri
 
 ## Download
 
-**Latest release: [v0.3.0](https://github.com/zhongwu/MDEditor/releases/tag/v0.3.0)** — see all versions on the [Releases page](https://github.com/zhongwu/MDEditor/releases).
+**Latest release: [v0.4.0](https://github.com/zhongwu/MDEditor/releases/tag/v0.4.0)** — see all versions on the [Releases page](https://github.com/zhongwu/MDEditor/releases).
 
 1. Download `MDEditor-<version>-win-x64-portable.zip` (or `win-arm64` for ARM PCs) from the release **Assets**.
 2. Unzip anywhere and run `MDEditor.exe`. No installer or .NET install is needed (self-contained). Windows SmartScreen may warn about an unknown publisher: choose **More info → Run anyway**.
@@ -12,7 +12,7 @@ A modern **Markdown desktop editor** built with **WPF** and **.NET 10**, featuri
 
 The `.msix` packages on the release page are only installable once signed with a trusted certificate; use the portable zip until then. Help → **Check for Updates** tells you when a newer release is out. See [CHANGELOG.md](CHANGELOG.md) for release notes.
 
-## Current Status (v0.3.0)
+## Current Status (v0.4.0)
 
 | Phase | Status | Notes |
 |-------|--------|-------|
@@ -22,7 +22,7 @@ The `.msix` packages on the release page are only installable once signed with a
 | **4. File Operations** | ✅ Complete | New/Open/Save/Save As/Export HTML/PDF, drag & drop, recent files, auto-save |
 | **5. GitHub Integration** | ✅ Complete | OAuth/PAT multi-account auth, repo browser, open/save/sync, conflict handling, file history & diff, gist support |
 | **6. Advanced Features** | ✅ Complete | Editor enhancements (autocomplete, bracket matching, smart quotes, minimap), view toggles/zoom, preview (scroll sync, outline, find, print, presentation), settings/themes, localization (en/zh-Hans/zh-Hant) |
-| **7. Polish & Release** | 🔄 In Progress | v0.3.0 released: unit tests ~87% coverage, MSIX + portable packaging, GitHub Releases, update check. Open: UI automation, memory-leak & accessibility passes, trusted code signing |
+| **7. Polish & Release** | 🔄 In Progress | v0.4.0 released: unit tests ~87% coverage, MSIX + portable packaging, GitHub Releases, update check. Open: UI automation, memory-leak & accessibility passes, trusted code signing |
 
 ## Implemented Features
 
@@ -37,6 +37,7 @@ The `.msix` packages on the release page are only installable once signed with a
 ### Files, GitHub & Gists
 - **File menu** keeps open and save short: *Open...* (local, Ctrl+O), *Open from...* (choose GitHub repository or GitHub Gist), *Recent Files*, *Save*, and *Save As...* (choose This computer or GitHub Gist)
 - **Commit...** (Ctrl+Shift+Enter) and **History...** sit in the File menu and appear when a GitHub-hosted document is open; History shows commit history for a repository file or revisions for a gist, with diff and restore
+- **GitLab** (gitlab.com or a self-hosted server on any port): connect with a personal access token under Tools > GitLab Accounts..., then File > Open from... > GitLab project. Save / Commit..., conflict handling, merge requests and History... work like the GitHub ones; administrators see every project on the server
 - Sign-in, multi-account support and **GitHub Accounts...** are under Tools
 
 ### Preview Enhancements

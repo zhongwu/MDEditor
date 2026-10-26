@@ -294,7 +294,7 @@ Goal: open, edit and sync Markdown files on GitLab, both gitlab.com and self-hos
 
 ---
 
-### Phase 7: Polish & Release (Week 7-8) 🔄 IN PROGRESS — v0.3.0 released
+### Phase 7: Polish & Release (Week 7-8) 🔄 IN PROGRESS — v0.4.0 released
 
 #### 7.1 Quality Assurance
 - [x] Unit tests for core services (>80% coverage) — MDEditor.Core line coverage ~87%
@@ -308,7 +308,7 @@ Goal: open, edit and sync Markdown files on GitLab, both gitlab.com and self-hos
 - [ ] Code signing certificate — pipeline ready (script + release workflow sign when `WINDOWS_CERT_*` secrets exist); a real certificate still has to be purchased/provided
 - [x] Auto-update (MSIX auto-update or GitHub Releases) — Help → Check for Updates against the latest GitHub release; installs are manual (opens the download page)
 - [ ] Microsoft Store submission (optional)
-- [x] GitHub Releases with changelog — `CHANGELOG.md` + tag-triggered `.github/workflows/release.yml`. **v0.3.0 published**: https://github.com/zhongwu/MDEditor/releases/tag/v0.3.0 (portable zips x64/ARM64; MSIX unsigned until signing secrets are added; see `Release.md` for the procedure)
+- [x] GitHub Releases with changelog — `CHANGELOG.md` + tag-triggered `.github/workflows/release.yml`. **v0.3.0 and v0.4.0 (adds GitLab support) published**: https://github.com/zhongwu/MDEditor/releases/tag/v0.4.0 (portable zips x64/ARM64; MSIX unsigned until signing secrets are added; see `Release.md` for the procedure)
 
 #### 7.3 Documentation
 - [x] User guide (Markdown, bundled in app) — Help → Markdown Guide, localized (see 6.4)
