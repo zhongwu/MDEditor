@@ -156,7 +156,7 @@
 
 ---
 
-### Phase 4: File Operations (Week 4-5) 🔄 IN PROGRESS
+### Phase 4: File Operations (Week 4-5) ✅ COMPLETED
 
 #### 4.1 File Management ✅ COMPLETED
 - [x] New File (Ctrl+N) - untitled, track dirty state
@@ -210,7 +210,7 @@
 
 ---
 
-### Phase 6: Advanced Features (Week 6-7)
+### Phase 6: Advanced Features (Week 6-7) ✅ COMPLETED
 
 #### 6.1 Editor Enhancements
 - [x] Auto-complete for:
@@ -260,7 +260,7 @@
 
 ---
 
-### Phase 7: Polish & Release (Week 7-8)
+### Phase 7: Polish & Release (Week 7-8) 🔄 IN PROGRESS — v0.3.0 released
 
 #### 7.1 Quality Assurance
 - [x] Unit tests for core services (>80% coverage) — MDEditor.Core line coverage ~87%
@@ -274,7 +274,7 @@
 - [ ] Code signing certificate — pipeline ready (script + release workflow sign when `WINDOWS_CERT_*` secrets exist); a real certificate still has to be purchased/provided
 - [x] Auto-update (MSIX auto-update or GitHub Releases) — Help → Check for Updates against the latest GitHub release; installs are manual (opens the download page)
 - [ ] Microsoft Store submission (optional)
-- [x] GitHub Releases with changelog — `CHANGELOG.md` + tag-triggered `.github/workflows/release.yml`
+- [x] GitHub Releases with changelog — `CHANGELOG.md` + tag-triggered `.github/workflows/release.yml`. **v0.3.0 published**: https://github.com/zhongwu/MDEditor/releases/tag/v0.3.0 (portable zips x64/ARM64; MSIX unsigned until signing secrets are added; see `Release.md` for the procedure)
 
 #### 7.3 Documentation
 - [x] User guide (Markdown, bundled in app) — Help → Markdown Guide, localized (see 6.4)
